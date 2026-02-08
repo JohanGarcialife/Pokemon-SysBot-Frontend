@@ -1,13 +1,37 @@
 @import "tailwindcss";
 
 /* 
-  Tailwind v4 includes a default theme and preflight automatically with the import above.
-  Custom theme variables can be defined here if needed.
+  Pokémon Winds & Waves Theme
+  Inspired by Gen 10 official branding
 */
 
+@theme {
+  /* Pokémon Logo Colors */
+  --color-pokemon-blue: #3B5AAC;
+  --color-pokemon-yellow: #FFCC00;
+  
+  /* Winds Gradient (Warm) */
+  --color-winds-from: #FF6B35;
+  --color-winds-via: #E63E6D;
+  --color-winds-to: #7B2CBF;
+  
+  /* Waves Gradient (Cool) */
+  --color-waves-from: #00D9FF;
+  --color-waves-via: #56CCF2;
+  --color-waves-to: #006BA6;
+  
+  /* Neutral Dark Theme */
+  --color-bg-dark: #0F172A;
+  --color-bg-card: #1E293B;
+  --color-bg-card-hover: #334155;
+  --color-text-primary: #F8FAFC;
+  --color-text-secondary: #94A3B8;
+  --color-border: #334155;
+}
+
 :root {
-  --background: #0a0a0a;
-  --foreground: #ededed;
+  --background: var(--color-bg-dark);
+  --foreground: var(--color-text-primary);
 }
 
 body {
@@ -15,4 +39,51 @@ body {
   color: var(--foreground);
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+}
+
+/* Gradient Utilities */
+.bg-gradient-winds {
+  background: linear-gradient(135deg, var(--color-winds-from), var(--color-winds-via), var(--color-winds-to));
+}
+
+.bg-gradient-waves {
+  background: linear-gradient(135deg, var(--color-waves-from), var(--color-waves-via), var(--color-waves-to));
+}
+
+.bg-gradient-pokemon {
+  background: linear-gradient(90deg, var(--color-pokemon-yellow) 0%, var(--color-winds-via) 50%, var(--color-waves-via) 100%);
+}
+
+.text-gradient-winds {
+  background: linear-gradient(135deg, var(--color-winds-from), var(--color-winds-via), var(--color-winds-to));
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.text-gradient-waves {
+  background: linear-gradient(135deg, var(--color-waves-from), var(--color-waves-via), var(--color-waves-to));
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.text-gradient-pokemon {
+  background: linear-gradient(90deg, var(--color-pokemon-yellow) 0%, var(--color-winds-via) 50%, var(--color-waves-via) 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+/* Border Gradient Effect */
+.border-gradient-winds {
+  border: 2px solid transparent;
+  background: linear-gradient(var(--color-bg-card), var(--color-bg-card)) padding-box,
+              linear-gradient(135deg, var(--color-winds-from), var(--color-winds-via), var(--color-winds-to)) border-box;
+}
+
+.border-gradient-waves {
+  border: 2px solid transparent;
+  background: linear-gradient(var(--color-bg-card), var(--color-bg-card)) padding-box,
+              linear-gradient(135deg, var(--color-waves-from), var(--color-waves-via), var(--color-waves-to)) border-box;
 }
