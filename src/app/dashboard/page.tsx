@@ -1,6 +1,7 @@
 import { createClient } from '@/utils/supabase/server'
 import { redirect } from 'next/navigation'
-import { Activity, Zap, Crown, Sparkles, Users, TrendingUp } from 'lucide-react'
+import { Zap, Crown, Activity, Users, TrendingUp, Sparkles, Settings } from 'lucide-react'
+import Link from 'next/link'
 
 export default async function DashboardPage() {
   const supabase = await createClient()
@@ -47,6 +48,36 @@ export default async function DashboardPage() {
           <p className="text-gray-600 mb-10 text-lg">Monitorea tu actividad en la plataforma</p>
           
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+            <Link href="/dashboard/teambuilder" className="bg-white border-electric border-3 rounded-xl overflow-hidden hover:shadow-2xl transition-all hover:scale-105 group">
+              <div className="h-3 bg-electric" />
+              <div className="p-8">
+                <div className="flex items-center gap-4 mb-4">
+                  <div className="w-16 h-16 bg-gradient-to-br from-electric to-yellow-500 rounded-xl flex items-center justify-center group-hover:scale-110 transition-transform">
+                    <Users className="w-10 h-10 text-white" />
+                  </div>
+                  <h3 className="text-2xl font-black text-gray-900 uppercase tracking-tight">Teambuilder</h3>
+                </div>
+                <p className="text-gray-600 font-medium mb-4">Construye tu equipo perfecto de Pokémon con nuestro editor interactivo</p>
+                <div className="flex items-center gap-2 text-electric font-bold group-hover:gap-3 transition-all">
+                  <span>Empezar ahora</span>
+                  <span>→</span>
+                </div>
+              </div>
+            </Link>
+
+            <div className="bg-white border-psychic border-3 rounded-xl overflow-hidden hover:shadow-2xl transition-all">
+              <div className="h-3 bg-psychic" />
+              <div className="p-8">
+                <div className="flex items-center gap-4 mb-4">
+                  <div className="w-16 h-16 bg-gradient-to-br from-psychic to-purple-500 rounded-xl flex items-center justify-center">
+                    <Settings className="w-10 h-10 text-white" />
+                  </div>
+                  <h3 className="text-2xl font-black text-gray-900 uppercase tracking-tight">Automatización</h3>
+                </div>
+                <p className="text-gray-600 font-medium">Próximamente: Controla tus SysBots de forma automática</p>
+              </div>
+            </div>
+
             {/* Card 1 - Fire Theme */}
             <div className="border-fire bg-white rounded-xl overflow-hidden hover:shadow-2xl transition-shadow">
               <div className="h-2 bg-fire" />
@@ -59,7 +90,7 @@ export default async function DashboardPage() {
                     <p className="text-5xl font-black text-gray-900">0</p>
                   </div>
                 </div>
-                <h3 className="text-xl font-black mb-2 text-fire uppercase">Total Inyecciones</h3>
+                <h3 className="text-xl text-gray-900 font-black mb-2 text-fire uppercase">Total Inyecciones</h3>
                 <p className="text-gray-600 text-sm font-medium">Próximamente disponible</p>
               </div>
             </div>
@@ -73,10 +104,10 @@ export default async function DashboardPage() {
                     <Crown className="w-8 h-8 text-white" />
                   </div>
                   <div className="text-right">
-                    <p className="text-3xl font-black text-water">GRATIS</p>
+                    <p className="text-3xl font-black text-green-400">GRATIS</p>
                   </div>
                 </div>
-                <h3 className="text-xl font-black mb-2 text-water uppercase">Suscripción</h3>
+                <h3 className="text-xl text-gray-900 font-black mb-2 text-water uppercase">Suscripción</h3>
                 <p className="text-gray-600 text-sm font-medium">Actualiza para más beneficios</p>
               </div>
             </div>
@@ -93,7 +124,7 @@ export default async function DashboardPage() {
                     <p className="text-5xl font-black text-gray-900">-</p>
                   </div>
                 </div>
-                <h3 className="text-xl font-black mb-2 text-grass uppercase">Posición en Cola</h3>
+                <h3 className="text-xl text-gray-900 font-black mb-2 text-grass uppercase">Posición en Cola</h3>
                 <p className="text-gray-600 text-sm font-medium">Sin solicitudes activas</p>
               </div>
             </div>
