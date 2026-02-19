@@ -32,11 +32,7 @@ export default async function DashboardPage() {
                 Bienvenido, <span className="text-pokemon-yellow font-bold">{user.email}</span>
               </p>
             </div>
-            <form action="/auth/signout" method="post">
-              <button className="bg-white text-gray-900 font-bold px-6 py-3 rounded-full transition-all hover:scale-105 active:scale-95 uppercase tracking-wide shadow-lg">
-                Cerrar Sesión
-              </button>
-            </form>
+            {/* Logout is now in the Navbar */}
           </div>
         </div>
       </div>
