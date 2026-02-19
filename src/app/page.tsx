@@ -1,7 +1,14 @@
 import Link from 'next/link'
-import { Zap, Shield, Sparkles, Search, Sliders, QrCode, ArrowRightLeft, ArrowRight } from 'lucide-react'
+import { Zap, Shield, Sparkles, Search, Sliders, QrCode, ArrowRightLeft, ArrowRight, Gamepad2 } from 'lucide-react'
+import { createClient } from '@/utils/supabase/server'
 
-export default function Home() {
+export default async function Home() {
+  const supabase = await createClient()
+  const { data: { user } } = await supabase.auth.getUser()
+
+  const ctaLink = user ? '/dashboard/teambuilder' : '/login'
+  const ctaText = user ? 'Ir al Teambuilder' : 'Comenzar'
+
   return (
     <div className="min-h-screen">
       {/* Hero Section - Fondo Oscuro con estética Pokémon */}
@@ -33,10 +40,11 @@ export default function Home() {
 
           {/* Botón CTA */}
           <Link 
-            href="/login"
-            className="inline-block px-10 py-4 text-lg font-bold bg-white text-gray-900 rounded-full hover:scale-105 transition-transform shadow-2xl active:scale-95 uppercase tracking-wide"
+            href={ctaLink}
+            className="inline-flex items-center gap-2 px-10 py-4 text-lg font-bold bg-white text-gray-900 rounded-full hover:scale-105 transition-transform shadow-2xl active:scale-95 uppercase tracking-wide"
           >
-            Comenzar
+            {user ? <Gamepad2 className="w-6 h-6" /> : null}
+            {ctaText}
           </Link>
         </div>
       </div>
@@ -122,10 +130,11 @@ export default function Home() {
           {/* CTA */}
           <div className="text-center mt-14">
             <Link
-              href="/login"
-              className="inline-block px-10 py-4 text-lg font-bold bg-gray-900 text-white rounded-full hover:scale-105 transition-transform shadow-lg uppercase tracking-wide"
+              href={ctaLink}
+              className="inline-flex items-center gap-2 px-10 py-4 text-lg font-bold bg-gray-900 text-white rounded-full hover:scale-105 transition-transform shadow-lg uppercase tracking-wide"
             >
-              Comenzar Ahora
+              {user ? <Gamepad2 className="w-6 h-6" /> : null}
+              {ctaText} {user ? '' : 'Ahora'}
             </Link>
           </div>
         </div>
