@@ -105,7 +105,7 @@ export default function LoginForm() {
           </h2>
           <p className="text-gray-600 text-base font-medium">
             {mode === 'signin' 
-              ? 'Accede a tu plataforma de automatización' 
+              ? 'Accede a tu cuenta de PKDeX' 
               : 'Únete a la comunidad de entrenadores'}
           </p>
         </div>

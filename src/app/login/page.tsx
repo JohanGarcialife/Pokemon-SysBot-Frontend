@@ -6,8 +6,8 @@ export default function LoginPage() {
       <div className="absolute inset-0 bg-[url('/grid.svg')] bg-center [mask-image:linear-gradient(180deg,white,rgba(255,255,255,0))]"></div>
       <div className="relative w-full flex flex-col items-center">
         <div className="mb-8 text-center">
-            <h1 className="text-5xl font-extrabold tracking-tight text-white mb-2">SysBot<span className="text-blue-500">.Auto</span></h1>
-            <p className="text-gray-400">Professional Pokémon Automation SaaS</p>
+            <h1 className="text-5xl font-extrabold tracking-tight text-white mb-2">PK<span className="text-blue-500">DeX</span></h1>
+            <p className="text-gray-400">Diseña y obtén tu Pokémon ideal</p>
         </div>
         <LoginForm />
       </div>

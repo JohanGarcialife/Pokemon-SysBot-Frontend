@@ -9,6 +9,9 @@ import { TeraTypeSelector } from './TeraTypeSelector'
 import { AbilitySelector } from './AbilitySelector'
 import { MoveSlot } from './MoveSlot'
 import { MoveSelector } from './MoveSelector'
+import { PokeBallSelector } from './PokeBallSelector'
+import { HeldItemSelector } from './HeldItemSelector'
+import { OriginSelector } from './OriginSelector'
 import { TYPE_COLORS } from '@/lib/pokemon/constants'
 import Image from 'next/image'
 
@@ -34,6 +37,9 @@ export function PokemonEditor({ pokemon, onAddToTeam }: PokemonEditorProps) {
   const [level, setLevel] = useState<number>(100)
   const [shiny, setShiny] = useState<boolean>(false)
   const [gender, setGender] = useState<'male' | 'female' | 'genderless'>('genderless')
+  const [pokeball, setPokeball] = useState<string>('Poké Ball')
+  const [heldItem, setHeldItem] = useState<string>('None')
+  const [origin, setOrigin] = useState<string>('Wild Encounter')
   
   const [showMoveSelector, setShowMoveSelector] = useState(false)
   const [activeMoveSlot, setActiveMoveSlot] = useState<number>(0)
@@ -80,7 +86,10 @@ export function PokemonEditor({ pokemon, onAddToTeam }: PokemonEditorProps) {
       moves,
       shiny,
       gender,
-      level
+      level,
+      pokeball,
+      heldItem,
+      origin
     }
     onAddToTeam(build)
   }
@@ -166,7 +175,7 @@ export function PokemonEditor({ pokemon, onAddToTeam }: PokemonEditorProps) {
               </label>
               <select
                 value={gender}
-                onChange={(e) => setGender(e.target.value as any)}
+                onChange={(e) => setGender(e.target.value as 'male' | 'female' | 'genderless')}
                 className="w-full px-3 py-2 border-2 border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-psychic text-gray-900 font-bold bg-white"
               >
                 <option value="male">♂️ Macho</option>
@@ -201,6 +210,30 @@ export function PokemonEditor({ pokemon, onAddToTeam }: PokemonEditorProps) {
             pokemon={pokemon}
             selectedAbility={ability}
             onAbilityChange={setAbility}
+          />
+        </div>
+
+        {/* Poké Ball */}
+        <div className="bg-white border-2 border-gray-300 rounded-lg p-6">
+          <PokeBallSelector
+            selectedBall={pokeball}
+            onBallChange={setPokeball}
+          />
+        </div>
+
+        {/* Held Item */}
+        <div className="bg-white border-2 border-gray-300 rounded-lg p-6">
+          <HeldItemSelector
+            selectedItem={heldItem}
+            onItemChange={setHeldItem}
+          />
+        </div>
+
+        {/* Origin */}
+        <div className="bg-white border-2 border-gray-300 rounded-lg p-6">
+          <OriginSelector
+            selectedOrigin={origin}
+            onOriginChange={setOrigin}
           />
         </div>
 

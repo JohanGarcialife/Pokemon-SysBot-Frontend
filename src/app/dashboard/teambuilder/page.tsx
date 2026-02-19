@@ -1,10 +1,11 @@
 'use client'
 
 import { useState } from 'react'
-import { Sparkles } from 'lucide-react'
+import { Sparkles, ArrowRightLeft } from 'lucide-react'
 import PokemonSearchBar from '@/components/teambuilder/PokemonSearchBar'
 import GameSelector from '@/components/teambuilder/GameSelector'
 import { PokemonEditor } from '@/components/teambuilder/PokemonEditor'
+import { TradeCodeModal } from '@/components/teambuilder/TradeCodeModal'
 import type { GameVersion, PokemonSearchResult, Pokemon, PokemonBuild } from '@/lib/pokemon/types'
 import { pokeAPI } from '@/lib/pokemon/pokeapi'
 
@@ -12,6 +13,7 @@ export default function TeambuilderPage() {
   const [selectedGame, setSelectedGame] = useState<GameVersion>('scarlet')
   const [selectedPokemon, setSelectedPokemon] = useState<Pokemon | null>(null)
   const [team, setTeam] = useState<PokemonBuild[]>([])
+  const [showTradeCode, setShowTradeCode] = useState(false)
 
   const handlePokemonSelect = async (result: PokemonSearchResult | null) => {
     if (!result) {
@@ -130,7 +132,7 @@ export default function TeambuilderPage() {
           </p>
           
           {/* Grid placeholder */}
-          <div className="grid grid-cols-2 md:grid-cols-3 gap-6 max-w-4xl mx-auto">
+          <div className="grid grid-cols-2 md:grid-cols-3 gap-6 max-w-4xl mx-auto mb-8">
             {[1, 2, 3, 4, 5, 6].map((slot, index) => (
               <div 
                 key={slot}
@@ -152,6 +154,17 @@ export default function TeambuilderPage() {
               </div>
             ))}
           </div>
+
+          {/* Trade Code Button */}
+          {team.length > 0 && (
+            <button
+              onClick={() => setShowTradeCode(true)}
+              className="inline-flex items-center gap-3 px-8 py-4 bg-gradient-to-r from-green-500 to-emerald-600 text-white font-black text-lg rounded-full hover:scale-105 transition-transform shadow-lg uppercase tracking-wide"
+            >
+              <ArrowRightLeft className="w-6 h-6" />
+              Solicitar Intercambio
+            </button>
+          )}
         </div>
       </div>
 
@@ -159,10 +172,17 @@ export default function TeambuilderPage() {
       <div className="bg-black text-white py-12">
         <div className="max-w-7xl mx-auto px-8 text-center">
           <p className="text-gray-400 text-sm">
-            Desarrollado con <span className="text-red-500">❤️</span> para la Comunidad Pokémon
+            PKDeX &mdash; Diseña y obtén tu Pokémon ideal
           </p>
         </div>
       </div>
+
+      {/* Trade Code Modal */}
+      <TradeCodeModal
+        isOpen={showTradeCode}
+        onClose={() => setShowTradeCode(false)}
+        pokemonName={team.length > 0 ? team[team.length - 1].pokemon.name : undefined}
+      />
     </div>
   )
 }

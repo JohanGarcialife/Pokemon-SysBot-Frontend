@@ -72,9 +72,9 @@ export default async function DashboardPage() {
                   <div className="w-16 h-16 bg-gradient-to-br from-psychic to-purple-500 rounded-xl flex items-center justify-center">
                     <Settings className="w-10 h-10 text-white" />
                   </div>
-                  <h3 className="text-2xl font-black text-gray-900 uppercase tracking-tight">Automatización</h3>
+                  <h3 className="text-2xl font-black text-gray-900 uppercase tracking-tight">Intercambios</h3>
                 </div>
-                <p className="text-gray-600 font-medium">Próximamente: Controla tus SysBots de forma automática</p>
+                <p className="text-gray-600 font-medium">Próximamente: Recibe tus Pokémon personalizados en tu consola</p>
               </div>
             </div>
 
@@ -90,7 +90,7 @@ export default async function DashboardPage() {
                     <p className="text-5xl font-black text-gray-900">0</p>
                   </div>
                 </div>
-                <h3 className="text-xl text-gray-900 font-black mb-2 text-fire uppercase">Total Inyecciones</h3>
+                <h3 className="text-xl text-gray-900 font-black mb-2 text-fire uppercase">Total Intercambios</h3>
                 <p className="text-gray-600 text-sm font-medium">Próximamente disponible</p>
               </div>
             </div>
@@ -149,14 +149,14 @@ export default async function DashboardPage() {
               Próximamente
             </h2>
             <p className="text-white text-xl mb-8 leading-relaxed">
-              El sistema de automatización de Pokémon está en desarrollo. Pronto podrás crear y distribuir Pokémon personalizados.
+              Estamos preparando nuevas funcionalidades. Pronto podrás personalizar y recibir tus Pokémon favoritos directamente en tu consola.
             </p>
             
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               <div className="bg-white/10 backdrop-blur-sm border-2 border-white/20 px-5 py-4 rounded-xl">
                 <div className="flex items-center gap-3">
                   <Sparkles className="w-6 h-6 text-pokemon-yellow" />
-                  <span className="text-white font-bold text-lg">Team Builder</span>
+                  <span className="text-white font-bold text-lg">Teambuilder</span>
                 </div>
               </div>
               <div className="bg-white/10 backdrop-blur-sm border-2 border-white/20 px-5 py-4 rounded-xl">
@@ -186,7 +186,7 @@ export default async function DashboardPage() {
       <div className="bg-black text-white py-12">
         <div className="max-w-7xl mx-auto px-8 text-center">
           <p className="text-gray-400 text-sm">
-            Desarrollado con <span className="text-red-500">❤️</span> para la Comunidad Pokémon
+            PKDeX &mdash; Diseña y obtén tu Pokémon ideal
           </p>
         </div>
       </div>

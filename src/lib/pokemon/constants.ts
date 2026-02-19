@@ -127,3 +127,94 @@ export const TYPE_COLORS: Record<string, string> = {
   steel: 'bg-gray-500',
   fairy: 'bg-pink-400'
 }
+
+// Poké Balls disponibles en Scarlet/Violet
+export const POKE_BALLS = [
+  { name: 'Poké Ball', emoji: '🔴' },
+  { name: 'Great Ball', emoji: '🔵' },
+  { name: 'Ultra Ball', emoji: '🟡' },
+  { name: 'Master Ball', emoji: '🟣' },
+  { name: 'Net Ball', emoji: '🕸️' },
+  { name: 'Dive Ball', emoji: '💧' },
+  { name: 'Nest Ball', emoji: '🟢' },
+  { name: 'Repeat Ball', emoji: '🔄' },
+  { name: 'Timer Ball', emoji: '⏱️' },
+  { name: 'Luxury Ball', emoji: '✨' },
+  { name: 'Premier Ball', emoji: '⚪' },
+  { name: 'Dusk Ball', emoji: '🌑' },
+  { name: 'Heal Ball', emoji: '💗' },
+  { name: 'Quick Ball', emoji: '⚡' },
+  { name: 'Level Ball', emoji: '🎚️' },
+  { name: 'Lure Ball', emoji: '🎣' },
+  { name: 'Moon Ball', emoji: '🌙' },
+  { name: 'Friend Ball', emoji: '💚' },
+  { name: 'Love Ball', emoji: '💕' },
+  { name: 'Heavy Ball', emoji: '🏋️' },
+  { name: 'Fast Ball', emoji: '💨' },
+  { name: 'Dream Ball', emoji: '💭' },
+  { name: 'Beast Ball', emoji: '👾' },
+  { name: 'Sport Ball', emoji: '🏀' },
+  { name: 'Safari Ball', emoji: '🌿' },
+]
+
+// Objetos equipables competitivos
+export interface HeldItemData {
+  name: string
+  category: 'competitive' | 'berry' | 'evolution' | 'other'
+  description: string
+}
+
+export const HELD_ITEMS: HeldItemData[] = [
+  // Competitive
+  { name: 'Choice Band', category: 'competitive', description: 'Sube Ataque 50% pero bloquea un movimiento' },
+  { name: 'Choice Specs', category: 'competitive', description: 'Sube At.Esp 50% pero bloquea un movimiento' },
+  { name: 'Choice Scarf', category: 'competitive', description: 'Sube Velocidad 50% pero bloquea un movimiento' },
+  { name: 'Life Orb', category: 'competitive', description: 'Sube daño 30% pero pierde HP cada turno' },
+  { name: 'Leftovers', category: 'competitive', description: 'Recupera 1/16 HP cada turno' },
+  { name: 'Focus Sash', category: 'competitive', description: 'Sobrevive un golpe letal con 1 HP' },
+  { name: 'Assault Vest', category: 'competitive', description: 'Sube Def.Esp 50% pero no puede usar movimientos de estado' },
+  { name: 'Rocky Helmet', category: 'competitive', description: 'Daña al atacante que hace contacto' },
+  { name: 'Heavy-Duty Boots', category: 'competitive', description: 'Inmune a entry hazards' },
+  { name: 'Eviolite', category: 'competitive', description: 'Sube Def y Def.Esp 50% en Pokémon no evolucionados' },
+  { name: 'Black Sludge', category: 'competitive', description: 'Recupera HP si es tipo Veneno' },
+  { name: 'Flame Orb', category: 'competitive', description: 'Quema al portador (activa Guts/Facade)' },
+  { name: 'Toxic Orb', category: 'competitive', description: 'Envenena al portador (activa Poison Heal)' },
+  { name: 'Expert Belt', category: 'competitive', description: 'Sube daño super efectivo 20%' },
+  { name: 'Weakness Policy', category: 'competitive', description: 'Sube ATK y SP.ATK al recibir golpe super efectivo' },
+  { name: 'Air Balloon', category: 'competitive', description: 'Inmune a Tierra hasta recibir daño' },
+  { name: 'Safety Goggles', category: 'competitive', description: 'Inmune a clima y movimientos de polvo' },
+  { name: 'Covert Cloak', category: 'competitive', description: 'Inmune a efectos secundarios' },
+  { name: 'Clear Amulet', category: 'competitive', description: 'Previene reducción de stats' },
+  { name: 'Loaded Dice', category: 'competitive', description: 'Golpes múltiples conectan más veces' },
+  { name: 'Booster Energy', category: 'competitive', description: 'Activa habilidad Paradox' },
+  { name: 'Mirror Herb', category: 'competitive', description: 'Copia las subidas de stats del rival' },
+  { name: 'Scope Lens', category: 'competitive', description: 'Aumenta ratio de golpe crítico' },
+  // Berries
+  { name: 'Sitrus Berry', category: 'berry', description: 'Recupera 25% HP cuando baja de 50%' },
+  { name: 'Lum Berry', category: 'berry', description: 'Cura cualquier problema de estado' },
+  { name: 'Yache Berry', category: 'berry', description: 'Reduce daño super efectivo de Hielo' },
+  { name: 'Shuca Berry', category: 'berry', description: 'Reduce daño super efectivo de Tierra' },
+  { name: 'Chople Berry', category: 'berry', description: 'Reduce daño super efectivo de Lucha' },
+  { name: 'Aguav Berry', category: 'berry', description: 'Recupera 33% HP (confunde si -Def.Esp)' },
+  // Other
+  { name: 'Light Clay', category: 'other', description: 'Extiende pantallas a 8 turnos' },
+  { name: 'Terrain Extender', category: 'other', description: 'Extiende terrenos a 8 turnos' },
+  { name: 'Red Card', category: 'other', description: 'Fuerza cambio del rival al recibir daño' },
+  { name: 'Eject Button', category: 'other', description: 'Cambia al portador al recibir daño' },
+  { name: 'Eject Pack', category: 'other', description: 'Cambia si las stats bajan' },
+  { name: 'Shed Shell', category: 'other', description: 'Permite cambiar aunque esté atrapado' },
+  { name: 'Ability Shield', category: 'other', description: 'Protege la habilidad de ser cambiada' },
+  { name: 'None', category: 'other', description: 'Sin objeto equipado' },
+]
+
+// Orígenes legales del Pokémon
+export const ORIGINS = [
+  { name: 'Wild Encounter', label: 'Encuentro Salvaje', emoji: '🌿', description: 'Capturado en la naturaleza' },
+  { name: 'Tera Raid', label: 'Teraincursión', emoji: '💎', description: 'Obtenido en Teraincursión' },
+  { name: 'Egg', label: 'Huevo', emoji: '🥚', description: 'Nacido de un huevo' },
+  { name: 'Trade', label: 'Intercambio', emoji: '🔄', description: 'Recibido por intercambio' },
+  { name: 'Event', label: 'Evento', emoji: '🎁', description: 'Distribución de evento especial' },
+  { name: 'Mass Outbreak', label: 'Aparición Masiva', emoji: '🔥', description: 'Capturado en aparición masiva' },
+  { name: 'Starter', label: 'Inicial', emoji: '⭐', description: 'Pokémon inicial del juego' },
+  { name: 'In-Game Gift', label: 'Regalo', emoji: '🎀', description: 'Recibido como regalo en el juego' },
+]

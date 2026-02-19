@@ -183,5 +183,8 @@ export interface PokemonBuild {
   shiny: boolean
   gender: 'male' | 'female' | 'genderless'
   level: number
+  pokeball: string
+  heldItem: string
+  origin: string
 }
 
