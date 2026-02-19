@@ -55,7 +55,7 @@ export default function Navbar() {
         <div className="flex justify-between h-16">
           {/* Logo & Desktop Nav */}
           <div className="flex">
-            <div className="flex-shrink-0 flex items-center">
+            <div className="shrink-0 flex items-center">
               <Link href="/" className="text-2xl font-black tracking-tight text-white hover:opacity-90 transition-opacity">
                 PK<span className="text-pokemon-blue">DeX</span>
               </Link>
@@ -99,7 +99,7 @@ export default function Navbar() {
                     <span className="text-gray-300 font-medium truncate max-w-[150px]">
                       {userEmail}
                     </span>
-                    <div className="h-8 w-8 rounded-full bg-gradient-to-br from-pokemon-blue to-blue-600 flex items-center justify-center text-white">
+                    <div className="h-8 w-8 rounded-full bg-linear-to-br from-pokemon-blue to-blue-600 flex items-center justify-center text-white">
                       <User className="w-4 h-4" />
                     </div>
                     <ChevronDown className={`w-4 h-4 text-gray-400 transition-transform ${isUserMenuOpen ? 'rotate-180' : ''}`} />

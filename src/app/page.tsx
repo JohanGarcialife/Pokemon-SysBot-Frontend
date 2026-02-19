@@ -12,7 +12,7 @@ export default async function Home() {
   return (
     <div className="min-h-screen">
       {/* Hero Section - Fondo Oscuro con estética Pokémon */}
-      <div className="relative min-h-[75vh] flex items-center justify-center overflow-hidden bg-gradient-to-b from-slate-900 via-blue-950 to-slate-900">
+      <div className="relative min-h-[75vh] flex items-center justify-center overflow-hidden bg-linear-to-b from-slate-900 via-blue-950 to-slate-900">
         {/* Efecto de patrón de fondo sutil */}
         <div className="absolute inset-0 opacity-10">
           <div className="absolute top-10 left-10 w-64 h-64 bg-pokemon-blue rounded-full blur-3xl" />
@@ -62,7 +62,7 @@ export default async function Home() {
           <div className="grid md:grid-cols-4 gap-6">
             {/* Step 1 */}
             <div className="relative text-center group">
-              <div className="w-20 h-20 mx-auto mb-5 rounded-2xl bg-gradient-to-br from-blue-500 to-blue-600 flex items-center justify-center shadow-lg group-hover:scale-110 transition-transform">
+              <div className="w-20 h-20 mx-auto mb-5 rounded-2xl bg-linear-to-br from-blue-500 to-blue-600 flex items-center justify-center shadow-lg group-hover:scale-110 transition-transform">
                 <Search className="w-10 h-10 text-white" />
               </div>
               <div className="absolute -top-3 -right-1 md:right-2 w-8 h-8 rounded-full bg-gray-900 text-white flex items-center justify-center font-black text-sm">
@@ -80,7 +80,7 @@ export default async function Home() {
 
             {/* Step 2 */}
             <div className="relative text-center group">
-              <div className="w-20 h-20 mx-auto mb-5 rounded-2xl bg-gradient-to-br from-purple-500 to-purple-600 flex items-center justify-center shadow-lg group-hover:scale-110 transition-transform">
+              <div className="w-20 h-20 mx-auto mb-5 rounded-2xl bg-linear-to-br from-purple-500 to-purple-600 flex items-center justify-center shadow-lg group-hover:scale-110 transition-transform">
                 <Sliders className="w-10 h-10 text-white" />
               </div>
               <div className="absolute -top-3 -right-1 md:right-2 w-8 h-8 rounded-full bg-gray-900 text-white flex items-center justify-center font-black text-sm">
@@ -97,7 +97,7 @@ export default async function Home() {
 
             {/* Step 3 */}
             <div className="relative text-center group">
-              <div className="w-20 h-20 mx-auto mb-5 rounded-2xl bg-gradient-to-br from-green-500 to-emerald-600 flex items-center justify-center shadow-lg group-hover:scale-110 transition-transform">
+              <div className="w-20 h-20 mx-auto mb-5 rounded-2xl bg-linear-to-br from-green-500 to-emerald-600 flex items-center justify-center shadow-lg group-hover:scale-110 transition-transform">
                 <QrCode className="w-10 h-10 text-white" />
               </div>
               <div className="absolute -top-3 -right-1 md:right-2 w-8 h-8 rounded-full bg-gray-900 text-white flex items-center justify-center font-black text-sm">
@@ -114,7 +114,7 @@ export default async function Home() {
 
             {/* Step 4 */}
             <div className="relative text-center group">
-              <div className="w-20 h-20 mx-auto mb-5 rounded-2xl bg-gradient-to-br from-yellow-400 to-orange-500 flex items-center justify-center shadow-lg group-hover:scale-110 transition-transform">
+              <div className="w-20 h-20 mx-auto mb-5 rounded-2xl bg-linear-to-br from-yellow-400 to-orange-500 flex items-center justify-center shadow-lg group-hover:scale-110 transition-transform">
                 <ArrowRightLeft className="w-10 h-10 text-white" />
               </div>
               <div className="absolute -top-3 -right-1 md:right-2 w-8 h-8 rounded-full bg-gray-900 text-white flex items-center justify-center font-black text-sm">
@@ -155,7 +155,7 @@ export default async function Home() {
             <div className="border-fire bg-white rounded-xl overflow-hidden hover:shadow-2xl transition-shadow">
               <div className="h-1.5 bg-fire" />
               <div className="p-8">
-                <div className="w-14 h-14 bg-gradient-to-br from-fire to-orange-600 rounded-lg flex items-center justify-center mb-6">
+                <div className="w-14 h-14 bg-linear-to-br from-fire to-orange-600 rounded-lg flex items-center justify-center mb-6">
                   <Zap className="w-8 h-8 text-white" />
                 </div>
                 <h3 className="text-2xl font-black mb-3 text-fire">Ruta Victoria</h3>
@@ -172,7 +172,7 @@ export default async function Home() {
             <div className="border-water bg-white rounded-xl overflow-hidden hover:shadow-2xl transition-shadow">
               <div className="h-1.5 bg-water" />
               <div className="p-8">
-                <div className="w-14 h-14 bg-gradient-to-br from-water to-blue-600 rounded-lg flex items-center justify-center mb-6">
+                <div className="w-14 h-14 bg-linear-to-br from-water to-blue-600 rounded-lg flex items-center justify-center mb-6">
                   <Shield className="w-8 h-8 text-white" />
                 </div>
                 <h3 className="text-2xl font-black mb-3 text-water">Sendero Leyendas</h3>
@@ -189,7 +189,7 @@ export default async function Home() {
             <div className="border-grass bg-white rounded-xl overflow-hidden hover:shadow-2xl transition-shadow">
               <div className="h-1.5 bg-grass" />
               <div className="p-8">
-                <div className="w-14 h-14 bg-gradient-to-br from-grass to-green-600 rounded-lg flex items-center justify-center mb-6">
+                <div className="w-14 h-14 bg-linear-to-br from-grass to-green-600 rounded-lg flex items-center justify-center mb-6">
                   <Sparkles className="w-8 h-8 text-white" />
                 </div>
                 <h3 className="text-2xl font-black mb-3 text-grass">Calle Fugaz</h3>
@@ -206,7 +206,7 @@ export default async function Home() {
       </div>
 
       {/* Sección Fenómeno Teracrystal - Fondo Azul Oscuro */}
-      <div className="relative py-24 px-6 bg-gradient-to-br from-blue-950 via-blue-900 to-blue-950 overflow-hidden">
+      <div className="relative py-24 px-6 bg-linear-to-br from-blue-950 via-blue-900 to-blue-950 overflow-hidden">
         {/* Efecto de orbe brillante */}
         <div className="absolute right-20 top-1/2 -translate-y-1/2 w-80 h-80 rounded-full" 
              style={{

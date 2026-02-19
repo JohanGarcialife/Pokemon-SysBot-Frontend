@@ -44,28 +44,28 @@ export default async function DashboardPage() {
           <p className="text-gray-600 mb-10 text-lg">Monitorea tu actividad en la plataforma</p>
           
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-            <Link href="/dashboard/teambuilder" className="bg-white border-electric border-3 rounded-xl overflow-hidden hover:shadow-2xl transition-all hover:scale-105 group">
+            <Link href="/dashboard/teambuilder" className="bg-white border-[3px] border-electric rounded-xl overflow-hidden hover:shadow-2xl transition-all hover:scale-105 group">
               <div className="h-3 bg-electric" />
               <div className="p-8">
                 <div className="flex items-center gap-4 mb-4">
-                  <div className="w-16 h-16 bg-gradient-to-br from-electric to-yellow-500 rounded-xl flex items-center justify-center group-hover:scale-110 transition-transform">
-                    <Users className="w-10 h-10 text-white" />
+                  <div className="w-16 h-16 bg-linear-to-br from-electric to-yellow-500 rounded-xl flex items-center justify-center group-hover:scale-110 transition-transform">
+                    <Users className="w-10 h-10 text-gray-900" />
                   </div>
                   <h3 className="text-2xl font-black text-gray-900 uppercase tracking-tight">Teambuilder</h3>
                 </div>
                 <p className="text-gray-600 font-medium mb-4">Construye tu equipo perfecto de Pokémon con nuestro editor interactivo</p>
-                <div className="flex items-center gap-2 text-electric font-bold group-hover:gap-3 transition-all">
+                <div className="flex items-center gap-2 text-pokemon-blue font-bold group-hover:gap-3 transition-all">
                   <span>Empezar ahora</span>
                   <span>→</span>
                 </div>
               </div>
             </Link>
 
-            <div className="bg-white border-psychic border-3 rounded-xl overflow-hidden hover:shadow-2xl transition-all">
+            <div className="bg-white border-[3px] border-psychic rounded-xl overflow-hidden hover:shadow-2xl transition-all">
               <div className="h-3 bg-psychic" />
               <div className="p-8">
                 <div className="flex items-center gap-4 mb-4">
-                  <div className="w-16 h-16 bg-gradient-to-br from-psychic to-purple-500 rounded-xl flex items-center justify-center">
+                  <div className="w-16 h-16 bg-linear-to-br from-psychic to-purple-500 rounded-xl flex items-center justify-center">
                     <Settings className="w-10 h-10 text-white" />
                   </div>
                   <h3 className="text-2xl font-black text-gray-900 uppercase tracking-tight">Intercambios</h3>

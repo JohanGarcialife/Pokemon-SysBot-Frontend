@@ -1,6 +1,6 @@
 'use client'
 
-import React, { useState } from 'react'
+import React, { useState, useMemo } from 'react'
 import { Pokemon, PokemonBuild, PokemonStats, Nature, Move } from '@/lib/pokemon/types'
 import { NATURES } from '@/lib/pokemon/constants'
 import { StatsEditor } from './StatsEditor'
@@ -14,6 +14,8 @@ import { HeldItemSelector } from './HeldItemSelector'
 import { OriginSelector } from './OriginSelector'
 import { TYPE_COLORS } from '@/lib/pokemon/constants'
 import Image from 'next/image'
+import { useLegality } from '@/hooks/useLegality'
+import { LegalityPanel } from './LegalityPanel'
 
 interface PokemonEditorProps {
   pokemon: Pokemon | null
@@ -43,6 +45,14 @@ export function PokemonEditor({ pokemon, onAddToTeam }: PokemonEditorProps) {
   
   const [showMoveSelector, setShowMoveSelector] = useState(false)
   const [activeMoveSlot, setActiveMoveSlot] = useState<number>(0)
+
+  // ─── Real-time legality validation ───────────────────────
+  const currentBuild: PokemonBuild | null = useMemo(() => {
+    if (!pokemon) return null
+    return { pokemon, stats, nature, teraType, ability, moves, shiny, gender, level, pokeball, heldItem, origin }
+  }, [pokemon, stats, nature, teraType, ability, moves, shiny, gender, level, pokeball, heldItem, origin])
+
+  const { results, errors, warnings, isLegal, errorCount, warningCount } = useLegality(currentBuild)
 
   // Set initial ability when pokemon changes
   React.useEffect(() => {
@@ -184,6 +194,28 @@ export function PokemonEditor({ pokemon, onAddToTeam }: PokemonEditorProps) {
               </select>
             </div>
           </div>
+
+          {/* Legality + Add to Team — always visible in sticky panel */}
+          <div className="mt-4 space-y-3">
+            <LegalityPanel
+              results={results}
+              isLegal={isLegal}
+              errorCount={errorCount}
+              warningCount={warningCount}
+            />
+            <button
+              onClick={handleAddToTeam}
+              disabled={!isLegal}
+              title={!isLegal ? `Corrige ${errorCount} error${errorCount > 1 ? 'es' : ''} para continuar` : ''}
+              className={`w-full font-black text-lg py-4 rounded-lg transition-all shadow-lg uppercase ${
+                isLegal
+                  ? 'bg-linear-to-r from-psychic to-electric text-white hover:scale-105 cursor-pointer'
+                  : 'bg-gray-200 text-gray-400 cursor-not-allowed opacity-70'
+              }`}
+            >
+              {isLegal ? 'Agregar al Equipo →' : `⛔ ${errorCount} Error${errorCount > 1 ? 'es' : ''} — Corrige para continuar`}
+            </button>
+          </div>
         </div>
       </div>
 
@@ -258,13 +290,6 @@ export function PokemonEditor({ pokemon, onAddToTeam }: PokemonEditorProps) {
           </div>
         </div>
 
-        {/* Add to Team Button */}
-        <button
-          onClick={handleAddToTeam}
-          className="w-full bg-gradient-to-r from-psychic to-electric text-white font-black text-lg py-4 rounded-lg hover:scale-105 transition-transform shadow-lg uppercase"
-        >
-          Agregar al Equipo →
-        </button>
       </div>
 
       {/* Move Selector Modal */}

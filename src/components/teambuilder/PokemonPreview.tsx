@@ -62,7 +62,7 @@ export default function PokemonPreview({ searchResult }: PokemonPreviewProps) {
 
       <div className="p-8">
         {/* Sprite */}
-        <div className="bg-gradient-to-br from-gray-50 to-gray-100 rounded-xl p-8 mb-6 relative overflow-hidden">
+        <div className="bg-linear-to-br from-gray-50 to-gray-100 rounded-xl p-8 mb-6 relative overflow-hidden">
           {/* Background pattern */}
           <div className="absolute inset-0 opacity-5">
             <div className="absolute top-0 left-0 w-32 h-32 bg-pokemon-blue rounded-full blur-xl" />

@@ -218,7 +218,7 @@ export default function LoginForm() {
 
             {error && (
               <div className="bg-red-50 border-2 border-red-300 text-red-700 text-sm p-3 rounded-xl flex items-start gap-2 font-medium">
-                <AlertCircle className="w-5 h-5 flex-shrink-0 mt-0.5" />
+                <AlertCircle className="w-5 h-5 shrink-0 mt-0.5" />
                 <span>{error}</span>
               </div>
             )}

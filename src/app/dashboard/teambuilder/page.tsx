@@ -1,6 +1,7 @@
 'use client'
 
 import { useState } from 'react'
+import Image from 'next/image'
 import { Sparkles, ArrowRightLeft } from 'lucide-react'
 import PokemonSearchBar from '@/components/teambuilder/PokemonSearchBar'
 import GameSelector from '@/components/teambuilder/GameSelector'
@@ -8,6 +9,7 @@ import { PokemonEditor } from '@/components/teambuilder/PokemonEditor'
 import { TradeCodeModal } from '@/components/teambuilder/TradeCodeModal'
 import type { GameVersion, PokemonSearchResult, Pokemon, PokemonBuild } from '@/lib/pokemon/types'
 import { pokeAPI } from '@/lib/pokemon/pokeapi'
+import { TYPE_COLORS } from '@/lib/pokemon/constants'
 
 export default function TeambuilderPage() {
   const [selectedGame, setSelectedGame] = useState<GameVersion>('scarlet')
@@ -40,7 +42,7 @@ export default function TeambuilderPage() {
   return (
     <div className="min-h-screen bg-white">
       {/* Dark Header */}
-      <div className="relative bg-gradient-to-br from-slate-900 via-blue-950 to-slate-900 py-12 px-8 overflow-hidden">
+      <div className="relative bg-linear-to-br from-slate-900 via-blue-950 to-slate-900 py-12 px-8 overflow-hidden">
         {/* Glow effects */}
         <div className="absolute top-0 right-0 w-64 h-64 bg-pokemon-blue opacity-10 blur-3xl rounded-full" />
         <div className="absolute bottom-0 left-0 w-64 h-64 bg-winds-from opacity-10 blur-3xl rounded-full" />
@@ -113,7 +115,7 @@ export default function TeambuilderPage() {
       </div>
 
       {/* Dark Team Section - Coming Soon */}
-      <div className="relative py-20 px-8 bg-gradient-to-br from-blue-950 via-blue-900 to-blue-950 overflow-hidden">
+      <div className="relative py-20 px-8 bg-linear-to-br from-blue-950 via-blue-900 to-blue-950 overflow-hidden">
         {/* Glow orb */}
         <div className="absolute right-20 top-1/2 -translate-y-1/2 w-80 h-80 rounded-full" 
              style={{
@@ -131,35 +133,61 @@ export default function TeambuilderPage() {
             {team.length === 0 ? 'Agrega Pokémon a tu equipo usando el editor' : 'Team Slots próximamente'}
           </p>
           
-          {/* Grid placeholder */}
+          {/* Team Grid */}
           <div className="grid grid-cols-2 md:grid-cols-3 gap-6 max-w-4xl mx-auto mb-8">
-            {[1, 2, 3, 4, 5, 6].map((slot, index) => (
-              <div 
-                key={slot}
-                className={`bg-white/10 backdrop-blur-sm border-2 ${team[index] ? 'border-green-400' : 'border-white/20'} rounded-xl p-8 aspect-square flex flex-col items-center justify-center`}
-              >
-                {team[index] ? (
-                  <>
-                    <p className="text-2xl text-white font-bold mb-2">
-                      {team[index].pokemon.name}
-                    </p>
-                    <p className="text-white/70 text-sm">Slot {slot}</p>
-                  </>
-                ) : (
-                  <>
-                    <p className="text-6xl text-white/30 mb-2">?</p>
-                    <p className="text-white/50 font-bold">Slot {slot}</p>
-                  </>
-                )}
-              </div>
-            ))}
+            {[1, 2, 3, 4, 5, 6].map((slot, index) => {
+              const build = team[index]
+              const sprite = build?.pokemon.sprites.other?.['official-artwork']?.front_default
+                ?? build?.pokemon.sprites.front_default
+              return (
+                <div
+                  key={slot}
+                  className={`bg-white/10 backdrop-blur-sm border-2 ${
+                    build ? 'border-green-400 bg-white/15' : 'border-white/20'
+                  } rounded-xl aspect-square flex flex-col items-center justify-center overflow-hidden relative p-3`}
+                >
+                  {build ? (
+                    <>
+                      {sprite && (
+                        <Image
+                          src={sprite}
+                          alt={build.pokemon.name}
+                          width={96}
+                          height={96}
+                          className="w-24 h-24 object-contain drop-shadow-lg"
+                        />
+                      )}
+                      <p className="text-white font-black uppercase tracking-wide text-sm mt-1">
+                        {build.pokemon.name.charAt(0).toUpperCase() + build.pokemon.name.slice(1)}
+                      </p>
+                      <div className="flex gap-1 mt-1 flex-wrap justify-center">
+                        {build.pokemon.types.map((t) => (
+                          <span
+                            key={t.type.name}
+                            className={`${TYPE_COLORS[t.type.name] ?? 'bg-gray-400'} text-white text-[10px] font-bold px-2 py-0.5 rounded uppercase`}
+                          >
+                            {t.type.name}
+                          </span>
+                        ))}
+                      </div>
+                      <p className="text-white/50 text-xs mt-1">Slot {slot}</p>
+                    </>
+                  ) : (
+                    <>
+                      <p className="text-6xl text-white/30 mb-2">?</p>
+                      <p className="text-white/50 font-bold">Slot {slot}</p>
+                    </>
+                  )}
+                </div>
+              )
+            })}
           </div>
 
           {/* Trade Code Button */}
           {team.length > 0 && (
             <button
               onClick={() => setShowTradeCode(true)}
-              className="inline-flex items-center gap-3 px-8 py-4 bg-gradient-to-r from-green-500 to-emerald-600 text-white font-black text-lg rounded-full hover:scale-105 transition-transform shadow-lg uppercase tracking-wide"
+              className="inline-flex items-center gap-3 px-8 py-4 bg-linear-to-r from-green-500 to-emerald-600 text-white font-black text-lg rounded-full hover:scale-105 transition-transform shadow-lg uppercase tracking-wide"
             >
               <ArrowRightLeft className="w-6 h-6" />
               Solicitar Intercambio
@@ -181,7 +209,13 @@ export default function TeambuilderPage() {
       <TradeCodeModal
         isOpen={showTradeCode}
         onClose={() => setShowTradeCode(false)}
-        pokemonName={team.length > 0 ? team[team.length - 1].pokemon.name : undefined}
+        team={team}
+        gameVersion={selectedGame}
+        pokemonName={
+          team.length === 1
+            ? team[0].pokemon.name
+            : `equipo de ${team.length} Pokémon`
+        }
       />
     </div>
   )

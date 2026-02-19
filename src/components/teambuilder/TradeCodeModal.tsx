@@ -1,11 +1,17 @@
 'use client'
 
 import { useState, useEffect, useCallback } from 'react'
-import { X, Copy, Check, Clock, Gamepad2 } from 'lucide-react'
+import { X, Copy, Check, Clock, Gamepad2, Loader2, AlertCircle, PackageCheck } from 'lucide-react'
+import { createClient } from '@/utils/supabase/client'
+import { BackendAPI } from '@/lib/backend-api'
+import { teamToPayload } from '@/lib/pokemon/buildToPayload'
+import type { PokemonBuild, GameVersion } from '@/lib/pokemon/types'
 
 interface TradeCodeModalProps {
   isOpen: boolean
   onClose: () => void
+  team: PokemonBuild[]
+  gameVersion: GameVersion
   pokemonName?: string
 }
 
@@ -17,11 +23,18 @@ function generateTradeCode(): string {
 
 const EXPIRATION_SECONDS = 180 // 3 minutes
 
-export function TradeCodeModal({ isOpen, onClose, pokemonName }: TradeCodeModalProps) {
+type OrderState = 'idle' | 'loading' | 'success' | 'error'
+
+export function TradeCodeModal({ isOpen, onClose, team, gameVersion, pokemonName }: TradeCodeModalProps) {
   const [tradeCode, setTradeCode] = useState('')
   const [copied, setCopied] = useState(false)
   const [timeLeft, setTimeLeft] = useState(EXPIRATION_SECONDS)
   const [expired, setExpired] = useState(false)
+
+  // Order state
+  const [orderState, setOrderState] = useState<OrderState>('idle')
+  const [orderId, setOrderId] = useState<string | null>(null)
+  const [orderError, setOrderError] = useState<string | null>(null)
 
   const generateNewCode = useCallback(() => {
     setTradeCode(generateTradeCode())
@@ -30,12 +43,48 @@ export function TradeCodeModal({ isOpen, onClose, pokemonName }: TradeCodeModalP
     setCopied(false)
   }, [])
 
-  // Generate code on open
+  // Generate code + create order on open
   useEffect(() => {
-    if (isOpen) {
-      generateNewCode()
+    if (!isOpen) return
+
+    const code = generateTradeCode()
+    setTradeCode(code)
+    setTimeLeft(EXPIRATION_SECONDS)
+    setExpired(false)
+    setCopied(false)
+    setOrderState('loading')
+    setOrderId(null)
+    setOrderError(null)
+
+    const submitOrder = async () => {
+      try {
+        const supabase = createClient()
+        const { data: { session } } = await supabase.auth.getSession()
+
+        if (!session?.access_token) {
+          setOrderError('No se pudo obtener la sesión. Inicia sesión de nuevo.')
+          setOrderState('error')
+          return
+        }
+
+        const payload = teamToPayload(team)
+        const result = await BackendAPI.createOrder(
+          { team: payload, tradeCode: code, gameVersion },
+          session.access_token
+        )
+
+        setOrderId(result.orderId)
+        setOrderState('success')
+      } catch (err) {
+        console.error('Order creation failed:', err)
+        setOrderError(err instanceof Error ? err.message : 'Error al crear la orden')
+        setOrderState('error')
+      }
     }
-  }, [isOpen, generateNewCode])
+
+    submitOrder()
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [isOpen])
 
   // Countdown timer
   useEffect(() => {
@@ -60,7 +109,6 @@ export function TradeCodeModal({ isOpen, onClose, pokemonName }: TradeCodeModalP
       setCopied(true)
       setTimeout(() => setCopied(false), 2000)
     } catch {
-      // Fallback
       setCopied(true)
       setTimeout(() => setCopied(false), 2000)
     }
@@ -84,8 +132,8 @@ export function TradeCodeModal({ isOpen, onClose, pokemonName }: TradeCodeModalP
 
       {/* Modal */}
       <div className="relative bg-white rounded-2xl shadow-2xl max-w-md w-full overflow-hidden">
-        {/* Header - gradient */}
-        <div className="bg-gradient-to-r from-blue-600 via-purple-600 to-pink-500 p-6 text-white">
+        {/* Header */}
+        <div className="bg-linear-to-r from-blue-600 via-purple-600 to-pink-500 p-6 text-white">
           <button
             onClick={onClose}
             className="absolute top-4 right-4 text-white/80 hover:text-white transition-colors"
@@ -106,7 +154,38 @@ export function TradeCodeModal({ isOpen, onClose, pokemonName }: TradeCodeModalP
         </div>
 
         {/* Body */}
-        <div className="p-6 space-y-6">
+        <div className="p-6 space-y-5">
+
+          {/* Order Status Banner */}
+          {orderState === 'loading' && (
+            <div className="flex items-center gap-3 px-4 py-3 bg-blue-50 border border-blue-200 rounded-lg">
+              <Loader2 className="w-4 h-4 text-blue-600 animate-spin shrink-0" />
+              <span className="text-sm font-semibold text-blue-700">Registrando orden en el sistema…</span>
+            </div>
+          )}
+
+          {orderState === 'success' && orderId && (
+            <div className="flex items-center gap-3 px-4 py-3 bg-green-50 border border-green-200 rounded-lg">
+              <PackageCheck className="w-4 h-4 text-green-600 shrink-0" />
+              <div>
+                <p className="text-sm font-bold text-green-700">✅ Orden creada — Pendiente</p>
+                <p className="text-xs text-green-600 font-mono mt-0.5">
+                  ID: {orderId.slice(0, 8).toUpperCase()}…
+                </p>
+              </div>
+            </div>
+          )}
+
+          {orderState === 'error' && (
+            <div className="flex items-center gap-3 px-4 py-3 bg-red-50 border border-red-200 rounded-lg">
+              <AlertCircle className="w-4 h-4 text-red-600 shrink-0" />
+              <div>
+                <p className="text-sm font-bold text-red-700">Error al registrar la orden</p>
+                <p className="text-xs text-red-500 mt-0.5">{orderError}</p>
+              </div>
+            </div>
+          )}
+
           {/* Trade Code Display */}
           <div className="text-center">
             <div className={`
