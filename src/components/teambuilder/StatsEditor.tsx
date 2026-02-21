@@ -83,6 +83,18 @@ export function StatsEditor({ stats, onStatsChange }: StatsEditorProps) {
         </div>
       </div>
 
+      {/* Explicación Noob-Friendly */}
+      <div className="grid grid-cols-2 gap-4 text-xs mt-2">
+        <div className="bg-blue-50 border border-blue-200 p-3 rounded-lg shadow-sm">
+          <strong className="text-blue-800 block mb-1">🧬 IVs (Potencial Genético)</strong>
+          <p className="text-blue-600">Representan la genética inalterable del Pokémon. Por regla general, querrás que todos estén al máximo (31) para ser competitivo.</p>
+        </div>
+        <div className="bg-green-50 border border-green-200 p-3 rounded-lg shadow-sm">
+          <strong className="text-green-800 block mb-1">💪 EVs (Entrenamiento)</strong>
+          <p className="text-green-600">Puntos adicionales. Tienes un límite de <span className="font-bold">510</span>. Se sugiere maximizar (252) las dos estadísticas más importantes.</p>
+        </div>
+      </div>
+
       {/* Total EVs contador */}
       <div className="flex items-center justify-between p-3 bg-gray-50 rounded-lg border-2 border-gray-200">
         <span className="text-sm font-bold text-gray-700">

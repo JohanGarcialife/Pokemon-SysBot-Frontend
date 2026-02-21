@@ -44,7 +44,7 @@ export default async function DashboardPage() {
           <p className="text-gray-600 mb-10 text-lg">Monitorea tu actividad en la plataforma</p>
           
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-            <Link href="/dashboard/teambuilder" className="bg-white border-[3px] border-electric rounded-xl overflow-hidden hover:shadow-2xl transition-all hover:scale-105 group">
+            <Link href="/" className="bg-white border-[3px] border-electric rounded-xl overflow-hidden hover:shadow-2xl transition-all hover:scale-105 group">
               <div className="h-3 bg-electric" />
               <div className="p-8">
                 <div className="flex items-center gap-4 mb-4">

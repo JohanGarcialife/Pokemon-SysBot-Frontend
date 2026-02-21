@@ -2,6 +2,7 @@ import Link from 'next/link'
 import Image from 'next/image'
 import { Zap, Shield, Sparkles, Search, Sliders, QrCode, ArrowRightLeft, ArrowRight, Gamepad2 } from 'lucide-react'
 import { createClient } from '@/utils/supabase/server'
+import HomeTeambuilder from '@/components/home/HomeTeambuilder'
 
 export const dynamic = 'force-dynamic'
 
@@ -53,96 +54,8 @@ export default async function Home() {
         </div>
       </div>
 
-      {/* Sección Cómo Funciona - 4 pasos */}
-      <div className="py-20 px-6 bg-gray-50">
-        <div className="max-w-6xl mx-auto">
-          <h2 className="text-5xl md:text-6xl font-black text-center mb-3 text-gray-900 uppercase tracking-tight">
-            Cómo Funciona
-          </h2>
-          <p className="text-center text-gray-600 text-lg mb-16">
-            Obtén tu Pokémon personalizado en 4 simples pasos
-          </p>
-
-          <div className="grid md:grid-cols-4 gap-6">
-            {/* Step 1 */}
-            <div className="relative text-center group">
-              <div className="w-20 h-20 mx-auto mb-5 rounded-2xl bg-linear-to-br from-blue-500 to-blue-600 flex items-center justify-center shadow-lg group-hover:scale-110 transition-transform">
-                <Search className="w-10 h-10 text-white" />
-              </div>
-              <div className="absolute -top-3 -right-1 md:right-2 w-8 h-8 rounded-full bg-gray-900 text-white flex items-center justify-center font-black text-sm">
-                1
-              </div>
-              <h3 className="text-lg font-black text-gray-900 uppercase mb-2">Busca</h3>
-              <p className="text-gray-600 text-sm leading-relaxed">
-                Encuentra cualquier Pokémon por nombre o número de Pokédex
-              </p>
-              {/* Arrow connector (hidden on mobile) */}
-              <div className="hidden md:block absolute top-10 -right-3 text-gray-300">
-                <ArrowRight className="w-6 h-6" />
-              </div>
-            </div>
-
-            {/* Step 2 */}
-            <div className="relative text-center group">
-              <div className="w-20 h-20 mx-auto mb-5 rounded-2xl bg-linear-to-br from-purple-500 to-purple-600 flex items-center justify-center shadow-lg group-hover:scale-110 transition-transform">
-                <Sliders className="w-10 h-10 text-white" />
-              </div>
-              <div className="absolute -top-3 -right-1 md:right-2 w-8 h-8 rounded-full bg-gray-900 text-white flex items-center justify-center font-black text-sm">
-                2
-              </div>
-              <h3 className="text-lg font-black text-gray-900 uppercase mb-2">Personaliza</h3>
-              <p className="text-gray-600 text-sm leading-relaxed">
-                Configura stats, naturaleza, movimientos, objeto y más
-              </p>
-              <div className="hidden md:block absolute top-10 -right-3 text-gray-300">
-                <ArrowRight className="w-6 h-6" />
-              </div>
-            </div>
-
-            {/* Step 3 */}
-            <div className="relative text-center group">
-              <div className="w-20 h-20 mx-auto mb-5 rounded-2xl bg-linear-to-br from-green-500 to-emerald-600 flex items-center justify-center shadow-lg group-hover:scale-110 transition-transform">
-                <QrCode className="w-10 h-10 text-white" />
-              </div>
-              <div className="absolute -top-3 -right-1 md:right-2 w-8 h-8 rounded-full bg-gray-900 text-white flex items-center justify-center font-black text-sm">
-                3
-              </div>
-              <h3 className="text-lg font-black text-gray-900 uppercase mb-2">Recibe Código</h3>
-              <p className="text-gray-600 text-sm leading-relaxed">
-                Obtén un código de intercambio de 8 dígitos al instante
-              </p>
-              <div className="hidden md:block absolute top-10 -right-3 text-gray-300">
-                <ArrowRight className="w-6 h-6" />
-              </div>
-            </div>
-
-            {/* Step 4 */}
-            <div className="relative text-center group">
-              <div className="w-20 h-20 mx-auto mb-5 rounded-2xl bg-linear-to-br from-yellow-400 to-orange-500 flex items-center justify-center shadow-lg group-hover:scale-110 transition-transform">
-                <ArrowRightLeft className="w-10 h-10 text-white" />
-              </div>
-              <div className="absolute -top-3 -right-1 md:right-2 w-8 h-8 rounded-full bg-gray-900 text-white flex items-center justify-center font-black text-sm">
-                4
-              </div>
-              <h3 className="text-lg font-black text-gray-900 uppercase mb-2">Intercambia</h3>
-              <p className="text-gray-600 text-sm leading-relaxed">
-                Ingresa el código en tu Switch y recibe tu Pokémon
-              </p>
-            </div>
-          </div>
-
-          {/* CTA */}
-          <div className="text-center mt-14">
-            <Link
-              href={ctaLink}
-              className="inline-flex items-center gap-2 px-10 py-4 text-lg font-bold bg-gray-900 text-white rounded-full hover:scale-105 transition-transform shadow-lg uppercase tracking-wide"
-            >
-              {user ? <Gamepad2 className="w-6 h-6" /> : null}
-              {ctaText} {user ? '' : 'Ahora'}
-            </Link>
-          </div>
-        </div>
-      </div>
+      {/* Integración Principal Teambuilder */}
+      <HomeTeambuilder user={user} />
 
       {/* Sección Footer - Fondo Negro */}
       <div className="bg-black text-white py-16">
