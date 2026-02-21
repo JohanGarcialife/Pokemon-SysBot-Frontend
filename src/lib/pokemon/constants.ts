@@ -3,41 +3,41 @@ import { PokemonType, Nature } from './types'
 // Naturalezas de Pokémon
 export const NATURES: Nature[] = [
   // Neutral
-  { name: 'Hardy', increase: null, decrease: null },
-  { name: 'Docile', increase: null, decrease: null },
-  { name: 'Serious', increase: null, decrease: null },
-  { name: 'Bashful', increase: null, decrease: null },
-  { name: 'Quirky', increase: null, decrease: null },
+  { name: 'Hardy', label: 'Fuerte', increase: null, decrease: null },
+  { name: 'Docile', label: 'Dócil', increase: null, decrease: null },
+  { name: 'Serious', label: 'Seria', increase: null, decrease: null },
+  { name: 'Bashful', label: 'Tímida', increase: null, decrease: null },
+  { name: 'Quirky', label: 'Rara', increase: null, decrease: null },
   
   // Attack +
-  { name: 'Lonely', increase: 'attack', decrease: 'defense' },
-  { name: 'Brave', increase: 'attack', decrease: 'speed' },
-  { name: 'Adamant', increase: 'attack', decrease: 'spAttack' },
-  { name: 'Naughty', increase: 'attack', decrease: 'spDefense' },
+  { name: 'Lonely', label: 'Huraña', increase: 'attack', decrease: 'defense' },
+  { name: 'Brave', label: 'Audaz', increase: 'attack', decrease: 'speed' },
+  { name: 'Adamant', label: 'Firme', increase: 'attack', decrease: 'spAttack' },
+  { name: 'Naughty', label: 'Pícara', increase: 'attack', decrease: 'spDefense' },
   
   // Defense +
-  { name: 'Bold', increase: 'defense', decrease: 'attack' },
-  { name: 'Relaxed', increase: 'defense', decrease: 'speed' },
-  { name: 'Impish', increase: 'defense', decrease: 'spAttack' },
-  { name: 'Lax', increase: 'defense', decrease: 'spDefense' },
+  { name: 'Bold', label: 'Osada', increase: 'defense', decrease: 'attack' },
+  { name: 'Relaxed', label: 'Plácida', increase: 'defense', decrease: 'speed' },
+  { name: 'Impish', label: 'Agitada', increase: 'defense', decrease: 'spAttack' },
+  { name: 'Lax', label: 'Floja', increase: 'defense', decrease: 'spDefense' },
   
   // Speed +
-  { name: 'Timid', increase: 'speed', decrease: 'attack' },
-  { name: 'Hasty', increase: 'speed', decrease: 'defense' },
-  { name: 'Jolly', increase: 'speed', decrease: 'spAttack' },
-  { name: 'Naive', increase: 'speed', decrease: 'spDefense' },
+  { name: 'Timid', label: 'Miedosa', increase: 'speed', decrease: 'attack' },
+  { name: 'Hasty', label: 'Activa', increase: 'speed', decrease: 'defense' },
+  { name: 'Jolly', label: 'Alegre', increase: 'speed', decrease: 'spAttack' },
+  { name: 'Naive', label: 'Ingenua', increase: 'speed', decrease: 'spDefense' },
   
   // Sp. Attack +
-  { name: 'Modest', increase: 'spAttack', decrease: 'attack' },
-  { name: 'Mild', increase: 'spAttack', decrease: 'defense' },
-  { name: 'Quiet', increase: 'spAttack', decrease: 'speed' },
-  { name: 'Rash', increase: 'spAttack', decrease: 'spDefense' },
+  { name: 'Modest', label: 'Modesta', increase: 'spAttack', decrease: 'attack' },
+  { name: 'Mild', label: 'Afable', increase: 'spAttack', decrease: 'defense' },
+  { name: 'Quiet', label: 'Mansa', increase: 'spAttack', decrease: 'speed' },
+  { name: 'Rash', label: 'Alocada', increase: 'spAttack', decrease: 'spDefense' },
   
   // Sp. Defense +
-  { name: 'Calm', increase: 'spDefense', decrease: 'attack' },
-  { name: 'Gentle', increase: 'spDefense', decrease: 'defense' },
-  { name: 'Sassy', increase: 'spDefense', decrease: 'speed' },
-  { name: 'Careful', increase: 'spDefense', decrease: 'spAttack' },
+  { name: 'Calm', label: 'Serena', increase: 'spDefense', decrease: 'attack' },
+  { name: 'Gentle', label: 'Amable', increase: 'spDefense', decrease: 'defense' },
+  { name: 'Sassy', label: 'Grosera', increase: 'spDefense', decrease: 'speed' },
+  { name: 'Careful', label: 'Cauta', increase: 'spDefense', decrease: 'spAttack' },
 ]
 
 // Teratipos (Gen 9 - Scarlet/Violet)
@@ -106,7 +106,6 @@ export const STAT_LIMITS = {
   EV_TOTAL_MAX: 510
 } as const
 
-// Colores de tipos Pokémon (usando clases Tailwind estándar)
 export const TYPE_COLORS: Record<string, string> = {
   normal: 'bg-gray-400',
   fire: 'bg-orange-500',
@@ -128,33 +127,55 @@ export const TYPE_COLORS: Record<string, string> = {
   fairy: 'bg-pink-400'
 }
 
+// Traducciones de Tipos al Español
+export const TYPE_TRANSLATIONS: Record<string, string> = {
+  normal: 'Normal',
+  fire: 'Fuego',
+  water: 'Agua',
+  electric: 'Eléctrico',
+  grass: 'Planta',
+  ice: 'Hielo',
+  fighting: 'Lucha',
+  poison: 'Veneno',
+  ground: 'Tierra',
+  flying: 'Volador',
+  psychic: 'Psíquico',
+  bug: 'Bicho',
+  rock: 'Roca',
+  ghost: 'Fantasma',
+  dragon: 'Dragón',
+  dark: 'Siniestro',
+  steel: 'Acero',
+  fairy: 'Hada'
+}
+
 // Poké Balls disponibles en Scarlet/Violet
 export const POKE_BALLS = [
-  { name: 'Poké Ball', emoji: '🔴' },
-  { name: 'Great Ball', emoji: '🔵' },
-  { name: 'Ultra Ball', emoji: '🟡' },
-  { name: 'Master Ball', emoji: '🟣' },
-  { name: 'Net Ball', emoji: '🕸️' },
-  { name: 'Dive Ball', emoji: '💧' },
-  { name: 'Nest Ball', emoji: '🟢' },
-  { name: 'Repeat Ball', emoji: '🔄' },
-  { name: 'Timer Ball', emoji: '⏱️' },
-  { name: 'Luxury Ball', emoji: '✨' },
-  { name: 'Premier Ball', emoji: '⚪' },
-  { name: 'Dusk Ball', emoji: '🌑' },
-  { name: 'Heal Ball', emoji: '💗' },
-  { name: 'Quick Ball', emoji: '⚡' },
-  { name: 'Level Ball', emoji: '🎚️' },
-  { name: 'Lure Ball', emoji: '🎣' },
-  { name: 'Moon Ball', emoji: '🌙' },
-  { name: 'Friend Ball', emoji: '💚' },
-  { name: 'Love Ball', emoji: '💕' },
-  { name: 'Heavy Ball', emoji: '🏋️' },
-  { name: 'Fast Ball', emoji: '💨' },
-  { name: 'Dream Ball', emoji: '💭' },
-  { name: 'Beast Ball', emoji: '👾' },
-  { name: 'Sport Ball', emoji: '🏀' },
-  { name: 'Safari Ball', emoji: '🌿' },
+  { name: 'Poké Ball', label: 'Poké Ball', emoji: '🔴' },
+  { name: 'Great Ball', label: 'Super Ball', emoji: '🔵' },
+  { name: 'Ultra Ball', label: 'Ultra Ball', emoji: '🟡' },
+  { name: 'Master Ball', label: 'Master Ball', emoji: '🟣' },
+  { name: 'Net Ball', label: 'Malla Ball', emoji: '🕸️' },
+  { name: 'Dive Ball', label: 'Buceo Ball', emoji: '💧' },
+  { name: 'Nest Ball', label: 'Nido Ball', emoji: '🟢' },
+  { name: 'Repeat Ball', label: 'Acopio Ball', emoji: '🔄' },
+  { name: 'Timer Ball', label: 'Turno Ball', emoji: '⏱️' },
+  { name: 'Luxury Ball', label: 'Lujo Ball', emoji: '✨' },
+  { name: 'Premier Ball', label: 'Honor Ball', emoji: '⚪' },
+  { name: 'Dusk Ball', label: 'Ocaso Ball', emoji: '🌑' },
+  { name: 'Heal Ball', label: 'Sana Ball', emoji: '💗' },
+  { name: 'Quick Ball', label: 'Veloz Ball', emoji: '⚡' },
+  { name: 'Level Ball', label: 'Nivel Ball', emoji: '🎚️' },
+  { name: 'Lure Ball', label: 'Cebo Ball', emoji: '🎣' },
+  { name: 'Moon Ball', label: 'Luna Ball', emoji: '🌙' },
+  { name: 'Friend Ball', label: 'Amigo Ball', emoji: '💚' },
+  { name: 'Love Ball', label: 'Amor Ball', emoji: '💕' },
+  { name: 'Heavy Ball', label: 'Peso Ball', emoji: '🏋️' },
+  { name: 'Fast Ball', label: 'Rapid Ball', emoji: '💨' },
+  { name: 'Dream Ball', label: 'Ensueño Ball', emoji: '💭' },
+  { name: 'Beast Ball', label: 'Ente Ball', emoji: '👾' },
+  { name: 'Sport Ball', label: 'Competi Ball', emoji: '🏀' },
+  { name: 'Safari Ball', label: 'Safari Ball', emoji: '🌿' },
 ]
 
 // Objetos equipables competitivos

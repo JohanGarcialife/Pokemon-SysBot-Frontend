@@ -1,6 +1,6 @@
 'use client'
 
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import { Pokemon } from '@/lib/pokemon/types'
 import { ChevronDown, Sparkles } from 'lucide-react'
 
@@ -12,6 +12,24 @@ interface AbilitySelectorProps {
 
 export function AbilitySelector({ pokemon, selectedAbility, onAbilityChange }: AbilitySelectorProps) {
   const [isOpen, setIsOpen] = useState(false)
+  const [translations, setTranslations] = useState<Record<string, string>>({})
+
+  useEffect(() => {
+    if (pokemon) {
+      pokemon.abilities.forEach(async (a) => {
+        try {
+          const res = await fetch(a.ability.url)
+          const data = await res.json()
+          const esName = data.names.find((n: any) => n.language.name === 'es')?.name
+          if (esName) {
+            setTranslations(prev => ({ ...prev, [a.ability.name]: esName }))
+          }
+        } catch (e) {
+          console.error('Error loading ability translation:', e)
+        }
+      })
+    }
+  }, [pokemon])
 
   if (!pokemon) {
     return (
@@ -54,7 +72,7 @@ export function AbilitySelector({ pokemon, selectedAbility, onAbilityChange }: A
       >
         <div className="flex items-center gap-2">
           <span className="font-bold text-gray-900">
-            {formatAbilityName(selectedAbility)}
+            {translations[selectedAbility] || formatAbilityName(selectedAbility)}
           </span>
           {currentAbility?.isHidden && (
             <span className="flex items-center gap-1 text-xs bg-yellow-100 text-yellow-700 px-2 py-0.5 rounded font-bold">
@@ -82,7 +100,7 @@ export function AbilitySelector({ pokemon, selectedAbility, onAbilityChange }: A
               }`}
             >
               <span className={`font-bold ${selectedAbility === ability.name ? 'text-purple-700' : 'text-gray-900'}`}>
-                {formatAbilityName(ability.name)}
+                {translations[ability.name] || formatAbilityName(ability.name)}
               </span>
               {ability.isHidden && (
                 <span className="flex items-center gap-1 text-xs bg-yellow-100 text-yellow-700 px-2 py-0.5 rounded font-bold">

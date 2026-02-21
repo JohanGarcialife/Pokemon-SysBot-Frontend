@@ -12,7 +12,7 @@ import { MoveSelector } from './MoveSelector'
 import { PokeBallSelector } from './PokeBallSelector'
 import { HeldItemSelector } from './HeldItemSelector'
 import { OriginSelector } from './OriginSelector'
-import { TYPE_COLORS } from '@/lib/pokemon/constants'
+import { TYPE_COLORS, TYPE_TRANSLATIONS } from '@/lib/pokemon/constants'
 import Image from 'next/image'
 import { useLegality } from '@/hooks/useLegality'
 import { LegalityPanel } from './LegalityPanel'
@@ -145,7 +145,7 @@ export function PokemonEditor({ pokemon, onAddToTeam }: PokemonEditorProps) {
                 key={type.type.name}
                 className={`${TYPE_COLORS[type.type.name] || 'bg-gray-400'} text-white font-bold px-4 py-2 rounded uppercase text-sm`}
               >
-                {type.type.name}
+                {TYPE_TRANSLATIONS[type.type.name] || type.type.name}
               </span>
             ))}
           </div>

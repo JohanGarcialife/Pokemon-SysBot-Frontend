@@ -44,7 +44,7 @@ export default function Navbar() {
 
   const navLinks = [
     { name: 'Dashboard', href: '/dashboard', icon: LayoutDashboard },
-    { name: 'Teambuilder', href: '/dashboard/teambuilder', icon: Gamepad2 },
+    { name: 'Crea tu Pokémon', href: '/dashboard/teambuilder', icon: Gamepad2 },
   ]
 
   const isActive = (path: string) => pathname === path
@@ -56,8 +56,12 @@ export default function Navbar() {
           {/* Logo & Desktop Nav */}
           <div className="flex">
             <div className="shrink-0 flex items-center">
-              <Link href="/" className="text-2xl font-black tracking-tight text-white hover:opacity-90 transition-opacity">
-                PK<span className="text-pokemon-blue">DeX</span>
+              <Link href="/" className="hover:opacity-90 transition-opacity flex items-center">
+                <img 
+                  src="/PKDEX.png" 
+                  alt="PKDeX Logo" 
+                  className="w-32 md:w-40 h-auto drop-shadow-md object-contain"
+                />
               </Link>
             </div>
             

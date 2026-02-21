@@ -11,6 +11,8 @@ interface MoveSelectorProps {
   onClose: () => void
 }
 
+const movesCache = new Map<number, Move[]>()
+
 export function MoveSelector({ pokemon, onMoveSelect, onClose }: MoveSelectorProps) {
   const [searchQuery, setSearchQuery] = useState('')
   const [moves, setMoves] = useState<Move[]>([])
@@ -26,6 +28,11 @@ export function MoveSelector({ pokemon, onMoveSelect, onClose }: MoveSelectorPro
 
   const loadMoves = async () => {
     if (!pokemon) return
+
+    if (movesCache.has(pokemon.id)) {
+      setMoves(movesCache.get(pokemon.id)!)
+      return
+    }
 
     setLoading(true)
     try {
@@ -49,6 +56,7 @@ export function MoveSelector({ pokemon, onMoveSelect, onClose }: MoveSelectorPro
         })
 
       const loadedMoves = await Promise.all(movePromises)
+      movesCache.set(pokemon.id, loadedMoves)
       setMoves(loadedMoves)
     } catch (error) {
       console.error('Error loading moves:', error)
@@ -85,8 +93,8 @@ export function MoveSelector({ pokemon, onMoveSelect, onClose }: MoveSelectorPro
   })
 
   return (
-    <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
-      <div className="bg-white rounded-lg shadow-2xl w-full max-w-2xl max-h-[90vh] flex flex-col">
+    <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4" onClick={onClose}>
+      <div className="bg-white rounded-lg shadow-2xl w-full max-w-2xl max-h-[90vh] flex flex-col" onClick={(e) => e.stopPropagation()}>
         {/* Header */}
         <div className="p-4 border-b-2 border-gray-200 flex items-center justify-between">
           <h3 className="text-lg font-black text-gray-900 uppercase">
@@ -196,6 +204,16 @@ export function MoveSelector({ pokemon, onMoveSelect, onClose }: MoveSelectorPro
               ))}
             </div>
           )}
+        </div>
+
+        {/* Footer info/buttons */}
+        <div className="p-4 border-t-2 border-gray-200">
+          <button
+            onClick={onClose}
+            className="w-full py-3 bg-gray-100 hover:bg-gray-200 text-gray-700 font-bold rounded-lg transition-colors border-2 border-gray-300 uppercase tracking-wide"
+          >
+            Atrás / Cancelar
+          </button>
         </div>
       </div>
     </div>

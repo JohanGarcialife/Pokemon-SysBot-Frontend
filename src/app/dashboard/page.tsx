@@ -51,7 +51,7 @@ export default async function DashboardPage() {
                   <div className="w-16 h-16 bg-linear-to-br from-electric to-yellow-500 rounded-xl flex items-center justify-center group-hover:scale-110 transition-transform">
                     <Users className="w-10 h-10 text-gray-900" />
                   </div>
-                  <h3 className="text-2xl font-black text-gray-900 uppercase tracking-tight">Teambuilder</h3>
+                  <h3 className="text-2xl font-black text-gray-900 uppercase tracking-tight">Crea tu Pokémon</h3>
                 </div>
                 <p className="text-gray-600 font-medium mb-4">Construye tu equipo perfecto de Pokémon con nuestro editor interactivo</p>
                 <div className="flex items-center gap-2 text-pokemon-blue font-bold group-hover:gap-3 transition-all">
@@ -152,7 +152,7 @@ export default async function DashboardPage() {
               <div className="bg-white/10 backdrop-blur-sm border-2 border-white/20 px-5 py-4 rounded-xl">
                 <div className="flex items-center gap-3">
                   <Sparkles className="w-6 h-6 text-pokemon-yellow" />
-                  <span className="text-white font-bold text-lg">Teambuilder</span>
+                  <span className="text-white font-bold text-lg">Crea tu Pokémon</span>
                 </div>
               </div>
               <div className="bg-white/10 backdrop-blur-sm border-2 border-white/20 px-5 py-4 rounded-xl">

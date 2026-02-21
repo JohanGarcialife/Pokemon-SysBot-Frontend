@@ -15,7 +15,8 @@ export function NatureSelector({ selectedNature, onNatureChange }: NatureSelecto
   const [searchQuery, setSearchQuery] = useState('')
 
   const filteredNatures = NATURES.filter(nature =>
-    nature.name.toLowerCase().includes(searchQuery.toLowerCase())
+    nature.name.toLowerCase().includes(searchQuery.toLowerCase()) || 
+    (nature.label && nature.label.toLowerCase().includes(searchQuery.toLowerCase()))
   )
 
   const getNatureEffect = (nature: Nature) => {
@@ -54,7 +55,7 @@ export function NatureSelector({ selectedNature, onNatureChange }: NatureSelecto
         className="w-full px-4 py-3 bg-white border-2 border-gray-300 rounded-lg flex items-center justify-between hover:border-psychic transition-colors"
       >
         <div className="flex items-center gap-3">
-          <span className="font-bold text-gray-900">{selectedNature.name}</span>
+          <span className="font-bold text-gray-900">{selectedNature.label || selectedNature.name}</span>
           {getNatureEffect(selectedNature)}
         </div>
         <ChevronDown className={`w-5 h-5 text-gray-600 transition-transform ${isOpen ? 'rotate-180' : ''}`} />
@@ -90,7 +91,7 @@ export function NatureSelector({ selectedNature, onNatureChange }: NatureSelecto
                 }`}
               >
                 <span className={`font-bold ${selectedNature.name === nature.name ? 'text-psychic' : 'text-gray-900'}`}>
-                  {nature.name}
+                  {nature.label || nature.name}
                 </span>
                 {getNatureEffect(nature)}
               </button>

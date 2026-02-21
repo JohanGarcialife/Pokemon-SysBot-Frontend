@@ -5,7 +5,7 @@ import Image from 'next/image'
 import { Loader2 } from 'lucide-react'
 import { pokeAPI } from '@/lib/pokemon/pokeapi'
 import type { Pokemon, PokemonSearchResult } from '@/lib/pokemon/types'
-import { TYPE_COLORS } from '@/lib/pokemon/types'
+import { TYPE_COLORS, TYPE_TRANSLATIONS } from '@/lib/pokemon/constants'
 
 interface PokemonPreviewProps {
   searchResult: PokemonSearchResult | null
@@ -100,10 +100,9 @@ export default function PokemonPreview({ searchResult }: PokemonPreviewProps) {
             {pokemon.types.map(({ type }) => (
               <span
                 key={type.name}
-                className="px-4 py-1.5 rounded-full text-white font-bold text-sm uppercase tracking-wide shadow-lg"
-                style={{ backgroundColor: TYPE_COLORS[type.name] || '#A8A878' }}
+                className={`px-4 py-1.5 rounded-full text-white font-bold text-sm uppercase tracking-wide shadow-lg ${TYPE_COLORS[type.name] || 'bg-gray-400'}`}
               >
-                {type.name}
+                {TYPE_TRANSLATIONS[type.name] || type.name}
               </span>
             ))}
           </div>

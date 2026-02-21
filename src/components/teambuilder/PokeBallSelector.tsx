@@ -1,6 +1,12 @@
 'use client'
 
+import Image from 'next/image'
 import { POKE_BALLS } from '@/lib/pokemon/constants'
+
+function getBallSpriteUrl(name: string) {
+  const formattedName = name.toLowerCase().replace(' ', '-')
+  return `https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/${formattedName}.png`
+}
 
 interface PokeBallSelectorProps {
   selectedBall: string
@@ -8,6 +14,9 @@ interface PokeBallSelectorProps {
 }
 
 export function PokeBallSelector({ selectedBall, onBallChange }: PokeBallSelectorProps) {
+  const selectedBallData = POKE_BALLS.find(b => b.name === selectedBall)
+  const displayLabel = selectedBallData?.label || selectedBall
+
   return (
     <div>
       <label className="block text-sm font-bold text-gray-700 mb-2 uppercase">
@@ -30,9 +39,17 @@ export function PokeBallSelector({ selectedBall, onBallChange }: PokeBallSelecto
               }
             `}
           >
-            <span className="text-xl mb-1">{ball.emoji}</span>
+            <div className="relative w-8 h-8 mb-1">
+              <Image 
+                src={getBallSpriteUrl(ball.name)}
+                alt={ball.name}
+                fill
+                className="object-contain drop-shadow-[0_2px_2px_rgba(0,0,0,0.3)]"
+                unoptimized
+              />
+            </div>
             <span className="text-[10px] font-bold text-gray-700 leading-tight truncate w-full">
-              {ball.name.replace(' Ball', '')}
+              {(ball as any).label ? (ball as any).label.replace(' Ball', '') : ball.name.replace(' Ball', '')}
             </span>
           </button>
         ))}
@@ -40,12 +57,18 @@ export function PokeBallSelector({ selectedBall, onBallChange }: PokeBallSelecto
 
       {/* Selected Display */}
       <div className="mt-3 p-3 bg-white rounded-lg border-2 border-gray-300 flex items-center gap-3">
-        <span className="text-2xl">
-          {POKE_BALLS.find(b => b.name === selectedBall)?.emoji || '🔴'}
-        </span>
+        <div className="relative w-10 h-10">
+          <Image 
+            src={getBallSpriteUrl(selectedBall)}
+            alt={selectedBall}
+            fill
+            className="object-contain drop-shadow-[0_2px_2px_rgba(0,0,0,0.3)]"
+            unoptimized
+          />
+        </div>
         <div>
           <span className="text-sm font-bold text-gray-700">Seleccionada: </span>
-          <span className="font-black text-gray-900">{selectedBall}</span>
+          <span className="font-black text-gray-900">{displayLabel}</span>
         </div>
       </div>
     </div>

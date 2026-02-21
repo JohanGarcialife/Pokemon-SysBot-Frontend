@@ -1,7 +1,7 @@
 'use client'
 
 import React from 'react'
-import { TERA_TYPES, TYPE_COLORS } from '@/lib/pokemon/constants'
+import { TERA_TYPES, TYPE_COLORS, TYPE_TRANSLATIONS } from '@/lib/pokemon/constants'
 
 interface TeraTypeSelectorProps {
   selectedType: string
@@ -39,7 +39,7 @@ export function TeraTypeSelector({ selectedType, onTypeChange }: TeraTypeSelecto
                 }
               `}
             >
-              {type}
+              {TYPE_TRANSLATIONS[type] || type}
             </button>
           )
         })}
@@ -50,7 +50,7 @@ export function TeraTypeSelector({ selectedType, onTypeChange }: TeraTypeSelecto
         <span className="text-sm font-bold text-gray-700">Teratipo seleccionado: </span>
         <span className="inline-flex items-center gap-2 font-bold uppercase text-gray-900 px-3 py-1 bg-gray-100 rounded border-2 border-gray-300 ml-2">
           <span className={`w-3 h-3 rounded-full ${TYPE_COLORS[selectedType as keyof typeof TYPE_COLORS]}`} />
-          {selectedType}
+          {TYPE_TRANSLATIONS[selectedType] || selectedType}
         </span>
       </div>
     </div>

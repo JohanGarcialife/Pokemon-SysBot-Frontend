@@ -12,7 +12,7 @@ import { pokeAPI } from '@/lib/pokemon/pokeapi'
 import { TYPE_COLORS } from '@/lib/pokemon/constants'
 
 export default function TeambuilderPage() {
-  const [selectedGame, setSelectedGame] = useState<GameVersion>('scarlet')
+  const [selectedGame, setSelectedGame] = useState<GameVersion>('legends-za')
   const [selectedPokemon, setSelectedPokemon] = useState<Pokemon | null>(null)
   const [team, setTeam] = useState<PokemonBuild[]>([])
   const [showTradeCode, setShowTradeCode] = useState(false)
@@ -51,7 +51,7 @@ export default function TeambuilderPage() {
           <div className="flex items-center gap-4 mb-3">
             <Sparkles className="w-10 h-10 text-pokemon-yellow" />
             <h1 className="text-5xl md:text-6xl font-black text-gradient-pokemon uppercase tracking-tight">
-              Teambuilder
+              Crea tu Pokémon
             </h1>
           </div>
           <p className="text-white text-lg font-medium">

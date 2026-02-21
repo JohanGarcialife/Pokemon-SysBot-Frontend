@@ -9,7 +9,19 @@ interface GameSelectorProps {
 
 export default function GameSelector({ selected, onSelect }: GameSelectorProps) {
   return (
-    <div className="flex gap-3">
+    <div className="flex flex-col md:flex-row gap-3">
+      <button
+        onClick={() => onSelect('legends-za')}
+        className={`
+          flex-1 px-6 py-3 rounded-xl font-bold uppercase tracking-wide transition-all border-2
+          ${selected === 'legends-za'
+            ? 'bg-linear-to-r from-emerald-500 to-teal-700 text-white shadow-xl scale-105 border-transparent'
+            : 'bg-white text-gray-700 hover:bg-gray-50 border-emerald-500 shadow-md'
+          }
+        `}
+      >
+        ✨ Legends Z-A
+      </button>
       <button
         onClick={() => onSelect('scarlet')}
         className={`

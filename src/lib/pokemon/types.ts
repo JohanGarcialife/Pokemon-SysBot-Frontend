@@ -94,7 +94,7 @@ export interface PokemonListResponse {
 
 // Tipos de la aplicación
 
-export type GameVersion = 'scarlet' | 'violet'
+export type GameVersion = 'legends-za' | 'scarlet' | 'violet'
 
 export interface TeamSlot {
   position: number
@@ -158,6 +158,7 @@ export interface StatValue {
 
 export interface Nature {
   name: string
+  label?: string
   increase: keyof PokemonStats | null
   decrease: keyof PokemonStats | null
 }

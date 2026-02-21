@@ -1,3 +1,5 @@
+import { GameVersion } from '@/lib/pokemon/types'
+
 /**
  * Backend API Configuration
  */
@@ -32,7 +34,7 @@ export interface PokemonBuildPayload {
 export interface CreateOrderRequest {
   team: PokemonBuildPayload[]
   tradeCode: string
-  gameVersion: 'scarlet' | 'violet'
+  gameVersion: GameVersion
 }
 
 export interface CreateOrderResponse {
