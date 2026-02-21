@@ -4,7 +4,7 @@ import Image from 'next/image'
 import { POKE_BALLS } from '@/lib/pokemon/constants'
 
 function getBallSpriteUrl(name: string) {
-  const formattedName = name.toLowerCase().replace(' ', '-')
+  const formattedName = name.toLowerCase().replace('é', 'e').replace(' ', '-')
   return `https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/${formattedName}.png`
 }
 

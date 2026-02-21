@@ -3,12 +3,14 @@ import Image from 'next/image'
 import { Zap, Shield, Sparkles, Search, Sliders, QrCode, ArrowRightLeft, ArrowRight, Gamepad2 } from 'lucide-react'
 import { createClient } from '@/utils/supabase/server'
 
+export const dynamic = 'force-dynamic'
+
 export default async function Home() {
   const supabase = await createClient()
   const { data: { user } } = await supabase.auth.getUser()
 
-  const ctaLink = user ? '/dashboard/teambuilder' : '/login'
-  const ctaText = user ? 'Ir al Teambuilder' : 'Comenzar'
+  const ctaLink = user ? '/dashboard' : '/login'
+  const ctaText = user ? 'Ir al Dashboard' : 'Comenzar'
 
   return (
     <div className="min-h-screen">
