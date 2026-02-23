@@ -15,21 +15,17 @@ export default async function Home() {
 
   return (
     <div className="min-h-screen">
-      {/* Hero Section - Dualidad fuego/agua */}
-      <div className="relative py-6 pb-8 flex flex-col items-center overflow-hidden w-full">
-        {/* Background: imagen estirada 100% ancho/alto para cubrir de borde a borde */}
+      {/* Hero Section - Fondo dualidad fuego/agua */}
+      <div className="relative py-6 pb-8 flex flex-col items-center overflow-hidden">
+        {/* Background Image */}
         <div 
-          className="absolute inset-0 w-full h-full"
-          style={{
-            backgroundImage: "url('/hero-bg.png')",
-            backgroundSize: '100% 100%',
-            backgroundRepeat: 'no-repeat'
-          }}
+          className="absolute inset-0 bg-cover bg-center bg-no-repeat"
+          style={{ backgroundImage: "url('/hero-bg.png')" }}
         />
         {/* Dark overlay para legibilidad */}
-        <div className="absolute inset-0 bg-black/35" />
-        {/* Bottom fade hacia el bloque blanco de abajo */}
-        <div className="absolute bottom-0 left-0 right-0 h-20 bg-linear-to-b from-transparent to-white/50" />
+        <div className="absolute inset-0 bg-black/40" />
+        {/* Vignette vertical sutil */}
+        <div className="absolute inset-0 bg-linear-to-b from-black/20 via-transparent to-black/60" />
         
         <div className="relative z-10 text-center px-6 max-w-4xl w-full mx-auto mt-0">
           {/* Logo PKDEX */}
