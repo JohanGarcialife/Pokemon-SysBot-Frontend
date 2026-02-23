@@ -15,17 +15,27 @@ export default async function Home() {
 
   return (
     <div className="min-h-screen">
-      {/* Hero Section - Fondo dualidad fuego/agua */}
-      <div className="relative py-6 pb-8 flex flex-col items-center overflow-hidden">
-        {/* Background Image */}
+      {/* Hero Section - Dualidad fuego/agua */}
+      <div className="relative py-6 pb-8 flex flex-col items-center overflow-hidden w-full">
+        {/* CSS Gradient background - fuego izquierda, agua derecha, edge-to-edge */}
         <div 
-          className="absolute inset-0 bg-cover bg-center bg-no-repeat"
-          style={{ backgroundImage: "url('/hero-bg.png')" }}
+          className="absolute inset-0 w-full h-full"
+          style={{
+            background: 'linear-gradient(to right, #3d1200 0%, #7a2800 20%, #5c1a00 35%, #1a1a0a 48%, #001a1a 52%, #00304a 65%, #003050 80%, #001828 100%)'
+          }}
         />
-        {/* Dark overlay to keep text readable and prevent image from overpowering content */}
-        <div className="absolute inset-0 bg-black/40" />
-        {/* Subtle edge vignette */}
-        <div className="absolute inset-0 bg-linear-to-b from-black/20 via-transparent to-black/60" />
+        {/* Subtle film grain texture overlay */}
+        <div 
+          className="absolute inset-0 opacity-30"
+          style={{
+            backgroundImage: "url('/hero-bg.png')",
+            backgroundSize: 'cover',
+            backgroundPosition: 'center 40%',
+            mixBlendMode: 'screen'
+          }}
+        />
+        {/* Bottom fade to white (para fundirse con el bloque debajo) */}
+        <div className="absolute bottom-0 left-0 right-0 h-24 bg-linear-to-b from-transparent to-white/60" />
         
         <div className="relative z-10 text-center px-6 max-w-4xl w-full mx-auto mt-0">
           {/* Logo PKDEX */}
