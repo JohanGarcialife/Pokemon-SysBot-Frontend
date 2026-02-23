@@ -17,25 +17,19 @@ export default async function Home() {
     <div className="min-h-screen">
       {/* Hero Section - Dualidad fuego/agua */}
       <div className="relative py-6 pb-8 flex flex-col items-center overflow-hidden w-full">
-        {/* CSS Gradient background - fuego izquierda, agua derecha, edge-to-edge */}
+        {/* Background: imagen estirada 100% ancho/alto para cubrir de borde a borde */}
         <div 
           className="absolute inset-0 w-full h-full"
           style={{
-            background: 'linear-gradient(to right, #3d1200 0%, #7a2800 20%, #5c1a00 35%, #1a1a0a 48%, #001a1a 52%, #00304a 65%, #003050 80%, #001828 100%)'
-          }}
-        />
-        {/* Subtle film grain texture overlay */}
-        <div 
-          className="absolute inset-0 opacity-30"
-          style={{
             backgroundImage: "url('/hero-bg.png')",
-            backgroundSize: 'cover',
-            backgroundPosition: 'center 40%',
-            mixBlendMode: 'screen'
+            backgroundSize: '100% 100%',
+            backgroundRepeat: 'no-repeat'
           }}
         />
-        {/* Bottom fade to white (para fundirse con el bloque debajo) */}
-        <div className="absolute bottom-0 left-0 right-0 h-24 bg-linear-to-b from-transparent to-white/60" />
+        {/* Dark overlay para legibilidad */}
+        <div className="absolute inset-0 bg-black/35" />
+        {/* Bottom fade hacia el bloque blanco de abajo */}
+        <div className="absolute bottom-0 left-0 right-0 h-20 bg-linear-to-b from-transparent to-white/50" />
         
         <div className="relative z-10 text-center px-6 max-w-4xl w-full mx-auto mt-0">
           {/* Logo PKDEX */}
