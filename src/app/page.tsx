@@ -15,14 +15,17 @@ export default async function Home() {
 
   return (
     <div className="min-h-screen">
-      {/* Hero Section - Fondo Oscuro con estética Pokémon */}
-      <div className="relative py-6 pb-8 flex flex-col items-center overflow-hidden bg-linear-to-b from-slate-900 via-blue-950 to-slate-900">
-        {/* Efecto de patrón de fondo sutil */}
-        <div className="absolute inset-0 opacity-10">
-          <div className="absolute top-10 left-10 w-64 h-64 bg-pokemon-blue rounded-full blur-3xl" />
-          <div className="absolute bottom-10 right-10 w-64 h-64 bg-waves-from rounded-full blur-3xl" />
-          <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-96 h-96 bg-winds-from rounded-full blur-3xl" />
-        </div>
+      {/* Hero Section - Fondo dualidad fuego/agua */}
+      <div className="relative py-6 pb-8 flex flex-col items-center overflow-hidden">
+        {/* Background Image */}
+        <div 
+          className="absolute inset-0 bg-cover bg-center bg-no-repeat"
+          style={{ backgroundImage: "url('/hero-bg.png')" }}
+        />
+        {/* Dark overlay to keep text readable and prevent image from overpowering content */}
+        <div className="absolute inset-0 bg-black/40" />
+        {/* Subtle edge vignette */}
+        <div className="absolute inset-0 bg-linear-to-b from-black/20 via-transparent to-black/60" />
         
         <div className="relative z-10 text-center px-6 max-w-4xl w-full mx-auto mt-0">
           {/* Logo PKDEX */}
@@ -35,11 +38,11 @@ export default async function Home() {
           </div>
           
           {/* Texto Principal */}
-          <h2 className="text-2xl md:text-3xl font-black mb-2 text-white uppercase tracking-wider relative z-20">
+          <h2 className="text-2xl md:text-3xl font-black mb-2 text-white uppercase tracking-wider relative z-20 drop-shadow-lg">
             Haz intercambios en <span className="text-pokemon-yellow">segundos</span>
           </h2>
           
-          <p className="text-gray-300 text-sm md:text-base mb-6 max-w-2xl mx-auto uppercase tracking-wide font-medium">
+          <p className="text-gray-200 text-sm md:text-base mb-6 max-w-2xl mx-auto uppercase tracking-wide font-medium drop-shadow">
             Consigue cualquier Pokémon legal. Diseña y arma tu equipo perfecto de forma rápida.
           </p>
 
