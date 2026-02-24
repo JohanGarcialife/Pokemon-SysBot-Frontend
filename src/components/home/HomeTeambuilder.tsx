@@ -23,7 +23,10 @@ export default function HomeTeambuilder({ user }: HomeTeambuilderProps) {
   const [isModalOpen, setIsModalOpen] = useState(false)
   const { query, setQuery, results, loading } = usePokemonSearch()
 
-  // On mount: if user is logged in, check for a pending build saved before login redirect
+  // On mount: check for a build saved before the login redirect
+  // We use empty deps [] to run exactly once on mount — user is already set
+  // by the server component so the closure captures the correct value.
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   useEffect(() => {
     if (!user) return
     try {
@@ -31,14 +34,13 @@ export default function HomeTeambuilder({ user }: HomeTeambuilderProps) {
       if (saved) {
         const pending: { pokemon: Pokemon; build: PokemonBuild } = JSON.parse(saved)
         localStorage.removeItem(PENDING_BUILD_KEY)
-        // Re-open the editor with the saved pokemon
         setSelectedPokemon(pending.pokemon)
         setIsModalOpen(true)
       }
     } catch {
       localStorage.removeItem(PENDING_BUILD_KEY)
     }
-  }, [user])
+  }, []) // intentionally empty — run once on mount
 
   const handlePokemonSelect = async (result: PokemonSearchResult | null) => {
     if (!result) {
