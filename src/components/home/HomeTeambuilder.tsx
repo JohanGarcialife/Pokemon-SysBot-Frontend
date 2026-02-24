@@ -27,18 +27,17 @@ export default function HomeTeambuilder({ user }: HomeTeambuilderProps) {
   const [currentBuild, setCurrentBuild] = useState<PokemonBuild | null>(null)
   const { query, setQuery, results, loading } = usePokemonSearch()
 
-  // On mount: check for a build saved before the login redirect
-  // We use empty deps [] to run exactly once on mount — user is already set
-  // by the server component so the closure captures the correct value.
+  // On mount: always check for a pending build saved before the login redirect.
+  // We do NOT check 'user' here because during SSR hydration the prop
+  // may briefly be null, causing the effect to bail early and never restore.
+  // The /teambuilder server component guarantees auth before rendering.
   // eslint-disable-next-line react-hooks/exhaustive-deps
   useEffect(() => {
-    if (!user) return
     try {
       const saved = localStorage.getItem(PENDING_BUILD_KEY)
       if (saved) {
         const pending: { pokemon: Pokemon; build: PokemonBuild } = JSON.parse(saved)
         localStorage.removeItem(PENDING_BUILD_KEY)
-        // Restore: open the editor directly with the saved build
         setSelectedPokemon(pending.pokemon)
         setCurrentBuild(pending.build)
         setIsModalOpen(true)
@@ -46,7 +45,7 @@ export default function HomeTeambuilder({ user }: HomeTeambuilderProps) {
     } catch {
       localStorage.removeItem(PENDING_BUILD_KEY)
     }
-  }, []) // intentionally empty — run once on mount
+  }, []) // run exactly once on mount
 
   const handlePokemonSelect = async (result: PokemonSearchResult | null) => {
     if (!result) {
