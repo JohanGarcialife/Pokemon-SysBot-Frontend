@@ -166,7 +166,7 @@ export default function HomeTeambuilder({ user }: HomeTeambuilderProps) {
                    </div>
                    <div>
                      <h4 className="font-bold text-gray-900 mb-1">¿Los Pokémon son legales para jugar online?</h4>
-                     <p className="text-gray-600 text-sm leading-relaxed">Sí. El editor PKDeX cuenta con validadores de legalidad incorporados (basados en PKHeX) que impedirán enviar Pokémon con movimientos o estadísticas imposibles, protegiendo tu cuenta.</p>
+                     <p className="text-gray-600 text-sm leading-relaxed">Sí. Todos los Pokémon son generados siguiendo el mismo estándar de validación que <strong>Pokémon Showdown</strong>, garantizando movimientos, estadísticas y habilidades 100% legales. Ningún Pokémon imposible puede ser enviado, protegiendo siempre tu cuenta.</p>
                    </div>
                  </div>
                </div>
