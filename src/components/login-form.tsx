@@ -1,12 +1,14 @@
 'use client'
 
 import { createClient } from '@/utils/supabase/client'
-import { useRouter } from 'next/navigation'
+import { useRouter, useSearchParams } from 'next/navigation'
 import { useState } from 'react'
 import { Loader2, Mail, Lock, AlertCircle, User } from 'lucide-react'
 
 export default function LoginForm() {
   const router = useRouter()
+  const searchParams = useSearchParams()
+  const redirectTo = searchParams.get('redirect') || '/dashboard'
   const supabase = createClient()
   
   // Form States
@@ -55,7 +57,7 @@ export default function LoginForm() {
           password,
         })
         if (error) throw error
-        router.push('/dashboard')
+        router.push(redirectTo)
         router.refresh()
       }
     } catch (err: any) {

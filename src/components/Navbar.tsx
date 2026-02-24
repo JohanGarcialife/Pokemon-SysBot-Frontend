@@ -44,7 +44,7 @@ export default function Navbar() {
 
   const navLinks = [
     { name: 'Dashboard', href: '/dashboard', icon: LayoutDashboard },
-    { name: 'Crea tu Pokémon', href: '/', icon: Gamepad2 },
+    { name: 'Crea tu Pokémon', href: '/dashboard/teambuilder', icon: Gamepad2 },
   ]
 
   const isActive = (path: string) => pathname === path

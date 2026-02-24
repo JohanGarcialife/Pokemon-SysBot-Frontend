@@ -1,6 +1,6 @@
 'use client'
 
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { useRouter } from 'next/navigation'
 import { ArrowRightLeft, Sparkles, Filter, Info, Server, ChevronRight, Search, Loader2 } from 'lucide-react'
 import GameSelector from '@/components/teambuilder/GameSelector'
@@ -9,6 +9,8 @@ import { PokemonEditorModal } from '@/components/teambuilder/PokemonEditorModal'
 import { usePokemonSearch } from '@/hooks/usePokemonSearch'
 import type { GameVersion, PokemonSearchResult, Pokemon, PokemonBuild } from '@/lib/pokemon/types'
 import { pokeAPI } from '@/lib/pokemon/pokeapi'
+
+const PENDING_BUILD_KEY = 'pkdex_pending_build'
 
 interface HomeTeambuilderProps {
   user: any // Supabase user
@@ -20,6 +22,23 @@ export default function HomeTeambuilder({ user }: HomeTeambuilderProps) {
   const [selectedPokemon, setSelectedPokemon] = useState<Pokemon | null>(null)
   const [isModalOpen, setIsModalOpen] = useState(false)
   const { query, setQuery, results, loading } = usePokemonSearch()
+
+  // On mount: if user is logged in, check for a pending build saved before login redirect
+  useEffect(() => {
+    if (!user) return
+    try {
+      const saved = localStorage.getItem(PENDING_BUILD_KEY)
+      if (saved) {
+        const pending: { pokemon: Pokemon; build: PokemonBuild } = JSON.parse(saved)
+        localStorage.removeItem(PENDING_BUILD_KEY)
+        // Re-open the editor with the saved pokemon
+        setSelectedPokemon(pending.pokemon)
+        setIsModalOpen(true)
+      }
+    } catch {
+      localStorage.removeItem(PENDING_BUILD_KEY)
+    }
+  }, [user])
 
   const handlePokemonSelect = async (result: PokemonSearchResult | null) => {
     if (!result) {
@@ -37,12 +56,19 @@ export default function HomeTeambuilder({ user }: HomeTeambuilderProps) {
 
   const handleAddToTeam = (build: PokemonBuild) => {
     if (!user) {
-      // If not logged in, take them to login (or save state in localStorage then login)
-      router.push('/login')
+      // Save the current build and pokemon to localStorage so it survives the login redirect
+      if (selectedPokemon) {
+        try {
+          localStorage.setItem(PENDING_BUILD_KEY, JSON.stringify({ pokemon: selectedPokemon, build }))
+        } catch { /* storage full or unavailable */ }
+      }
+      // Redirect to login with a redirect-back URL
+      const currentPath = window.location.pathname
+      router.push(`/login?redirect=${encodeURIComponent(currentPath)}`)
       return
     }
-    // Proceed to add to team
-    console.log("Added", build)
+    // User is logged in — proceed to add to team
+    console.log('Added', build)
     router.push('/dashboard')
   }
 
