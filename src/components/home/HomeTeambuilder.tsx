@@ -6,6 +6,7 @@ import { ArrowRightLeft, Sparkles, Filter, Info, Server, ChevronRight, Search, L
 import GameSelector from '@/components/teambuilder/GameSelector'
 import { PokemonGrid } from '@/components/teambuilder/PokemonGrid'
 import { PokemonEditorModal } from '@/components/teambuilder/PokemonEditorModal'
+import { TradeCodeModal } from '@/components/teambuilder/TradeCodeModal'
 import { usePokemonSearch } from '@/hooks/usePokemonSearch'
 import type { GameVersion, PokemonSearchResult, Pokemon, PokemonBuild } from '@/lib/pokemon/types'
 import { pokeAPI } from '@/lib/pokemon/pokeapi'
@@ -21,6 +22,9 @@ export default function HomeTeambuilder({ user }: HomeTeambuilderProps) {
   const [selectedGame, setSelectedGame] = useState<GameVersion>('legends-za')
   const [selectedPokemon, setSelectedPokemon] = useState<Pokemon | null>(null)
   const [isModalOpen, setIsModalOpen] = useState(false)
+  // Trade code modal state — opened after the user confirms the build
+  const [isTradeModalOpen, setIsTradeModalOpen] = useState(false)
+  const [currentBuild, setCurrentBuild] = useState<PokemonBuild | null>(null)
   const { query, setQuery, results, loading } = usePokemonSearch()
 
   // On mount: check for a build saved before the login redirect
@@ -34,7 +38,9 @@ export default function HomeTeambuilder({ user }: HomeTeambuilderProps) {
       if (saved) {
         const pending: { pokemon: Pokemon; build: PokemonBuild } = JSON.parse(saved)
         localStorage.removeItem(PENDING_BUILD_KEY)
+        // Restore: open the editor directly with the saved build
         setSelectedPokemon(pending.pokemon)
+        setCurrentBuild(pending.build)
         setIsModalOpen(true)
       }
     } catch {
@@ -69,9 +75,10 @@ export default function HomeTeambuilder({ user }: HomeTeambuilderProps) {
       router.push(`/login?redirect=${encodeURIComponent(currentPath)}`)
       return
     }
-    // User is logged in — proceed to add to team
-    console.log('Added', build)
-    router.push('/dashboard')
+    // User is logged in — close the editor and open the TradeCodeModal
+    setIsModalOpen(false)
+    setCurrentBuild(build)
+    setIsTradeModalOpen(true)
   }
 
   return (
@@ -218,6 +225,19 @@ export default function HomeTeambuilder({ user }: HomeTeambuilderProps) {
         isOpen={isModalOpen}
         onClose={() => setIsModalOpen(false)}
         onAddToTeam={handleAddToTeam}
+      />
+
+      {/* TradeCodeModal — opens after the user confirms the build (logged in) */}
+      <TradeCodeModal
+        isOpen={isTradeModalOpen}
+        onClose={() => {
+          setIsTradeModalOpen(false)
+          setCurrentBuild(null)
+          setSelectedPokemon(null)
+        }}
+        team={currentBuild ? [currentBuild] : []}
+        gameVersion={selectedGame}
+        pokemonName={selectedPokemon?.name}
       />
     </div>
   )
