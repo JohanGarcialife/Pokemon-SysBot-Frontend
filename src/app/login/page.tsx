@@ -12,20 +12,18 @@ export default async function LoginPage() {
 
   return (
     <div className="min-h-screen flex items-center justify-center p-4 relative overflow-hidden">
-      {/* Dual fire/water background */}
+      {/* Dark fantasy fire/water background */}
       <div 
         className="absolute inset-0 bg-cover bg-center bg-no-repeat"
         style={{ backgroundImage: "url('/login-bg.png')" }}
       />
-      {/* Dark overlay for readability */}
-      <div className="absolute inset-0 bg-black/50" />
-      {/* Subtle vignette edges */}
-      <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,transparent_40%,rgba(0,0,0,0.4)_100%)]" />
+      {/* Dark overlay - el arte oscuro necesita menos overlay */}
+      <div className="absolute inset-0 bg-black/45" />
 
       <div className="relative z-10 w-full flex flex-col items-center">
         <div className="mb-8 text-center flex flex-col items-center">
             <img src="/PKDEX.png" alt="PKDeX Logo" className="w-64 h-auto drop-shadow-2xl mb-4" />
-            <p className="text-gray-300 font-medium drop-shadow">Diseña y obtén tu Pokémon ideal</p>
+            <p className="text-gray-300 font-medium" style={{ textShadow: '0 1px 6px rgba(0,0,0,0.9)' }}>Diseña y obtén tu Pokémon ideal</p>
         </div>
         <LoginForm />
       </div>
