@@ -7,7 +7,7 @@ export default async function TeambuilderPage() {
   const { data: { user } } = await supabase.auth.getUser()
 
   if (!user) {
-    redirect('/login?redirect=/dashboard/teambuilder')
+    redirect('/login?redirect=/teambuilder')
   }
 
   return (
@@ -24,7 +24,7 @@ export default async function TeambuilderPage() {
         </div>
       </div>
 
-      {/* Teambuilder — same component used on /home */}
+      {/* Teambuilder */}
       <HomeTeambuilder user={user} />
     </div>
   )

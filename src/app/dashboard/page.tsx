@@ -17,10 +17,13 @@ export default async function DashboardPage() {
   return (
     <div className="min-h-screen bg-white">
       {/* Dark Header Section */}
-      <div className="relative bg-gradient-to-br from-slate-900 via-blue-950 to-slate-900 py-12 px-8 overflow-hidden">
-        {/* Subtle glow effects */}
-        <div className="absolute top-0 right-0 w-64 h-64 bg-pokemon-blue opacity-10 blur-3xl rounded-full" />
-        <div className="absolute bottom-0 left-0 w-64 h-64 bg-winds-from opacity-10 blur-3xl rounded-full" />
+      <div className="relative py-12 px-8 overflow-hidden">
+        {/* FONDOLOGIN background */}
+        <div 
+          className="absolute inset-0 bg-cover bg-center bg-no-repeat"
+          style={{ backgroundImage: "url('/FONDOLOGIN.png')" }}
+        />
+        <div className="absolute inset-0 bg-black/55" />
         
         <div className="relative z-10 max-w-7xl mx-auto">
           <div className="flex justify-between items-start mb-4">
@@ -32,7 +35,6 @@ export default async function DashboardPage() {
                 Bienvenido, <span className="text-pokemon-yellow font-bold">{user.email}</span>
               </p>
             </div>
-            {/* Logout is now in the Navbar */}
           </div>
         </div>
       </div>
@@ -129,15 +131,13 @@ export default async function DashboardPage() {
       </div>
 
       {/* Dark Features Section */}
-      <div className="relative py-20 px-8 bg-gradient-to-br from-blue-950 via-blue-900 to-blue-950 overflow-hidden">
-        {/* Glow orb effect */}
-        <div className="absolute right-20 top-1/2 -translate-y-1/2 w-80 h-80 rounded-full" 
-             style={{
-               background: 'radial-gradient(circle, rgba(255,107,53,1) 0%, rgba(230,62,109,1) 33%, rgba(123,44,191,1) 66%, rgba(0,217,255,1) 100%)',
-               filter: 'blur(40px)',
-               opacity: 0.3
-             }} 
+      <div className="relative py-20 px-8 overflow-hidden">
+        {/* FONDOLOGIN background - muestra la parte inferior (agua/fuego abajo) */}
+        <div 
+          className="absolute inset-0 bg-cover bg-bottom bg-no-repeat"
+          style={{ backgroundImage: "url('/FONDOLOGIN.png')" }}
         />
+        <div className="absolute inset-0 bg-black/60" />
         
         <div className="relative z-10 max-w-7xl mx-auto">
           <div className="max-w-2xl">

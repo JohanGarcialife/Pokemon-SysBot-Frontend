@@ -65,7 +65,7 @@ export default function HomeTeambuilder({ user }: HomeTeambuilderProps) {
         } catch { /* storage full or unavailable */ }
       }
       // Redirect to login with a redirect-back URL
-      const currentPath = window.location.pathname
+      const currentPath = window.location.pathname === '/' ? '/teambuilder' : window.location.pathname
       router.push(`/login?redirect=${encodeURIComponent(currentPath)}`)
       return
     }
