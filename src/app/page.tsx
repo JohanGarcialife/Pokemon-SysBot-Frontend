@@ -20,7 +20,7 @@ export default async function Home() {
         {/* Background Image */}
         <div 
           className="absolute inset-0 bg-cover bg-center bg-no-repeat"
-          style={{ backgroundImage: "url('/hero-bg.png')" }}
+          style={{ backgroundImage: "url('/FONDODEPRUEBA.png')" }}
         />
         {/* Overlay oscuro ligero - la nueva imagen ya tiene buen contraste */}
         <div className="absolute inset-0 bg-black/25" />

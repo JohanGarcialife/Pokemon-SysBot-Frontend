@@ -15,7 +15,7 @@ export default async function LoginPage() {
       {/* Dark fantasy fire/water background */}
       <div 
         className="absolute inset-0 bg-cover bg-center bg-no-repeat"
-        style={{ backgroundImage: "url('/login-bg.png')" }}
+        style={{ backgroundImage: "url('/FONDOLOGIN.png')" }}
       />
       {/* Dark overlay - el arte oscuro necesita menos overlay */}
       <div className="absolute inset-0 bg-black/45" />
