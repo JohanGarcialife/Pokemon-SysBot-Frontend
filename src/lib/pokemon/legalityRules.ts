@@ -208,6 +208,49 @@ function checkSuspiciousZeroIVs(build: PokemonBuild): ValidationResult | null {
   return null
 }
 
+/**
+ * Rule 11 (Error): Ability is not one of the valid abilities for this species.
+ * Uses the pokemon.abilities data already available in the build (from PokeAPI).
+ */
+function checkAbilityIsValid(build: PokemonBuild): ValidationResult | null {
+  if (!build.ability || !build.pokemon?.abilities?.length) return null
+  
+  const validAbilities = build.pokemon.abilities.map((a) => a.ability.name)
+  const selectedSlug = build.ability.toLowerCase().trim()
+  
+  if (!validAbilities.includes(selectedSlug)) {
+    return {
+      id: 'ability-invalid-for-species',
+      severity: 'error',
+      field: 'ability',
+      message: `"${build.ability}" no es una habilidad válida para ${build.pokemon.name}. Válidas: ${validAbilities.join(', ')}`,
+    }
+  }
+  return null
+}
+
+/**
+ * Rule 12 (Warning): Hidden Ability may not be legal in all competitive formats.
+ */
+function checkHiddenAbility(build: PokemonBuild): ValidationResult | null {
+  if (!build.ability || !build.pokemon?.abilities?.length) return null
+  
+  const selectedSlug = build.ability.toLowerCase().trim()
+  const haEntry = build.pokemon.abilities.find(
+    (a) => a.ability.name === selectedSlug && a.is_hidden
+  )
+  
+  if (haEntry) {
+    return {
+      id: 'ability-hidden',
+      severity: 'warning',
+      field: 'ability',
+      message: '⚠️ Habilidad Oculta (HA) — verifica que sea legal en el formato de tu torneo',
+    }
+  }
+  return null
+}
+
 // ============================================================
 // Main Validation Function
 // ============================================================
@@ -228,6 +271,8 @@ export function validateBuild(build: PokemonBuild): ValidationResult[] {
   push(checkGenderCompatibility(build))
   push(checkAssaultVest(build))
   push(checkSuspiciousZeroIVs(build))
+  push(checkAbilityIsValid(build))
+  push(checkHiddenAbility(build))
 
   // Sort: errors first, then warnings
   return results.sort((a, b) => {
