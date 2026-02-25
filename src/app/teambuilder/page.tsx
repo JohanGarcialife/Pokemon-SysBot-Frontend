@@ -13,8 +13,17 @@ export default async function TeambuilderPage() {
   return (
     <div className="min-h-screen bg-white">
       {/* Header */}
-      <div className="bg-slate-900 py-8 px-6">
-        <div className="max-w-7xl mx-auto">
+      <div
+        className="py-8 px-6 relative"
+        style={{
+          backgroundImage: "url('/FONDOLOGIN.png')",
+          backgroundSize: 'cover',
+          backgroundPosition: 'center',
+        }}
+      >
+        {/* Dark overlay for readability */}
+        <div className="absolute inset-0 bg-slate-900/75" />
+        <div className="max-w-7xl mx-auto relative z-10">
           <h1 className="text-4xl md:text-5xl font-black text-white uppercase tracking-tight">
             Crea tu <span className="text-pokemon-yellow">Pokémon</span>
           </h1>
