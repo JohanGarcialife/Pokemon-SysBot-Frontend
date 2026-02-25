@@ -61,22 +61,32 @@ export function TradeCodeModal({ isOpen, onClose, team, gameVersion, pokemonName
         const supabase = createClient()
         const { data: { session } } = await supabase.auth.getSession()
 
+        console.log('[TradeModal] session exists:', !!session)
+        console.log('[TradeModal] access_token prefix:', session?.access_token?.substring(0, 30) + '...')
+        console.log('[TradeModal] team length:', team.length)
+        console.log('[TradeModal] gameVersion:', gameVersion)
+        console.log('[TradeModal] tradeCode:', code)
+
         if (!session?.access_token) {
+          console.log('[TradeModal] FAIL: No access_token in session')
           setOrderError('No se pudo obtener la sesión. Inicia sesión de nuevo.')
           setOrderState('error')
           return
         }
 
         const payload = teamToPayload(team)
+        console.log('[TradeModal] Sending payload:', JSON.stringify({ team: payload.length + ' pokemon', tradeCode: code, gameVersion }))
+
         const result = await BackendAPI.createOrder(
           { team: payload, tradeCode: code, gameVersion },
           session.access_token
         )
 
+        console.log('[TradeModal] SUCCESS order created:', result)
         setOrderId(result.orderId)
         setOrderState('success')
       } catch (err) {
-        console.error('Order creation failed:', err)
+        console.error('[TradeModal] Order creation FAILED:', err)
         setOrderError(err instanceof Error ? err.message : 'Error al crear la orden')
         setOrderState('error')
       }
