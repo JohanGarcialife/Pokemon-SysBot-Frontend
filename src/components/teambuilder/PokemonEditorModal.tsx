@@ -1,4 +1,4 @@
-'use client'
+ 'use client'
 
 import React, { useEffect, useState } from 'react'
 import { Pokemon, PokemonBuild, GameVersion } from '@/lib/pokemon/types'
@@ -80,7 +80,7 @@ export function PokemonEditorModal({
                 <AlertCircle className="w-5 h-5 text-red-500 shrink-0" />
                 <span>
                   <strong className="capitalize">{pokemon.name}</strong> no está disponible en{' '}
-                  <strong>{gameName}</strong>. Puedes configurarlo, pero el bot no podrá entregarlo.
+                  <strong>{gameName}</strong>. Puedes configurarlo, pero nuestro sistema no podrá entregarlo.
                 </span>
               </>
             )}

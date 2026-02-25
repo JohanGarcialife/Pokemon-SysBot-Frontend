@@ -1,7 +1,7 @@
 import { PokemonBuild } from './types'
 
 /**
- * Serialized representation of a PokemonBuild for the backend/SysBot.
+ * Serialized representation of a PokemonBuild for the backend distribution system.
  * Uses plain primitives — safe to JSON.stringify and store in Supabase jsonb.
  */
 export interface StatValues {
@@ -31,7 +31,7 @@ export interface PokemonBuildPayload {
 
 /**
  * Converts a single PokemonBuild (rich frontend type) into a flat payload
- * ready to be stored in Supabase or sent to SysBot.
+ * ready to be stored in Supabase or sent to the distribution system.
  */
 export function buildToPayload(build: PokemonBuild): PokemonBuildPayload {
   const ivs: StatValues = {

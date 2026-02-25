@@ -354,7 +354,7 @@ export default function HomeTeambuilder({ user }: HomeTeambuilderProps) {
               </div>
               <div>
                 <h4 className="font-black text-green-900 uppercase tracking-tight">Sistemas Operativos</h4>
-                <p className="text-green-700 text-sm">Bots en línea 24/7 para intercambios inmediatos.</p>
+                <p className="text-green-700 text-sm">Sistema de distribución activo 24/7 para intercambios inmediatos.</p>
               </div>
             </div>
 
@@ -383,7 +383,7 @@ export default function HomeTeambuilder({ user }: HomeTeambuilderProps) {
               <div className="space-y-6">
                 <div>
                   <h4 className="font-bold text-gray-900 mb-1">¿Cómo funciona el intercambio?</h4>
-                  <p className="text-gray-600 text-sm leading-relaxed">Configura tu equipo de hasta 6 Pokémon, haz clic en &quot;Solicitar Intercambio&quot; y recibirás un Código de 8 dígitos. Introdúcelo en el &quot;Poképortal&quot; de tu juego para conectarte con nuestro bot automático.</p>
+                  <p className="text-gray-600 text-sm leading-relaxed">Configura tu equipo de hasta 6 Pokémon, haz clic en &quot;Solicitar Intercambio&quot; y recibirás un Código de 8 dígitos. Introdúcelo en el &quot;Poképortal&quot; de tu juego para conectarte con nuestro sistema automático.</p>
                 </div>
                 <div>
                   <h4 className="font-bold text-gray-900 mb-1">¿Los Pokémon son legales para jugar online?</h4>
