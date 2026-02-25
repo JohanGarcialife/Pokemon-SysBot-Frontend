@@ -13,6 +13,7 @@ import { TradeCodeModal } from '@/components/teambuilder/TradeCodeModal'
 import { usePokemonSearch } from '@/hooks/usePokemonSearch'
 import type { GameVersion, PokemonSearchResult, Pokemon, PokemonBuild } from '@/lib/pokemon/types'
 import { pokeAPI } from '@/lib/pokemon/pokeapi'
+import { preloadGamePokedex } from '@/lib/pokemon/gameAvailability'
 
 const PENDING_BUILD_KEY = 'pkdex_pending_build'
 const MAX_TEAM_SIZE = 6
@@ -88,6 +89,18 @@ function TeamSlotCard({ slot, build, isActive, onClick, onRemove }: TeamSlotCard
 export default function HomeTeambuilder({ user }: HomeTeambuilderProps) {
   const router = useRouter()
   const [selectedGame, setSelectedGame] = useState<GameVersion>('legends-za')
+
+  // Preload the Pokédex for the selected game so availability checks are instant
+  const handleGameSelect = (game: GameVersion) => {
+    setSelectedGame(game)
+    preloadGamePokedex(game).catch(console.error)
+  }
+
+  // Preload on mount for the default game
+  useEffect(() => {
+    preloadGamePokedex(selectedGame).catch(console.error)
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [])
   const [selectedPokemon, setSelectedPokemon] = useState<Pokemon | null>(null)
   const [isModalOpen, setIsModalOpen] = useState(false)
   const [isTradeModalOpen, setIsTradeModalOpen] = useState(false)
@@ -219,7 +232,7 @@ export default function HomeTeambuilder({ user }: HomeTeambuilderProps) {
                 <span className="bg-pokemon-blue w-6 h-6 flex items-center justify-center rounded-full text-white">1</span>
                 Versión del Juego
               </label>
-              <GameSelector selected={selectedGame} onSelect={setSelectedGame} />
+              <GameSelector selected={selectedGame} onSelect={handleGameSelect} />
             </div>
 
             <div className="hidden md:flex col-span-1 justify-center items-center">
@@ -397,6 +410,7 @@ export default function HomeTeambuilder({ user }: HomeTeambuilderProps) {
         isOpen={isModalOpen}
         onClose={() => { setIsModalOpen(false); setEditingSlot(null) }}
         onAddToTeam={handleAddToTeam}
+        gameVersion={selectedGame}
       />
 
       <TradeCodeModal
