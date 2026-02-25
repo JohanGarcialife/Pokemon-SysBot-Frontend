@@ -268,8 +268,17 @@ export default function HomeTeambuilder({ user }: HomeTeambuilderProps) {
       </div>
 
       {/* ── TEAM SLOTS ── */}
-      <div className="py-12 px-6 bg-slate-900 border-t border-white/10 w-full">
-        <div className="max-w-7xl mx-auto">
+      <div
+        className="py-12 px-6 border-t border-white/10 w-full relative"
+        style={{
+          backgroundImage: "url('/FONDOLOGIN.png')",
+          backgroundSize: 'cover',
+          backgroundPosition: 'center',
+        }}
+      >
+        {/* Dark overlay */}
+        <div className="absolute inset-0 bg-slate-900/80" />
+        <div className="max-w-7xl mx-auto relative z-10">
           <div className="flex items-center gap-2 mb-8">
             <span className="bg-pokemon-yellow w-8 h-8 flex items-center justify-center rounded-full text-gray-900 font-black">4</span>
             <div>

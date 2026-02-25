@@ -1,8 +1,24 @@
 import { GameVersion } from '@/lib/pokemon/types'
 
 /**
- * Backend API Configuration
+ * Returns the correct backend URL at call time.
+ * - Browser on localhost → always local backend (localhost:4000)
+ * - Any other host → NEXT_PUBLIC_BACKEND_URL env var (production)
+ *
+ * Using a function (not a module-level constant) means the URL is
+ * re-evaluated on every request, so old dev servers with a stale
+ * env var will still route correctly.
  */
+function getBackendURL(): string {
+  if (typeof window !== 'undefined') {
+    const isLocalhost =
+      window.location.hostname === 'localhost' ||
+      window.location.hostname === '127.0.0.1'
+    if (isLocalhost) return 'http://localhost:4000'
+  }
+  return process.env.NEXT_PUBLIC_BACKEND_URL || 'http://localhost:4000'
+}
+
 export const BACKEND_API_URL = process.env.NEXT_PUBLIC_BACKEND_URL || 'http://localhost:4000'
 
 export interface StatValues {
@@ -30,7 +46,6 @@ export interface PokemonBuildPayload {
   evs: StatValues
 }
 
-
 export interface CreateOrderRequest {
   team: PokemonBuildPayload[]
   tradeCode: string
@@ -48,7 +63,8 @@ export interface CreateOrderResponse {
  * API Client for backend requests
  */
 export class BackendAPI {
-  private static baseURL = BACKEND_API_URL
+  /** Resolved at call time to avoid stale env-var issues */
+  private static get baseURL() { return getBackendURL() }
 
   /**
    * Health check endpoint
@@ -94,7 +110,10 @@ export class BackendAPI {
     data: CreateOrderRequest,
     jwtToken: string
   ): Promise<CreateOrderResponse> {
-    const response = await fetch(`${this.baseURL}/api/orders`, {
+    const url = `${this.baseURL}/api/orders`
+    console.log('[BackendAPI] POST', url)
+
+    const response = await fetch(url, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
@@ -134,7 +153,7 @@ export class BackendAPI {
   static async get(endpoint: string) {
     try {
       const response = await fetch(`${this.baseURL}${endpoint}`)
-      
+
       if (!response.ok) {
         throw new Error(`HTTP error! status: ${response.status}`)
       }
