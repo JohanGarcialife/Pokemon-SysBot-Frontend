@@ -148,7 +148,10 @@ export function TradeCodeModal({ isOpen, onClose, team, gameVersion, pokemonName
           </div>
           {pokemonName && (
             <p className="text-white/80 text-sm">
-              Tu <span className="font-bold text-white">{pokemonName}</span> está listo para el intercambio
+              {team.length > 1
+                ? <><span className="font-bold text-white">{team.length} Pokémon</span> listos para el intercambio</>
+                : <>Tu <span className="font-bold text-white capitalize">{pokemonName}</span> está listo para el intercambio</>
+              }
             </p>
           )}
         </div>
