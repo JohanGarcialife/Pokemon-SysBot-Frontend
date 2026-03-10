@@ -3,7 +3,7 @@ import { GameVersion } from '@/lib/pokemon/types'
 /**
  * Returns the correct backend URL at call time.
  * - Browser on localhost → always local backend (localhost:4000)
- * - Any other host → NEXT_PUBLIC_BACKEND_URL env var (production)
+ * - Any other host → PRODUCTION Railway backend
  *
  * Using a function (not a module-level constant) means the URL is
  * re-evaluated on every request, so old dev servers with a stale
@@ -16,10 +16,10 @@ function getBackendURL(): string {
       window.location.hostname === '127.0.0.1'
     if (isLocalhost) return 'http://localhost:4000'
   }
-  return process.env.NEXT_PUBLIC_BACKEND_URL || 'http://localhost:4000'
+  return process.env.NEXT_PUBLIC_BACKEND_URL || 'https://pkdex-sysbot-backend-production.up.railway.app'
 }
 
-export const BACKEND_API_URL = process.env.NEXT_PUBLIC_BACKEND_URL || 'http://localhost:4000'
+export const BACKEND_API_URL = process.env.NEXT_PUBLIC_BACKEND_URL || 'https://pkdex-sysbot-backend-production.up.railway.app'
 
 export interface StatValues {
   hp: number
