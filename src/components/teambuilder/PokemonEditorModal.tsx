@@ -105,7 +105,7 @@ export function PokemonEditorModal({
 
         {/* Scrollable Content */}
         <div className="overflow-y-auto flex-1 p-6 relative">
-          <PokemonEditor pokemon={pokemon} onAddToTeam={onAddToTeam} />
+          <PokemonEditor pokemon={pokemon} onAddToTeam={onAddToTeam} gameVersion={gameVersion} />
         </div>
       </div>
     </div>

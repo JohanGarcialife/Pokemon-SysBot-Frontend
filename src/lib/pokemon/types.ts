@@ -182,10 +182,12 @@ export interface PokemonBuild {
   ability: string
   moves: (Move | null)[]  // Array de 4
   shiny: boolean
+  alpha: boolean           // Alpha Pokémon (Legends ZA only)
   gender: 'male' | 'female' | 'genderless'
   level: number
   pokeball: string
   heldItem: string
   origin: string
 }
+
 

@@ -19,6 +19,7 @@ export interface PokemonBuildPayload {
   nature: string
   ability: string
   shiny: boolean
+  alpha: boolean
   gender: string
   heldItem: string
   teraType: string
@@ -62,6 +63,7 @@ export function buildToPayload(build: PokemonBuild): PokemonBuildPayload {
     nature: build.nature.name,
     ability: build.ability,
     shiny: build.shiny,
+    alpha: build.alpha,
     gender: build.gender,
     heldItem: build.heldItem,
     teraType: build.teraType,
