@@ -1,7 +1,7 @@
 'use client'
 
 import React, { useState, useMemo } from 'react'
-import { Pokemon, PokemonBuild, PokemonStats, Nature, Move } from '@/lib/pokemon/types'
+import { Pokemon, PokemonBuild, PokemonStats, Nature, Move, GameVersion } from '@/lib/pokemon/types'
 import { NATURES } from '@/lib/pokemon/constants'
 import { StatsEditor } from './StatsEditor'
 import { NatureSelector } from './NatureSelector'
@@ -20,9 +20,14 @@ import { LegalityPanel } from './LegalityPanel'
 interface PokemonEditorProps {
   pokemon: Pokemon | null
   onAddToTeam: (build: PokemonBuild) => void
+  gameVersion?: GameVersion
 }
 
-export function PokemonEditor({ pokemon, onAddToTeam }: PokemonEditorProps) {
+export function PokemonEditor({ pokemon, onAddToTeam, gameVersion }: PokemonEditorProps) {
+  const isLegendsZA = gameVersion === 'legends-za'
+  // Origins that have Shiny Lock - cannot be shiny by game rules
+  const GIFT_ORIGINS = ['In-Game Gift', 'Starter', 'Event']
+
   const [stats, setStats] = useState<PokemonStats>({
     hp: { iv: 31, ev: 0 },
     attack: { iv: 31, ev: 0 },
@@ -38,10 +43,13 @@ export function PokemonEditor({ pokemon, onAddToTeam }: PokemonEditorProps) {
   const [moves, setMoves] = useState<(Move | null)[]>([null, null, null, null])
   const [level, setLevel] = useState<number>(100)
   const [shiny, setShiny] = useState<boolean>(false)
+  const [alpha, setAlpha] = useState<boolean>(false)
   const [gender, setGender] = useState<'male' | 'female' | 'genderless'>('genderless')
   const [pokeball, setPokeball] = useState<string>('Poké Ball')
   const [heldItem, setHeldItem] = useState<string>('None')
   const [origin, setOrigin] = useState<string>('Wild Encounter')
+  
+  const isGift = GIFT_ORIGINS.includes(origin)
   
   const [showMoveSelector, setShowMoveSelector] = useState(false)
   const [activeMoveSlot, setActiveMoveSlot] = useState<number>(0)
@@ -49,8 +57,8 @@ export function PokemonEditor({ pokemon, onAddToTeam }: PokemonEditorProps) {
   // ─── Real-time legality validation ───────────────────────
   const currentBuild: PokemonBuild | null = useMemo(() => {
     if (!pokemon) return null
-    return { pokemon, stats, nature, teraType, ability, moves, shiny, gender, level, pokeball, heldItem, origin }
-  }, [pokemon, stats, nature, teraType, ability, moves, shiny, gender, level, pokeball, heldItem, origin])
+    return { pokemon, stats, nature, teraType, ability, moves, shiny, alpha, gender, level, pokeball, heldItem, origin }
+  }, [pokemon, stats, nature, teraType, ability, moves, shiny, alpha, gender, level, pokeball, heldItem, origin])
 
   const { results, errors, warnings, isLegal, errorCount, warningCount } = useLegality(currentBuild)
 
@@ -94,7 +102,8 @@ export function PokemonEditor({ pokemon, onAddToTeam }: PokemonEditorProps) {
       teraType,
       ability,
       moves,
-      shiny,
+      shiny: isGift ? false : shiny,  // Enforce Shiny Lock for gifts
+      alpha,
       gender,
       level,
       pokeball,
@@ -166,18 +175,36 @@ export function PokemonEditor({ pokemon, onAddToTeam }: PokemonEditorProps) {
               />
             </div>
 
+            {/* Shiny + Alpha group */}
             <div className="flex items-center gap-2">
               <input
                 type="checkbox"
                 id="shiny"
-                checked={shiny}
+                checked={isGift ? false : shiny}
+                disabled={isGift}
                 onChange={(e) => setShiny(e.target.checked)}
-                className="w-4 h-4"
+                className="w-4 h-4 disabled:opacity-40"
               />
-              <label htmlFor="shiny" className="text-sm font-bold text-gray-700">
-                ✨ Shiny
+              <label htmlFor="shiny" className={`text-sm font-bold ${isGift ? 'text-gray-400 line-through' : 'text-gray-700'}`}>
+                ✨ Shiny {isGift ? '(bloqueado por origen)' : ''}
               </label>
             </div>
+
+            {/* Alpha — only for Legends ZA */}
+            {isLegendsZA && (
+              <div className="flex items-center gap-2">
+                <input
+                  type="checkbox"
+                  id="alpha"
+                  checked={alpha}
+                  onChange={(e) => setAlpha(e.target.checked)}
+                  className="w-4 h-4"
+                />
+                <label htmlFor="alpha" className="text-sm font-bold text-red-700">
+                  💢 Alpha (Leyenda ZA)
+                </label>
+              </div>
+            )}
 
             <div>
               <label className="block text-sm font-bold text-gray-700 mb-2">
@@ -274,20 +301,28 @@ export function PokemonEditor({ pokemon, onAddToTeam }: PokemonEditorProps) {
           <h3 className="text-lg font-black text-gray-900 uppercase mb-4">
             Movimientos
           </h3>
-          <div className="space-y-3">
-            {moves.map((move, index) => (
-              <MoveSlot
-                key={index}
-                moveIndex={index}
-                move={move}
-                onSelect={() => {
-                  setActiveMoveSlot(index)
-                  setShowMoveSelector(true)
-                }}
-                onRemove={() => handleMoveRemove(index)}
-              />
-            ))}
-          </div>
+          {isLegendsZA ? (
+            <div className="p-4 bg-gray-50 rounded-lg border border-gray-200">
+              <p className="text-sm text-gray-600 font-medium text-center">
+                En <b>Leyendas: Z-A</b> los ataques se gestionan automáticamente según el nivel y naturaleza del Pokémon dentro del juego. No es necesario elegirlos aquí.
+              </p>
+            </div>
+          ) : (
+            <div className="space-y-3">
+              {moves.map((move, index) => (
+                <MoveSlot
+                  key={index}
+                  moveIndex={index}
+                  move={move}
+                  onSelect={() => {
+                    setActiveMoveSlot(index)
+                    setShowMoveSelector(true)
+                  }}
+                  onRemove={() => handleMoveRemove(index)}
+                />
+              ))}
+            </div>
+          )}
         </div>
 
       </div>
