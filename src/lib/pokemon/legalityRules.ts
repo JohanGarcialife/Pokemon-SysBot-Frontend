@@ -109,8 +109,10 @@ function checkLevel(build: PokemonBuild): ValidationResult | null {
   return null
 }
 
-/** Rule 5: At least one move must be selected */
-function checkAtLeastOneMove(build: PokemonBuild): ValidationResult | null {
+/** Rule 5: At least one move must be selected (unless Legends ZA) */
+function checkAtLeastOneMove(build: PokemonBuild, gameVersion?: string): ValidationResult | null {
+  if (gameVersion === 'legends-za') return null
+  
   const hasMove = build.moves.some((m) => m !== null)
   if (!hasMove) {
     return {
@@ -255,7 +257,7 @@ function checkHiddenAbility(build: PokemonBuild): ValidationResult | null {
 // Main Validation Function
 // ============================================================
 
-export function validateBuild(build: PokemonBuild): ValidationResult[] {
+export function validateBuild(build: PokemonBuild, gameVersion?: string): ValidationResult[] {
   const results: ValidationResult[] = []
 
   const push = (r: ValidationResult | null) => r && results.push(r)
@@ -265,7 +267,7 @@ export function validateBuild(build: PokemonBuild): ValidationResult[] {
   pushAll(checkIndividualEVs(build))
   pushAll(checkIVRange(build))
   push(checkLevel(build))
-  push(checkAtLeastOneMove(build))
+  push(checkAtLeastOneMove(build, gameVersion))
   push(checkDuplicateMoves(build))
   push(checkAbility(build))
   push(checkGenderCompatibility(build))

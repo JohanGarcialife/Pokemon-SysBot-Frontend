@@ -60,7 +60,7 @@ export function PokemonEditor({ pokemon, onAddToTeam, gameVersion }: PokemonEdit
     return { pokemon, stats, nature, teraType, ability, moves, shiny, alpha, gender, level, pokeball, heldItem, origin }
   }, [pokemon, stats, nature, teraType, ability, moves, shiny, alpha, gender, level, pokeball, heldItem, origin])
 
-  const { results, errors, warnings, isLegal, errorCount, warningCount } = useLegality(currentBuild)
+  const { results, errors, warnings, isLegal, errorCount, warningCount } = useLegality(currentBuild, gameVersion)
 
   // Set initial ability when pokemon changes
   React.useEffect(() => {
