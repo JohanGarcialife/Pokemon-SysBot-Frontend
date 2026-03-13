@@ -11,9 +11,10 @@ function getBallSpriteUrl(name: string) {
 interface PokeBallSelectorProps {
   selectedBall: string
   onBallChange: (ball: string) => void
+  disabled?: boolean
 }
 
-export function PokeBallSelector({ selectedBall, onBallChange }: PokeBallSelectorProps) {
+export function PokeBallSelector({ selectedBall, onBallChange, disabled }: PokeBallSelectorProps) {
   const selectedBallData = POKE_BALLS.find(b => b.name === selectedBall)
   const displayLabel = selectedBallData?.label || selectedBall
 
@@ -30,12 +31,14 @@ export function PokeBallSelector({ selectedBall, onBallChange }: PokeBallSelecto
             type="button"
             onClick={() => onBallChange(ball.name)}
             title={ball.name}
+            disabled={disabled}
             className={`
               flex flex-col items-center justify-center p-2 rounded-lg
               transition-all duration-200 text-center
-              ${selectedBall === ball.name
+              ${disabled ? 'opacity-50 cursor-not-allowed grayscale' : ''}
+              ${!disabled && selectedBall === ball.name
                 ? 'ring-3 ring-yellow-400 ring-offset-1 bg-blue-50 scale-105 shadow-md'
-                : 'bg-gray-50 hover:bg-gray-100 hover:scale-105 border border-gray-200'
+                : !disabled ? 'bg-gray-50 hover:bg-gray-100 hover:scale-105 border border-gray-200' : 'bg-gray-50 border border-gray-200 ring-3 ring-gray-300'
               }
             `}
           >

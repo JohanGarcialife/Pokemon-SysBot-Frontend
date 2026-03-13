@@ -15,6 +15,7 @@ import { OriginSelector } from './OriginSelector'
 import { TYPE_COLORS, TYPE_TRANSLATIONS } from '@/lib/pokemon/constants'
 import Image from 'next/image'
 import { useLegality } from '@/hooks/useLegality'
+import { useEncounterRules } from '@/hooks/useEncounterRules'
 import { LegalityPanel } from './LegalityPanel'
 
 interface PokemonEditorProps {
@@ -49,7 +50,26 @@ export function PokemonEditor({ pokemon, onAddToTeam, gameVersion }: PokemonEdit
   const [heldItem, setHeldItem] = useState<string>('None')
   const [origin, setOrigin] = useState<string>('Wild Encounter')
   
-  const isGift = GIFT_ORIGINS.includes(origin)
+  const { isShinyDisabled, forcedBall, minAllowedLevel, disabledFeatures } = useEncounterRules(gameVersion, origin)
+
+  // Opciones forzadas según reglas de origen
+  React.useEffect(() => {
+    if (level < minAllowedLevel) {
+      setLevel(minAllowedLevel)
+    }
+  }, [minAllowedLevel, level])
+
+  React.useEffect(() => {
+    if (isShinyDisabled && shiny) {
+      setShiny(false)
+    }
+  }, [isShinyDisabled, shiny])
+
+  React.useEffect(() => {
+    if (forcedBall && pokeball !== forcedBall) {
+      setPokeball(forcedBall)
+    }
+  }, [forcedBall, pokeball])
   
   const [showMoveSelector, setShowMoveSelector] = useState(false)
   const [activeMoveSlot, setActiveMoveSlot] = useState<number>(0)
@@ -102,7 +122,7 @@ export function PokemonEditor({ pokemon, onAddToTeam, gameVersion }: PokemonEdit
       teraType,
       ability,
       moves,
-      shiny: isGift ? false : shiny,  // Enforce Shiny Lock for gifts
+      shiny: isShinyDisabled ? false : shiny,  // Enforce Shiny Lock directly from EncounterRules
       alpha,
       gender,
       level,
@@ -167,12 +187,15 @@ export function PokemonEditor({ pokemon, onAddToTeam, gameVersion }: PokemonEdit
               </label>
               <input
                 type="number"
-                min={1}
+                min={minAllowedLevel}
                 max={100}
                 value={level}
                 onChange={(e) => setLevel(Number(e.target.value))}
                 className="w-full px-3 py-2 border-2 border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-psychic text-gray-900 font-bold"
               />
+              {minAllowedLevel > 1 && (
+                <p className="text-xs text-orange-500 font-bold mt-1">Nivel mínimo por origen: {minAllowedLevel}</p>
+              )}
             </div>
 
             {/* Shiny + Alpha group */}
@@ -180,13 +203,13 @@ export function PokemonEditor({ pokemon, onAddToTeam, gameVersion }: PokemonEdit
               <input
                 type="checkbox"
                 id="shiny"
-                checked={isGift ? false : shiny}
-                disabled={isGift}
+                checked={isShinyDisabled ? false : shiny}
+                disabled={isShinyDisabled}
                 onChange={(e) => setShiny(e.target.checked)}
                 className="w-4 h-4 disabled:opacity-40"
               />
-              <label htmlFor="shiny" className={`text-sm font-bold ${isGift ? 'text-gray-400 line-through' : 'text-gray-700'}`}>
-                ✨ Shiny {isGift ? '(bloqueado por origen)' : ''}
+              <label htmlFor="shiny" className={`text-sm font-bold ${isShinyDisabled ? 'text-gray-400 line-through' : 'text-gray-700'}`}>
+                ✨ Shiny {isShinyDisabled ? '(bloqueado por origen)' : ''}
               </label>
             </div>
 
@@ -277,6 +300,7 @@ export function PokemonEditor({ pokemon, onAddToTeam, gameVersion }: PokemonEdit
           <PokeBallSelector
             selectedBall={pokeball}
             onBallChange={setPokeball}
+            disabled={!!forcedBall}
           />
         </div>
 
