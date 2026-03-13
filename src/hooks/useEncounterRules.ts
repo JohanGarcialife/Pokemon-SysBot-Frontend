@@ -9,6 +9,7 @@ export interface EncounterRulesResult {
   forcedBall: string | null
   minAllowedLevel: number
   disabledFeatures: string[]
+  disabledOrigins: string[]
 }
 
 /**
@@ -22,7 +23,8 @@ export function useEncounterRules(gameVersion?: GameVersion, origin?: string): E
       isShinyDisabled: false,
       forcedBall: null,
       minAllowedLevel: 1,
-      disabledFeatures: []
+      disabledFeatures: [],
+      disabledOrigins: []
     }
 
     if (!gameVersion || !origin) {
@@ -40,7 +42,8 @@ export function useEncounterRules(gameVersion?: GameVersion, origin?: string): E
       isShinyDisabled: originRules?.shinyLocked ?? false,
       forcedBall: originRules?.fixedBall ?? null,
       minAllowedLevel: originRules?.minLevel ?? 1,
-      disabledFeatures: gameRules.disabledFeatures || []
+      disabledFeatures: gameRules.disabledFeatures || [],
+      disabledOrigins: gameRules.disabledOrigins || []
     }
   }, [gameVersion, origin])
 }

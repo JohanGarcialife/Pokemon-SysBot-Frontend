@@ -8,6 +8,7 @@ export interface OriginRules {
 
 export interface GameRules {
   disabledFeatures: string[] // Ejemplo: ['teraType', 'evs'] para indicar qué secciones ocultar o ignorar
+  disabledOrigins: string[] // Métodos de obtención mecánicamente imposibles en este juego
   origins: Record<string, OriginRules> // Mapeo de nombre de origen a sus reglas específicas
 }
 
@@ -16,6 +17,7 @@ export const GAME_LEGALITY_RULES: Partial<Record<GameVersion, GameRules>> = {
   'legends-za': {
     // Mecánicas que no existen en este juego y que deben deshabilitarse si la UI lo permitiera
     disabledFeatures: ['teraType', 'evs'], 
+    disabledOrigins: ['Egg', 'Tera Raid'], // En Z-A no hay crianza ni Teraincursiones
     origins: {
       'Wild Encounter': {
         shinyLocked: false,
