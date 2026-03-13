@@ -50,7 +50,7 @@ export function PokemonEditor({ pokemon, onAddToTeam, gameVersion }: PokemonEdit
   const [heldItem, setHeldItem] = useState<string>('None')
   const [origin, setOrigin] = useState<string>('Wild Encounter')
   
-  const { isShinyDisabled, forcedBall, minAllowedLevel, disabledFeatures } = useEncounterRules(gameVersion, origin)
+  const { isShinyDisabled, forcedBall, minAllowedLevel, disabledFeatures, disabledOrigins } = useEncounterRules(gameVersion, origin)
 
   // Opciones forzadas según reglas de origen
   React.useEffect(() => {
@@ -317,6 +317,7 @@ export function PokemonEditor({ pokemon, onAddToTeam, gameVersion }: PokemonEdit
           <OriginSelector
             selectedOrigin={origin}
             onOriginChange={setOrigin}
+            disabledOrigins={disabledOrigins}
           />
         </div>
 
