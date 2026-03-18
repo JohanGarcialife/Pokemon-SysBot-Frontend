@@ -6,6 +6,7 @@
  */
 
 import { GameVersion } from './types'
+import { GAME_LEGALITY_RULES } from './legalityData'
 
 // ─── PokeAPI Pokédex IDs per game ────────────────────────────────────────────
 //
@@ -79,15 +80,25 @@ export async function isPokemonInGame(
   speciesName: string,
   game: GameVersion
 ): Promise<boolean | null> {
+  // PokeAPI uses lowercase hyphenated names: "charizard", "mr-mime", etc.
+  const normalised = speciesName.toLowerCase().replace(/\s+/g, '-')
+
+  // Override manual basado en nuestras reglas de legalidad estrictas (como Leyendas Z-A)
+  const gameRules = GAME_LEGALITY_RULES[game]
+  if (gameRules && gameRules.pokemonRules) {
+    const speciesRules = gameRules.pokemonRules[normalised]
+    if (speciesRules?.notAvailable) {
+      return false // Estrictamente no disponible en nuestra base de datos
+    }
+  }
+
   const ids = GAME_POKEDEX_IDS[game]
-  if (!ids || ids.length === 0) return null // unknown game
+  if (!ids || ids.length === 0) return null // unknown game (espera validación optimista si no está bloqueado arriba)
 
   await preloadGamePokedex(game)
   const set = cache.get(game)
   if (!set) return null
 
-  // PokeAPI uses lowercase hyphenated names: "charizard", "mr-mime", etc.
-  const normalised = speciesName.toLowerCase().replace(/\s+/g, '-')
   return set.has(normalised)
 }
 

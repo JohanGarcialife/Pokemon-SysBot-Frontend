@@ -122,6 +122,8 @@ export function PokemonEditor({ pokemon, onAddToTeam, gameVersion }: PokemonEdit
   }
 
   const handleAddToTeam = () => {
+    if (isPokemonNotAvailable) return;
+    
     const build: PokemonBuild = {
       pokemon,
       stats,
@@ -257,21 +259,29 @@ export function PokemonEditor({ pokemon, onAddToTeam, gameVersion }: PokemonEdit
           <div className="mt-4 space-y-3">
             <LegalityPanel
               results={results}
-              isLegal={isLegal}
-              errorCount={errorCount}
+              isLegal={isLegal && !isPokemonNotAvailable}
+              errorCount={isPokemonNotAvailable ? errorCount + 1 : errorCount}
               warningCount={warningCount}
             />
+            {isPokemonNotAvailable && (
+              <div className="bg-red-100 border-l-4 border-red-600 p-4 mt-4 rounded">
+                <p className="text-red-800 font-bold">
+                  ⚠️ Este Pokémon no está disponible en {gameVersion === 'legends-za' ? 'Leyendas Z-A' : 'este juego'}.
+                </p>
+                <p className="text-sm text-red-600 mt-1">No podrás añadirlo a tu equipo.</p>
+              </div>
+            )}
             <button
               onClick={handleAddToTeam}
-              disabled={!isLegal}
-              title={!isLegal ? `Corrige ${errorCount} error${errorCount > 1 ? 'es' : ''} para continuar` : ''}
-              className={`w-full font-black text-lg py-4 rounded-lg transition-all shadow-lg uppercase ${
-                isLegal
-                  ? 'bg-linear-to-r from-psychic to-electric text-white hover:scale-105 cursor-pointer'
+              disabled={!isLegal || isPokemonNotAvailable}
+              title={(!isLegal || isPokemonNotAvailable) ? `Corrige los errores para continuar` : ''}
+              className={`w-full font-black text-lg py-4 rounded-lg transition-all shadow-lg uppercase mt-4 ${
+                isLegal && !isPokemonNotAvailable
+                  ? 'bg-gradient-to-r from-psychic to-electric text-white hover:scale-105 cursor-pointer'
                   : 'bg-gray-200 text-gray-400 cursor-not-allowed opacity-70'
               }`}
             >
-              {isLegal ? 'Agregar al Equipo →' : `⛔ ${errorCount} Error${errorCount > 1 ? 'es' : ''} — Corrige para continuar`}
+              {isLegal && !isPokemonNotAvailable ? 'Agregar al Equipo →' : `⛔ Error — Corrige para continuar`}
             </button>
           </div>
         </div>

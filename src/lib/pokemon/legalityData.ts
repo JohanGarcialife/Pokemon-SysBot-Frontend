@@ -70,10 +70,15 @@ const LZA_ALPHA_LOCKED_POKEMON: string[] = [
   'xerneas', 'yveltal', 'zygarde',
 ]
 
-// Pokémon de generaciones posteriores a 6 que NO ESTÁN en Z-A
-// Z-A tiene ~230 pokémon centrados en Gen 1-6 principalmente
-// Gen 7+ generalmente no están salvo excepciones (Meltan, Melmetal, Zeraora, Marshadow, Magearna)
-const LZA_NOT_AVAILABLE_GEN7_PLUS: string[] = [
+// Pokémon de Gen 1-6 que son Legendarios/Míticos y NO ESTÁN en Z-A
+// + Pokémon de generaciones posteriores a 6 que NO ESTÁN en Z-A
+const LZA_NOT_AVAILABLE_POKEMON: string[] = [
+  // Legendarios / Míticos de Gen 1-6 que NO están en Z-A
+  'articuno', 'zapdos', 'moltres', 'mew',
+  'raikou', 'entei', 'suicune', 'lugia', 'ho-oh', 'celebi',
+  'regirock', 'regice', 'registeel', 'jirachi', 'deoxys',
+  'uxie', 'mesprit', 'azelf', 'dialga', 'palkia', 'cresselia', 'phione', 'manaphy', 'shaymin', 'arceus',
+  'victini', 'tornadus', 'thundurus', 'reshiram', 'zekrom', 'landorus', 'kyurem',
   // Gen 7 Legendarios/Míticos que SÍ están como excepción ya mencionados arriba
   // Gen 7 Pokémon normales que NO están
   'rowlet', 'dartrix', 'decidueye', 'litten', 'torracat', 'incineroar',
@@ -214,7 +219,7 @@ export const GAME_LEGALITY_RULES: Partial<Record<GameVersion, GameRules>> = {
       ),
       // Pokémon no disponibles en Z-A
       ...Object.fromEntries(
-        LZA_NOT_AVAILABLE_GEN7_PLUS.map((slug) => [
+        LZA_NOT_AVAILABLE_POKEMON.map((slug) => [
           slug,
           { notAvailable: true } satisfies PokemonSpeciesRules,
         ])
