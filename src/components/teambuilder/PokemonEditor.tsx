@@ -50,7 +50,7 @@ export function PokemonEditor({ pokemon, onAddToTeam, gameVersion }: PokemonEdit
   const [heldItem, setHeldItem] = useState<string>('None')
   const [origin, setOrigin] = useState<string>('Wild Encounter')
   
-  const { isShinyDisabled, forcedBall, minAllowedLevel, disabledFeatures, disabledOrigins } = useEncounterRules(gameVersion, origin)
+  const { isShinyDisabled, isAlphaDisabled, isPokemonNotAvailable, forcedBall, minAllowedLevel, disabledFeatures, disabledOrigins } = useEncounterRules(gameVersion, origin, pokemon?.name)
 
   // Opciones forzadas según reglas de origen
   React.useEffect(() => {
@@ -70,6 +70,13 @@ export function PokemonEditor({ pokemon, onAddToTeam, gameVersion }: PokemonEdit
       setPokeball(forcedBall)
     }
   }, [forcedBall, pokeball])
+
+  // Auto-reset alpha si está bloqueado
+  React.useEffect(() => {
+    if (isAlphaDisabled && alpha) {
+      setAlpha(false)
+    }
+  }, [isAlphaDisabled, alpha])
   
   const [showMoveSelector, setShowMoveSelector] = useState(false)
   const [activeMoveSlot, setActiveMoveSlot] = useState<number>(0)
@@ -122,8 +129,8 @@ export function PokemonEditor({ pokemon, onAddToTeam, gameVersion }: PokemonEdit
       teraType,
       ability,
       moves,
-      shiny: isShinyDisabled ? false : shiny,  // Enforce Shiny Lock directly from EncounterRules
-      alpha,
+      shiny: isShinyDisabled ? false : shiny,
+      alpha: isAlphaDisabled ? false : alpha,
       gender,
       level,
       pokeball,
@@ -219,12 +226,13 @@ export function PokemonEditor({ pokemon, onAddToTeam, gameVersion }: PokemonEdit
                 <input
                   type="checkbox"
                   id="alpha"
-                  checked={alpha}
+                  checked={isAlphaDisabled ? false : alpha}
+                  disabled={isAlphaDisabled}
                   onChange={(e) => setAlpha(e.target.checked)}
-                  className="w-4 h-4"
+                  className="w-4 h-4 disabled:opacity-40"
                 />
-                <label htmlFor="alpha" className="text-sm font-bold text-red-700">
-                  💢 Alpha (Leyenda ZA)
+                <label htmlFor="alpha" className={`text-sm font-bold ${isAlphaDisabled ? 'text-gray-400 line-through' : 'text-red-700'}`}>
+                  💢 Alpha {isAlphaDisabled ? '(bloqueado por especie/origen)' : '(Leyenda ZA)'}
                 </label>
               </div>
             )}
