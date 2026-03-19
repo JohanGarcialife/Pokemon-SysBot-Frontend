@@ -299,10 +299,12 @@ export function PokemonEditor({ pokemon, onAddToTeam, gameVersion }: PokemonEdit
           <NatureSelector selectedNature={nature} onNatureChange={setNature} />
         </div>
 
-        {/* Teratipo */}
-        <div className="bg-white border-2 border-gray-300 rounded-lg p-6">
-          <TeraTypeSelector selectedType={teraType} onTypeChange={setTeraType} />
-        </div>
+        {/* Teratipo — Solo Scarlet/Violet, no existe en Legends ZA */}
+        {!isLegendsZA && (
+          <div className="bg-white border-2 border-gray-300 rounded-lg p-6">
+            <TeraTypeSelector selectedType={teraType} onTypeChange={setTeraType} />
+          </div>
+        )}
 
         {/* Ability */}
         <div className="bg-white border-2 border-gray-300 rounded-lg p-6">
@@ -322,13 +324,22 @@ export function PokemonEditor({ pokemon, onAddToTeam, gameVersion }: PokemonEdit
           />
         </div>
 
-        {/* Held Item */}
-        <div className="bg-white border-2 border-gray-300 rounded-lg p-6">
-          <HeldItemSelector
-            selectedItem={heldItem}
-            onItemChange={setHeldItem}
-          />
-        </div>
+        {/* Held Item — Not supported in Legends ZA */}
+        {isLegendsZA ? (
+          <div className="bg-white border-2 border-gray-300 rounded-lg p-6">
+            <h3 className="text-lg font-black text-gray-900 uppercase mb-2">Objeto Equipado</h3>
+            <p className="text-sm text-gray-500 bg-gray-50 rounded-lg p-3 border border-gray-200">
+              En <b>Leyendas: Z-A</b> los objetos equipados no se aplican al generar el Pokémon. El bot genera el Pokémon sin objeto.
+            </p>
+          </div>
+        ) : (
+          <div className="bg-white border-2 border-gray-300 rounded-lg p-6">
+            <HeldItemSelector
+              selectedItem={heldItem}
+              onItemChange={setHeldItem}
+            />
+          </div>
+        )}
 
         {/* Origin */}
         <div className="bg-white border-2 border-gray-300 rounded-lg p-6">
