@@ -18,13 +18,17 @@ import { useLegality } from '@/hooks/useLegality'
 import { useEncounterRules } from '@/hooks/useEncounterRules'
 import { LegalityPanel } from './LegalityPanel'
 
+type AvailabilityStatus = 'loading' | 'available' | 'unavailable' | 'unknown'
+
 interface PokemonEditorProps {
   pokemon: Pokemon | null
   onAddToTeam: (build: PokemonBuild) => void
   gameVersion?: GameVersion
+  /** Passed from PokemonEditorModal — blocks team if unavailable/unknown */
+  availabilityStatus?: AvailabilityStatus
 }
 
-export function PokemonEditor({ pokemon, onAddToTeam, gameVersion }: PokemonEditorProps) {
+export function PokemonEditor({ pokemon, onAddToTeam, gameVersion, availabilityStatus }: PokemonEditorProps) {
   const isLegendsZA = gameVersion === 'legends-za'
   // Origins that have Shiny Lock - cannot be shiny by game rules
   const GIFT_ORIGINS = ['In-Game Gift', 'Starter', 'Event']
@@ -121,8 +125,11 @@ export function PokemonEditor({ pokemon, onAddToTeam, gameVersion }: PokemonEdit
     setMoves(newMoves)
   }
 
+  // Block if explicitly unavailable OR if availability is unknown/unconfirmed (e.g. ZA Pokémon not in our DB)
+  const isPokemonBlocked = isPokemonNotAvailable || availabilityStatus === 'unavailable' || availabilityStatus === 'unknown'
+
   const handleAddToTeam = () => {
-    if (isPokemonNotAvailable) return;
+    if (isPokemonBlocked) return;
     
     const build: PokemonBuild = {
       pokemon,
@@ -259,11 +266,11 @@ export function PokemonEditor({ pokemon, onAddToTeam, gameVersion }: PokemonEdit
           <div className="mt-4 space-y-3">
             <LegalityPanel
               results={results}
-              isLegal={isLegal && !isPokemonNotAvailable}
-              errorCount={isPokemonNotAvailable ? errorCount + 1 : errorCount}
+              isLegal={isLegal && !isPokemonBlocked}
+              errorCount={isPokemonBlocked ? errorCount + 1 : errorCount}
               warningCount={warningCount}
             />
-            {isPokemonNotAvailable && (
+            {isPokemonBlocked && (
               <div className="bg-red-100 border-l-4 border-red-600 p-4 mt-4 rounded">
                 <p className="text-red-800 font-bold">
                   ⚠️ Este Pokémon no está disponible en {gameVersion === 'legends-za' ? 'Leyendas Z-A' : 'este juego'}.
@@ -273,15 +280,15 @@ export function PokemonEditor({ pokemon, onAddToTeam, gameVersion }: PokemonEdit
             )}
             <button
               onClick={handleAddToTeam}
-              disabled={!isLegal || isPokemonNotAvailable}
-              title={(!isLegal || isPokemonNotAvailable) ? `Corrige los errores para continuar` : ''}
+              disabled={!isLegal || isPokemonBlocked}
+              title={(!isLegal || isPokemonBlocked) ? `Corrige los errores para continuar` : ''}
               className={`w-full font-black text-lg py-4 rounded-lg transition-all shadow-lg uppercase mt-4 ${
-                isLegal && !isPokemonNotAvailable
-                  ? 'bg-gradient-to-r from-psychic to-electric text-white hover:scale-105 cursor-pointer'
+                isLegal && !isPokemonBlocked
+                  ? 'bg-linear-to-r from-psychic to-electric text-white hover:scale-105 cursor-pointer'
                   : 'bg-gray-200 text-gray-400 cursor-not-allowed opacity-70'
               }`}
             >
-              {isLegal && !isPokemonNotAvailable ? 'Agregar al Equipo →' : `⛔ Error — Corrige para continuar`}
+              {isLegal && !isPokemonBlocked ? 'Agregar al Equipo →' : `⛔ Error — Corrige para continuar`}
             </button>
           </div>
         </div>

@@ -67,7 +67,7 @@ export function PokemonEditorModal({
           <div
             className={`
               flex items-center gap-3 px-6 py-3 text-sm font-medium shrink-0 border-b
-              ${availability === 'unavailable'
+              ${availability === 'unavailable' || (availability === 'unknown' && gameVersion === 'legends-za')
                 ? 'bg-red-50 border-red-200 text-red-800'
                 : availability === 'unknown'
                   ? 'bg-amber-50 border-amber-200 text-amber-800'
@@ -84,13 +84,22 @@ export function PokemonEditorModal({
                 </span>
               </>
             )}
-            {availability === 'unknown' && (
+            {availability === 'unknown' && gameVersion !== 'legends-za' && (
               <>
                 <HelpCircle className="w-5 h-5 text-amber-500 shrink-0" />
                 <span>
                   No podemos verificar si <strong className="capitalize">{pokemon.name}</strong> está
                   disponible en <strong>{gameName}</strong> — la Pokédex de este juego aún no está
                   en nuestra base de datos. Verifica antes de solicitar el intercambio.
+                </span>
+              </>
+            )}
+            {availability === 'unknown' && gameVersion === 'legends-za' && (
+              <>
+                <AlertCircle className="w-5 h-5 text-red-500 shrink-0" />
+                <span>
+                  <strong className="capitalize">{pokemon.name}</strong> no está confirmado en{' '}
+                  <strong>{gameName}</strong>. Solo los Pokémon de la región de Kalos están disponibles. No podrás añadirlo al equipo.
                 </span>
               </>
             )}
@@ -105,7 +114,12 @@ export function PokemonEditorModal({
 
         {/* Scrollable Content */}
         <div className="overflow-y-auto flex-1 p-6 relative">
-          <PokemonEditor pokemon={pokemon} onAddToTeam={onAddToTeam} gameVersion={gameVersion} />
+          <PokemonEditor
+            pokemon={pokemon}
+            onAddToTeam={onAddToTeam}
+            gameVersion={gameVersion}
+            availabilityStatus={availability}
+          />
         </div>
       </div>
     </div>
