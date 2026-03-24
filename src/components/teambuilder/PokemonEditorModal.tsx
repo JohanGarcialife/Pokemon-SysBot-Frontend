@@ -67,20 +67,29 @@ export function PokemonEditorModal({
           <div
             className={`
               flex items-center gap-3 px-6 py-3 text-sm font-medium shrink-0 border-b
-              ${availability === 'unavailable' || (availability === 'unknown' && gameVersion === 'legends-za')
+              ${gameVersion === 'legends-za' && (availability === 'unavailable' || availability === 'unknown')
                 ? 'bg-red-50 border-red-200 text-red-800'
-                : availability === 'unknown'
+                : (availability === 'unavailable' || availability === 'unknown')
                   ? 'bg-amber-50 border-amber-200 text-amber-800'
                   : 'bg-gray-50 border-gray-200 text-gray-500'
               }
             `}
           >
-            {availability === 'unavailable' && (
+            {availability === 'unavailable' && gameVersion !== 'legends-za' && (
+              <>
+                <HelpCircle className="w-5 h-5 text-amber-500 shrink-0" />
+                <span>
+                  <strong className="capitalize">{pokemon.name}</strong> no está en la Pokédex regional de{' '}
+                  <strong>{gameName}</strong>. Asegúrate que pueda ser transferido vía Pokémon HOME, de lo contrario el intercambio fallará.
+                </span>
+              </>
+            )}
+            {availability === 'unavailable' && gameVersion === 'legends-za' && (
               <>
                 <AlertCircle className="w-5 h-5 text-red-500 shrink-0" />
                 <span>
-                  <strong className="capitalize">{pokemon.name}</strong> no está disponible en{' '}
-                  <strong>{gameName}</strong>. Puedes configurarlo, pero nuestro sistema no podrá entregarlo.
+                  <strong className="capitalize">{pokemon.name}</strong> definitivamente no está en{' '}
+                  <strong>{gameName}</strong>. No podrás añadirlo al equipo.
                 </span>
               </>
             )}

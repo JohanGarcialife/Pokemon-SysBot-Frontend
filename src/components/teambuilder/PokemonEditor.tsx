@@ -125,8 +125,10 @@ export function PokemonEditor({ pokemon, onAddToTeam, gameVersion, availabilityS
     setMoves(newMoves)
   }
 
-  // Block if explicitly unavailable OR if availability is unknown/unconfirmed (e.g. ZA Pokémon not in our DB)
-  const isPokemonBlocked = isPokemonNotAvailable || availabilityStatus === 'unavailable' || availabilityStatus === 'unknown'
+  // Block if explicitly unavailable (GAME_LEGALITY_RULES) OR if it's Legends ZA and the Pokémon isn't in the placeholder Kalos Pokedex
+  const isPokemonBlocked = 
+    isPokemonNotAvailable || 
+    (gameVersion === 'legends-za' && (availabilityStatus === 'unavailable' || availabilityStatus === 'unknown'))
 
   const handleAddToTeam = () => {
     if (isPokemonBlocked) return;
