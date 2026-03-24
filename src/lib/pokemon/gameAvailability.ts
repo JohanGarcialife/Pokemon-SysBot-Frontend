@@ -17,7 +17,13 @@ import { GAME_LEGALITY_RULES } from './legalityData'
 const GAME_POKEDEX_IDS: Partial<Record<GameVersion, number[]>> = {
   scarlet:     [27, 31, 32], // paldea, kitakami, blueberry
   violet:      [27, 31, 32],
-  'legends-za': [],          // not yet in PokeAPI → treated as "unknown"
+  /**
+   * Legends: Z-A is unreleased (2025). PokeAPI doesn't have its dex yet.
+   * As a placeholder, we use the original X/Y Kalos pokedexes:
+   * 12: kalos-central, 13: kalos-coastal, 14: kalos-mountain
+   * This allows legal Kalos Pokemon (like Charmander) while blocking Chimchar.
+   */
+  'legends-za': [12, 13, 14],
 }
 
 // ─── In-memory cache: GameVersion → Set of species names ────────────────────
