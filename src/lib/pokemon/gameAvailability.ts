@@ -132,10 +132,96 @@ const LEGENDS_ZA_WHITELIST = new Set([
   'drampa',
   'beldum', 'metang', 'metagross',
 
-  // ── Legendaries / Mythicals ───────────────────────────────────────────────
+  // ── Legendaries / Mythicals (base game) ─────────────────────────────────
   'xerneas', 'yveltal', 'zygarde',
   'diancie',
   'mewtwo',
+
+  // ── DLC: Mega Dimension (source: pokemondb.net/pokedex/game/legends-z-a/mega-dimension) ──
+  // Gen 1-2 extras
+  'mankey', 'primeape', 'annihilape',
+  'meowth', 'persian',
+  'farfetchd', 'sirfetchd',
+  'cubone', 'marowak',
+  'porygon', 'porygon2', 'porygon-z',
+  'perrserker',
+  'kecleon',
+  'qwilfish', 'overqwil',
+  'mime-jr', 'mr-mime', 'mr-rime',
+  'igglybuff', 'jigglypuff', 'wigglytuff',
+  'zangoose', 'seviper',
+  'cryogonal',
+  'zubat', 'golbat', 'crobat',
+  'gulpin', 'swalot',
+  'spoink', 'grumpig',
+
+  // Gen 3 starters + extras
+  'treecko', 'grovyle', 'sceptile',
+  'torchic', 'combusken', 'blaziken',
+  'mudkip', 'marshtomp', 'swampert',
+  'feebas', 'milotic',
+  'latias', 'latios',
+  'kyogre', 'groudon', 'rayquaza',
+
+  // Gen 4 extras
+  'starly', 'staravia', 'staraptor',
+  'chingling', 'chimecho',
+  'golett', 'golurk',
+
+  // Gen 5 extras
+  'throh', 'sawk',
+  'munna', 'musharna',
+  'yamask', 'cofagrigus', 'runerigus',
+  'purrloin', 'liepard',
+  'foongus', 'amoonguss',
+  'kleavor',
+  // Swords of Justice + Mythicals
+  'cobalion', 'terrakion', 'virizion', 'keldeo',
+  'meloetta', 'genesect',
+  'heatran', 'volcanion',
+
+  // Gen 6 extras (DLC side)
+  'hoopa',
+
+  // Gen 7 extras
+  'mimikyu',
+  'wimpod', 'golisopod',
+  'sandygast', 'palossand',
+  'marshadow',
+  'magearna', 'zeraora',
+  'meltan', 'melmetal',
+  'rotom',
+  'morpeko',
+
+  // Gen 8 extras
+  'rookidee', 'corvisquire', 'corviknight',
+  'nickit', 'thievul',
+  'clobbopus', 'grapploct',
+  'indeedee',
+  'perrserker', // galarian meowth evo
+
+  // Gen 9 extras (Paldea Pokémon)
+  'capsakid', 'scovillain',
+  'tinkatink', 'tinkatuff', 'tinkaton',
+  'cyclizar',
+  'glimmet', 'glimmora',
+  'greavard', 'houndstone',
+  'dondozo', 'tatsugiri',
+  'frigibax', 'arctibax', 'baxcalibur',
+  'gimmighoul', 'gholdengo',
+  'charcadet', 'armarouge', 'ceruledge',
+  'maschiff', 'mabosstiff',
+  'toxel', 'toxtricity',
+  'shroodle', 'grafaiai',
+  'flamigo',
+  'crabrawler', 'crabominable',
+  'squawkabilly',
+  'nacli', 'naclstack', 'garganacl',
+  'fidough', 'dachsbun',
+  'darkrai',
+
+  // Gen 9 (Paldea) more
+  'misdreavus', 'mismagius',
 ])
 
 // ─── In-memory cache: GameVersion → Set of species names ────────────────────
