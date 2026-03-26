@@ -1,8 +1,10 @@
 /**
  * gameAvailability.ts
  *
- * Checks whether a Pokémon species is available in a given game version
- * by fetching PokeAPI Pokédex data and caching it in memory.
+ * Checks whether a Pokémon species is available in a given game version.
+ *
+ * For Legends Z-A: uses a hardcoded whitelist scraped from pokemondb.net/pokedex/game/legends-z-a
+ * For Scarlet/Violet: queries PokeAPI regional pokedexes (paldea, kitakami, blueberry).
  */
 
 import { GameVersion } from './types'
@@ -10,21 +12,131 @@ import { GAME_LEGALITY_RULES } from './legalityData'
 
 // ─── PokeAPI Pokédex IDs per game ────────────────────────────────────────────
 //
-// Each entry maps to the PokeAPI pokedex numeric ID.
-// Scarlet / Violet share the same three regional dexes.
-// Legends: Z-A is a 2025 title — PokeAPI doesn't have its dex yet.
+// Scarlet / Violet share the same three regional dexes via PokeAPI.
+// Legends: Z-A uses a manual whitelist (see below) — no PokeAPI entry yet.
 //
 const GAME_POKEDEX_IDS: Partial<Record<GameVersion, number[]>> = {
-  scarlet:     [27, 31, 32], // paldea, kitakami, blueberry
-  violet:      [27, 31, 32],
-  /**
-   * Legends: Z-A is unreleased (2025). PokeAPI doesn't have its dex yet.
-   * As a placeholder, we use the original X/Y Kalos pokedexes:
-   * 12: kalos-central, 13: kalos-coastal, 14: kalos-mountain
-   * This allows legal Kalos Pokemon (like Charmander) while blocking Chimchar.
-   */
-  'legends-za': [12, 13, 14],
+  scarlet: [27, 31, 32], // paldea, kitakami, blueberry
+  violet:  [27, 31, 32],
+  // legends-za → handled via LEGENDS_ZA_WHITELIST below
 }
+
+// ─── Legends: Z-A Pokédex Whitelist ──────────────────────────────────────────
+//
+// Source: https://pokemondb.net/pokedex/game/legends-z-a  (scraped 2025-03-25)
+// The DLC "Mega Dimension" has its own separate Pokédex and is NOT included here.
+// All names are lowercase-hyphenated to match PokeAPI conventions.
+//
+const LEGENDS_ZA_WHITELIST = new Set([
+  // ── Starters (from other regions) ────────────────────────────────────────
+  'chikorita', 'bayleef', 'meganium',
+  'tepig', 'pignite', 'emboar',
+  'totodile', 'croconaw', 'feraligatr',
+
+  // ── Kalos-native + extras ─────────────────────────────────────────────────
+  'fletchling', 'fletchinder', 'talonflame',
+  'bunnelby', 'diggersby',
+  'scatterbug', 'spewpa', 'vivillon',
+  'weedle', 'kakuna', 'beedrill',
+  'pidgey', 'pidgeotto', 'pidgeot',
+  'mareep', 'flaaffy', 'ampharos',
+  'patrat', 'watchog',
+  'budew', 'roselia', 'roserade',
+  'magikarp', 'gyarados',
+  'binacle', 'barbaracle',
+  'staryu', 'starmie',
+  'flabebe', 'floette', 'florges',
+  'skiddo', 'gogoat',
+  'espurr', 'meowstic',
+  'litleo', 'pyroar',
+  'pancham', 'pangoro',
+  'trubbish', 'garbodor',
+  'dedenne',
+  'pichu', 'pikachu', 'raichu',
+  'cleffa', 'clefairy', 'clefable',
+  'spinarak', 'ariados',
+  'ekans', 'arbok',
+  'abra', 'kadabra', 'alakazam',
+  'gastly', 'haunter', 'gengar',
+  'venipede', 'whirlipede', 'scolipede',
+  'honedge', 'doublade', 'aegislash',
+  'bellsprout', 'weepinbell', 'victreebel',
+  'pansage', 'simisage',
+  'pansear', 'simisear',
+  'panpour', 'simipour',
+  'meditite', 'medicham',
+  'electrike', 'manectric',
+  'ralts', 'kirlia', 'gardevoir', 'gallade',
+  'houndour', 'houndoom',
+  'swablu', 'altaria',
+  'audino',
+  'spritzee', 'aromatisse',
+  'swirlix', 'slurpuff',
+  'eevee', 'vaporeon', 'jolteon', 'flareon', 'espeon', 'umbreon', 'leafeon', 'glaceon', 'sylveon',
+  'buneary', 'lopunny',
+  'shuppet', 'banette',
+  'vanillite', 'vanillish', 'vanilluxe',
+  'numel', 'camerupt',
+  'hippopotas', 'hippowdon',
+  'drilbur', 'excadrill',
+  'sandile', 'krokorok', 'krookodile',
+  'machop', 'machoke', 'machamp',
+  'gible', 'gabite', 'garchomp',
+  'carbink',
+  'sableye',
+  'mawile',
+  'absol',
+  'riolu', 'lucario',
+  'slowpoke', 'slowbro', 'slowking',
+  'carvanha', 'sharpedo',
+  'tynamo', 'eelektrik', 'eelektross',
+  'dratini', 'dragonair', 'dragonite',
+  'bulbasaur', 'ivysaur', 'venusaur',
+  'charmander', 'charmeleon', 'charizard',
+  'squirtle', 'wartortle', 'blastoise',
+  'stunfisk',
+  'furfrou',
+  'inkay', 'malamar',
+  'skrelp', 'dragalge',
+  'clauncher', 'clawitzer',
+  'goomy', 'sliggoo', 'goodra',
+  'delibird',
+  'snorunt', 'glalie', 'froslass',
+  'snover', 'abomasnow',
+  'bergmite', 'avalugg',
+  'scyther', 'scizor',
+  'pinsir',
+  'heracross',
+  'emolga',
+  'hawlucha',
+  'phantump', 'trevenant',
+  'scraggy', 'scrafty',
+  'noibat', 'noivern',
+  'klefki',
+  'litwick', 'lampent', 'chandelure',
+  'aerodactyl',
+  'tyrunt', 'tyrantrum',
+  'amaura', 'aurorus',
+  'onix', 'steelix',
+  'aron', 'lairon', 'aggron',
+  'helioptile', 'heliolisk',
+  'pumpkaboo', 'gourgeist',
+  'larvitar', 'pupitar', 'tyranitar',
+  'froakie', 'frogadier', 'greninja',
+  'falinks',
+  'chespin', 'quilladin', 'chesnaught',
+  'skarmory',
+  'fennekin', 'braixen', 'delphox',
+  'bagon', 'shelgon', 'salamence',
+  'kangaskhan',
+  'drampa',
+  'beldum', 'metang', 'metagross',
+
+  // ── Legendaries / Mythicals ───────────────────────────────────────────────
+  'xerneas', 'yveltal', 'zygarde',
+  'diancie',
+  'mewtwo',
+])
 
 // ─── In-memory cache: GameVersion → Set of species names ────────────────────
 const cache = new Map<GameVersion, Set<string>>()
@@ -44,7 +156,7 @@ async function fetchPokedex(id: number): Promise<string[]> {
 
 async function buildGameSet(game: GameVersion): Promise<Set<string>> {
   const ids = GAME_POKEDEX_IDS[game]
-  if (!ids || ids.length === 0) return new Set() // empty = "unknown" game
+  if (!ids || ids.length === 0) return new Set()
 
   const results = await Promise.all(ids.map(fetchPokedex))
   const combined = new Set<string>()
@@ -58,12 +170,14 @@ async function buildGameSet(game: GameVersion): Promise<Set<string>> {
 
 /**
  * Preloads the game's Pokédex into cache.
- * Call this when a game is selected so later checks are instant.
+ * For Legends Z-A, the whitelist is already in memory — no fetch needed.
  */
 export async function preloadGamePokedex(game: GameVersion): Promise<void> {
-  if (cache.has(game)) return // already cached
+  if (game === 'legends-za') return // whitelist is static, no network needed
+  if (cache.has(game)) return
+
   const ids = GAME_POKEDEX_IDS[game]
-  if (!ids || ids.length === 0) return // no data available
+  if (!ids || ids.length === 0) return
 
   if (!pendingFetches.has(game)) {
     const promise = buildGameSet(game).then((set) => {
@@ -89,17 +203,21 @@ export async function isPokemonInGame(
   // PokeAPI uses lowercase hyphenated names: "charizard", "mr-mime", etc.
   const normalised = speciesName.toLowerCase().replace(/\s+/g, '-')
 
-  // Override manual basado en nuestras reglas de legalidad estrictas (como Leyendas Z-A)
+  // Manual override from GAME_LEGALITY_RULES (explicit notAvailable entries)
   const gameRules = GAME_LEGALITY_RULES[game]
-  if (gameRules && gameRules.pokemonRules) {
+  if (gameRules?.pokemonRules) {
     const speciesRules = gameRules.pokemonRules[normalised]
-    if (speciesRules?.notAvailable) {
-      return false // Estrictamente no disponible en nuestra base de datos
-    }
+    if (speciesRules?.notAvailable) return false
   }
 
+  // ── Legends Z-A: use hardcoded whitelist ──────────────────────────────────
+  if (game === 'legends-za') {
+    return LEGENDS_ZA_WHITELIST.has(normalised)
+  }
+
+  // ── Other games: use PokeAPI Pokédex ─────────────────────────────────────
   const ids = GAME_POKEDEX_IDS[game]
-  if (!ids || ids.length === 0) return null // unknown game (espera validación optimista si no está bloqueado arriba)
+  if (!ids || ids.length === 0) return null
 
   await preloadGamePokedex(game)
   const set = cache.get(game)
@@ -113,9 +231,9 @@ export async function isPokemonInGame(
  */
 export function getGameDisplayName(game: GameVersion): string {
   const names: Record<GameVersion, string> = {
-    scarlet:       'Pokémon Escarlata',
-    violet:        'Pokémon Púrpura',
-    'legends-za':  'Pokémon Legends: Z-A',
+    scarlet:      'Pokémon Escarlata',
+    violet:       'Pokémon Púrpura',
+    'legends-za': 'Pokémon Legends: Z-A',
   }
   return names[game] ?? game
 }
