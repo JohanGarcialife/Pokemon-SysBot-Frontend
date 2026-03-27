@@ -289,16 +289,18 @@ export async function isPokemonInGame(
   // PokeAPI uses lowercase hyphenated names: "charizard", "mr-mime", etc.
   const normalised = speciesName.toLowerCase().replace(/\s+/g, '-')
 
-  // Manual override from GAME_LEGALITY_RULES (explicit notAvailable entries)
+  // ── Legends Z-A: whitelist takes ABSOLUTE priority ──────────────────────
+  // The whitelist (+ DLC) is the single source of truth for ZA availability.
+  // notAvailable entries in legalityData may be stale — the whitelist wins.
+  if (game === 'legends-za') {
+    return LEGENDS_ZA_WHITELIST.has(normalised)
+  }
+
+  // For other games: Manual override from GAME_LEGALITY_RULES (explicit notAvailable entries)
   const gameRules = GAME_LEGALITY_RULES[game]
   if (gameRules?.pokemonRules) {
     const speciesRules = gameRules.pokemonRules[normalised]
     if (speciesRules?.notAvailable) return false
-  }
-
-  // ── Legends Z-A: use hardcoded whitelist ──────────────────────────────────
-  if (game === 'legends-za') {
-    return LEGENDS_ZA_WHITELIST.has(normalised)
   }
 
   // ── Other games: use PokeAPI Pokédex ─────────────────────────────────────

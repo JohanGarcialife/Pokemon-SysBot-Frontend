@@ -125,10 +125,13 @@ export function PokemonEditor({ pokemon, onAddToTeam, gameVersion, availabilityS
     setMoves(newMoves)
   }
 
-  // Block if explicitly unavailable (GAME_LEGALITY_RULES) OR if it's Legends ZA and the Pokémon isn't in the placeholder Kalos Pokedex
-  const isPokemonBlocked = 
-    isPokemonNotAvailable || 
-    (gameVersion === 'legends-za' && (availabilityStatus === 'unavailable' || availabilityStatus === 'unknown'))
+  // For Legends ZA: the whitelist (availabilityStatus) is the ONLY source of truth.
+  // isPokemonNotAvailable from legalityData may be stale after DLC updates, so we ignore it for ZA.
+  // For other games: block if explicitly marked notAvailable via legalityData.
+  const isPokemonBlocked =
+    (gameVersion === 'legends-za')
+      ? (availabilityStatus === 'unavailable' || availabilityStatus === 'unknown')
+      : (isPokemonNotAvailable || availabilityStatus === 'unavailable')
 
   const handleAddToTeam = () => {
     if (isPokemonBlocked) return;
