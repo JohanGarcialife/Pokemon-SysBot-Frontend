@@ -137,16 +137,24 @@ const LEGENDS_ZA_WHITELIST = new Set([
   'diancie',
   'mewtwo',
 
-  // ── DLC: Mega Dimension (source: pokemondb.net/pokedex/game/legends-z-a/mega-dimension) ──
-  // Gen 1-2 extras
+  // ── DLC: Mega Dimension / Lumiose Hyperspace ─────────────────────────────
+  // Source: pokeos.com/es/pokedex/dex/plza-dlc + pokemondb.net/pokedex/game/legends-z-a/mega-dimension
+  // PokeAPI slugs: lowercase-hyphenated. Regional forms use suffix: -alola, -galar, -hisui
+
+  // Gen 1 regional + extras
   'mankey', 'primeape', 'annihilape',
-  'meowth', 'persian',
-  'farfetchd', 'sirfetchd',
-  'cubone', 'marowak',
+  'meowth',                           // Kantonian Meowth → Persian
+  'meowth-alola',                     // Alolan Meowth → Persian-Alola
+  'meowth-galar',                     // Galarian Meowth → Perrserker (already in whitelist)
+  'persian', 'persian-alola',
+  'farfetchd',                        // Kantonian Farfetch'd
+  'farfetchd-galar',                  // Galarian Farfetch'd → Sirfetch'd (already in whitelist)
+  'cubone',
+  'marowak',                          // Kantonian Marowak
+  'marowak-alola',                    // Alolan Marowak (Fire/Ghost type)
   'porygon', 'porygon2', 'porygon-z',
-  'perrserker',
+  'perrserker',                       // Galarian Meowth evolution
   'kecleon',
-  'qwilfish', 'overqwil',
   'mime-jr', 'mr-mime', 'mr-rime',
   'igglybuff', 'jigglypuff', 'wigglytuff',
   'zangoose', 'seviper',
@@ -154,6 +162,18 @@ const LEGENDS_ZA_WHITELIST = new Set([
   'zubat', 'golbat', 'crobat',
   'gulpin', 'swalot',
   'spoink', 'grumpig',
+  'qwilfish',                          // Kantonian Qwilfish
+  'qwilfish-hisui',                    // Hisuian Qwilfish → Overqwil
+  'overqwil',                          // Hisuian evolution
+  'sirfetchd',                         // Galarian Farfetch'd evolution
+
+  // Gen 2 regional
+  'slowpoke-galar',                   // Galarian Slowpoke (already have slowpoke/slowbro/slowking via base game)
+  'qwilfish-hisui',                   // Hisuian Qwilfish → Overqwil (already in whitelist)
+
+  // Gen 4 regional
+  'growlithe-hisui',                  // Hisuian Growlithe → Hisuian Arcanine
+  'arcanine-hisui',
 
   // Gen 3 starters + extras
   'treecko', 'grovyle', 'sceptile',
@@ -183,7 +203,7 @@ const LEGENDS_ZA_WHITELIST = new Set([
   // Gen 6 extras (DLC side)
   'hoopa',
 
-  // Gen 7 extras
+  // Gen 7 extras + regional forms
   'mimikyu',
   'wimpod', 'golisopod',
   'sandygast', 'palossand',
@@ -192,13 +212,29 @@ const LEGENDS_ZA_WHITELIST = new Set([
   'meltan', 'melmetal',
   'rotom',
   'morpeko',
+  // Gen 7 regional forms available in ZA DLC
+  'vulpix-alola',                      // Alolan Vulpix → Ninetales-Alola
+  'ninetales-alola',
+  'sandshrew-alola',                   // Alolan Sandshrew → Sandslash-Alola
+  'sandslash-alola',
+  'diglett-alola',                     // Alolan Diglett → Dugtrio-Alola
+  'dugtrio-alola',
+  'geodude-alola',                     // Alolan Geodude → Graveler-Alola → Golem-Alola
+  'graveler-alola', 'golem-alola',
+  'grimer-alola',                      // Alolan Grimer → Muk-Alola
+  'muk-alola',
+  'exeggutor-alola',                   // Alolan Exeggutor
+  'raichu-alola',                      // Alolan Raichu
 
-  // Gen 8 extras
+  // Gen 8 extras + regional forms
   'rookidee', 'corvisquire', 'corviknight',
   'nickit', 'thievul',
   'clobbopus', 'grapploct',
   'indeedee',
-  'perrserker', // galarian meowth evo
+  // Gen 8 Galarian forms (base forms that were missing, evos already listed)
+  // Note: perrserker comes from meowth-galar already listed above
+  // mr-rime comes from mr-mime-galar
+  'mr-mime-galar',                     // Galarian Mr. Mime → Mr. Rime (already in whitelist)
 
   // Gen 9 extras (Paldea Pokémon)
   'capsakid', 'scovillain',
