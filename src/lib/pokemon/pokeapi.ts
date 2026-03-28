@@ -96,27 +96,71 @@ class PokeAPIClient {
     
     const normalizedQuery = query.toLowerCase().trim()
     
-    // Filtrar por nombre o ID
-    const filtered = list.results
+    // Regional forms from ZA DLC — these are NOT in the standard /pokemon?limit=1010 list
+    // because PokeAPI places them at IDs 10000+. We inject them as a static supplement.
+    const REGIONAL_FORMS: { name: string; displayName: string }[] = [
+      // Alolan forms
+      { name: 'meowth-alola',       displayName: 'meowth-alola' },
+      { name: 'persian-alola',      displayName: 'persian-alola' },
+      { name: 'raichu-alola',       displayName: 'raichu-alola' },
+      { name: 'vulpix-alola',       displayName: 'vulpix-alola' },
+      { name: 'ninetales-alola',    displayName: 'ninetales-alola' },
+      { name: 'sandshrew-alola',    displayName: 'sandshrew-alola' },
+      { name: 'sandslash-alola',    displayName: 'sandslash-alola' },
+      { name: 'diglett-alola',      displayName: 'diglett-alola' },
+      { name: 'dugtrio-alola',      displayName: 'dugtrio-alola' },
+      { name: 'geodude-alola',      displayName: 'geodude-alola' },
+      { name: 'graveler-alola',     displayName: 'graveler-alola' },
+      { name: 'golem-alola',        displayName: 'golem-alola' },
+      { name: 'grimer-alola',       displayName: 'grimer-alola' },
+      { name: 'muk-alola',          displayName: 'muk-alola' },
+      { name: 'marowak-alola',      displayName: 'marowak-alola' },
+      { name: 'exeggutor-alola',    displayName: 'exeggutor-alola' },
+      // Galarian forms
+      { name: 'meowth-galar',       displayName: 'meowth-galar' },
+      { name: 'farfetchd-galar',    displayName: 'farfetchd-galar' },
+      { name: 'slowpoke-galar',     displayName: 'slowpoke-galar' },
+      { name: 'mr-mime-galar',      displayName: 'mr-mime-galar' },
+      // Hisuian forms
+      { name: 'growlithe-hisui',    displayName: 'growlithe-hisui' },
+      { name: 'arcanine-hisui',     displayName: 'arcanine-hisui' },
+      { name: 'qwilfish-hisui',     displayName: 'qwilfish-hisui' },
+    ]
+
+    // 1. Standard results from the main Pokémon list
+    const standardResults = list.results
       .map((item, index) => ({
         id: index + 1,
         name: item.name,
-        url: item.url
+        url: item.url,
+        isRegional: false,
       }))
       .filter(item => {
         const matchesName = item.name.includes(normalizedQuery)
         const matchesId = item.id.toString() === normalizedQuery
         return matchesName || matchesId
       })
-      .slice(0, 10) // Limitar a 10 resultados
 
-    // Obtener sprites
+    // 2. Regional forms filtered by query
+    const regionalResults = REGIONAL_FORMS
+      .filter(form => form.name.includes(normalizedQuery))
+      .map(form => ({
+        id: 0,   // will be resolved from PokeAPI
+        name: form.name,
+        url: `https://pokeapi.co/api/v2/pokemon/${form.name}`,
+        isRegional: true,
+      }))
+
+    // Merge, deduplicate, limit to 12
+    const combined = [...standardResults, ...regionalResults].slice(0, 12)
+
+    // Fetch sprites for all results
     return Promise.all(
-      filtered.map(async item => {
+      combined.map(async item => {
         try {
-          const pokemon = await this.getPokemon(item.id)
+          const pokemon = await this.getPokemon(item.isRegional ? item.name : item.id)
           return {
-            id: item.id,
+            id: pokemon.id,
             name: item.name,
             sprite: pokemon.sprites.other?.['official-artwork']?.front_default || 
                     pokemon.sprites.front_default || 
