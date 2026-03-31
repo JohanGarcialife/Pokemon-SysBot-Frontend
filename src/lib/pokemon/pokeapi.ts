@@ -98,7 +98,7 @@ class PokeAPIClient {
     
     // Regional forms from ZA DLC — these are NOT in the standard /pokemon?limit=1010 list
     // because PokeAPI places them at IDs 10000+. We inject them as a static supplement.
-    const REGIONAL_FORMS: { name: string; displayName: string }[] = [
+    const REGIONAL_FORMS: { name: string; displayName: string; apiName?: string }[] = [
       // Alolan forms
       { name: 'meowth-alola',       displayName: 'meowth-alola' },
       { name: 'persian-alola',      displayName: 'persian-alola' },
@@ -125,6 +125,9 @@ class PokeAPIClient {
       { name: 'growlithe-hisui',    displayName: 'growlithe-hisui' },
       { name: 'arcanine-hisui',     displayName: 'arcanine-hisui' },
       { name: 'qwilfish-hisui',     displayName: 'qwilfish-hisui' },
+      // Zygarde forms
+      { name: 'zygarde-10%-c',      displayName: 'zygarde-10%-c', apiName: 'zygarde-10' },
+      { name: 'zygarde-complete',   displayName: 'zygarde-complete' },
     ]
 
     // 1. Standard results from the main Pokémon list
@@ -134,6 +137,7 @@ class PokeAPIClient {
         name: item.name,
         url: item.url,
         isRegional: false,
+        apiName: item.name,
       }))
       .filter(item => {
         const matchesName = item.name.includes(normalizedQuery)
@@ -143,12 +147,13 @@ class PokeAPIClient {
 
     // 2. Regional forms filtered by query
     const regionalResults = REGIONAL_FORMS
-      .filter(form => form.name.includes(normalizedQuery))
+      .filter(form => form.name.includes(normalizedQuery) || form.displayName.includes(normalizedQuery))
       .map(form => ({
         id: 0,   // will be resolved from PokeAPI
-        name: form.name,
-        url: `https://pokeapi.co/api/v2/pokemon/${form.name}`,
+        name: form.displayName,
+        url: `https://pokeapi.co/api/v2/pokemon/${form.apiName || form.name}`,
         isRegional: true,
+        apiName: form.apiName || form.name,
       }))
 
     // Merge, deduplicate, limit to 12
@@ -158,7 +163,7 @@ class PokeAPIClient {
     return Promise.all(
       combined.map(async item => {
         try {
-          const pokemon = await this.getPokemon(item.isRegional ? item.name : item.id)
+          const pokemon = await this.getPokemon(item.apiName)
           return {
             id: pokemon.id,
             name: item.name,
@@ -169,7 +174,7 @@ class PokeAPIClient {
         } catch (error) {
           console.error(`Error fetching sprite for ${item.name}:`, error)
           return {
-            id: item.id,
+            id: item.id || 0,
             name: item.name,
             sprite: ''
           }
