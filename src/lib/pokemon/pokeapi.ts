@@ -126,7 +126,7 @@ class PokeAPIClient {
       { name: 'arcanine-hisui',     displayName: 'arcanine-hisui' },
       { name: 'qwilfish-hisui',     displayName: 'qwilfish-hisui' },
       // Zygarde forms
-      { name: 'zygarde-10%-c',      displayName: 'zygarde-10%-c', apiName: 'zygarde-10' },
+      { name: 'zygarde-10%',      displayName: 'zygarde-10%', apiName: 'zygarde-10' },
       { name: 'zygarde-complete',   displayName: 'zygarde-complete' },
     ]
 

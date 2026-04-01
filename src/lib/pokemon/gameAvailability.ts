@@ -133,7 +133,7 @@ const LEGENDS_ZA_WHITELIST = new Set([
   'beldum', 'metang', 'metagross',
 
   // ── Legendaries / Mythicals (base game) ─────────────────────────────────
-  'xerneas', 'yveltal', 'zygarde-10%-c',
+  'xerneas', 'yveltal', 'zygarde-10%',
   'diancie',
   'mewtwo',
 
