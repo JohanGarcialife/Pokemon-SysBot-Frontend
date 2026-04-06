@@ -33,7 +33,7 @@ export interface GameRules {
 // Fuentes: destructoid.com, insider-gaming.com, serebii.net
 const LZA_SHINY_LOCKED_POKEMON: string[] = [
   // Sub-legendarios disponibles solo por historia/misión, sin shiny
-  'xerneas', 'yveltal', 'zygarde',
+  'xerneas', 'yveltal', 'zygarde-10', 'zygarde-complete',
   // Legendarios que vienen por misiones especiales o eventos de juego
   'mewtwo',      // Diciembre 2025 - via evento especial, shiny locked
   'meloetta',    // Hyperspace Distortion, shiny locked
@@ -67,7 +67,7 @@ const LZA_ALPHA_LOCKED_POKEMON: string[] = [
   'mewtwo', 'diancie', 'hoopa', 'volcanion', 'magearna', 'marshadow',
   'zeraora', 'meltan', 'melmetal', 'genesect', 'keldeo',
   'meloetta', 'rayquaza', 'groudon', 'kyogre', 'heatran',
-  'xerneas', 'yveltal', 'zygarde',
+  'xerneas', 'yveltal', 'zygarde-10', 'zygarde-complete',
 ]
 
 // Pokémon de Gen 1-6 que son Legendarios/Míticos y NO ESTÁN en Z-A
