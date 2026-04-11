@@ -16,10 +16,10 @@ function getBackendURL(): string {
       window.location.hostname === '127.0.0.1'
     if (isLocalhost) return 'http://localhost:4000'
   }
-  return process.env.NEXT_PUBLIC_BACKEND_URL || 'https://pkdex-sysbot-backend-production.up.railway.app'
+  return process.env.NEXT_PUBLIC_BACKEND_URL || 'https://pkdex-backend-production.up.railway.app'
 }
 
-export const BACKEND_API_URL = process.env.NEXT_PUBLIC_BACKEND_URL || 'https://pkdex-sysbot-backend-production.up.railway.app'
+export const BACKEND_API_URL = process.env.NEXT_PUBLIC_BACKEND_URL || 'https://pkdex-backend-production.up.railway.app'
 
 export interface StatValues {
   hp: number
