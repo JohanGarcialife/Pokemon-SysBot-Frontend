@@ -347,6 +347,35 @@ export async function isPokemonInGame(
   const set = cache.get(game)
   if (!set) return null
 
+  // SV HOME Transfer Whitelist: These Pokémon are not in the regional dexes but are allowed via HOME
+  if (game === 'scarlet' || game === 'violet') {
+    const SV_HOME_TRANSFER_WHITELIST = new Set([
+      'mew', 'mewtwo', 'articuno', 'zapdos', 'moltres', 'articuno-galar', 'zapdos-galar', 'moltres-galar',
+      'charmander', 'charmeleon', 'charizard', 'bulbasaur', 'ivysaur', 'venusaur', 'squirtle', 'wartortle', 'blastoise',
+      'chikorita', 'bayleef', 'meganium', 'cyndaquil', 'quilava', 'typhlosion', 'typhlosion-hisui', 'totodile', 'croconaw', 'feraligatr',
+      'treecko', 'grovyle', 'sceptile', 'torchic', 'combusken', 'blaziken', 'mudkip', 'marshtomp', 'swampert',
+      'turtwig', 'grotle', 'torterra', 'chimchar', 'monferno', 'infernape', 'piplup', 'prinplup', 'empoleon',
+      'snivy', 'servine', 'serperior', 'tepig', 'pignite', 'emboar', 'oshawott', 'dewott', 'samurott', 'samurott-hisui',
+      'chespin', 'quilladin', 'chesnaught', 'fennekin', 'braixen', 'delphox', 'froakie', 'frogadier', 'greninja',
+      'rowlet', 'dartrix', 'decidueye', 'decidueye-hisui', 'litten', 'torracat', 'incineroar', 'popplio', 'brionne', 'primarina',
+      'grookey', 'thwackey', 'rillaboom', 'scorbunny', 'raboot', 'cinderace', 'sobble', 'drizzile', 'inteleon',
+      'raikou', 'entei', 'suicune', 'lugia', 'ho-oh', 'kyogre', 'groudon', 'rayquaza', 'latias', 'latios',
+      'uxie', 'mesprit', 'azelf', 'dialga', 'palkia', 'heatran', 'regigigas', 'giratina', 'cresselia', 'phione', 'manaphy', 'darkrai', 'shaymin', 'arceus',
+      'cobalion', 'terrakion', 'virizion', 'tornadus', 'thundurus', 'reshiram', 'zekrom', 'landorus', 'kyurem', 'keldeo', 'meloetta',
+      'diancie', 'hoopa', 'volcanion', 'magearna', 'zacian', 'zamazenta', 'eternatus', 'kubfu', 'urshifu', 'zarude', 'regieleki', 'regidrago', 'glastrier', 'spectrier', 'calyrex',
+      // Hisuian forms
+      'growlithe-hisui', 'arcanine-hisui', 'voltorb-hisui', 'electrode-hisui', 'qwilfish-hisui', 'sneasel-hisui', 'braviary-hisui', 'sliggoo-hisui', 'goodra-hisui', 'avalugg-hisui', 'zorua-hisui', 'zoroark-hisui',
+      'wyrdeer', 'kleavor', 'ursaluna', 'basculegion', 'sneasler', 'overqwil', 'enamorus',
+      // Alolan forms
+      'rattata-alola', 'raticate-alola', 'raichu-alola', 'sandshrew-alola', 'sandslash-alola', 'vulpix-alola', 'ninetales-alola', 'diglett-alola', 'dugtrio-alola', 'meowth-alola', 'persian-alola', 'geodude-alola', 'graveler-alola', 'golem-alola', 'grimer-alola', 'muk-alola', 'exeggutor-alola',
+      // Galarian forms
+      'meowth-galar', 'ponyta-galar', 'rapidash-galar', 'slowpoke-galar', 'slowbro-galar', 'farfetchd-galar', 'weezing-galar', 'mr-mime-galar', 'corsola-galar', 'zigzagoon-galar', 'linoone-galar', 'darumaka-galar', 'darmanitan-galar', 'yamask-galar', 'stunfisk-galar', 'slowking-galar'
+    ])
+    if (SV_HOME_TRANSFER_WHITELIST.has(normalised)) {
+      return true
+    }
+  }
+
   return set.has(normalised)
 }
 
