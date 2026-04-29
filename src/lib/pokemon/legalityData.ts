@@ -49,7 +49,7 @@ const LZA_ALPHA_LOCKED_POKEMON: string[] = [
   'mewtwo', 'diancie', 'hoopa', 'volcanion', 'magearna', 'marshadow',
   'zeraora', 'meltan', 'melmetal', 'genesect', 'keldeo',
   'meloetta', 'rayquaza', 'groudon', 'kyogre', 'heatran',
-  'xerneas', 'yveltal', 'zygarde-10', 'zygarde-complete',
+  'xerneas', 'yveltal', 'zygarde', 'zygarde-10', 'zygarde-10%', 'zygarde-50%', 'zygarde-complete',
 ]
 
 // Pokémon de Gen 1-6 que son Legendarios/Míticos y NO ESTÁN en Z-A
@@ -122,8 +122,6 @@ const LZA_NOT_AVAILABLE_POKEMON: string[] = [
 // Pokémon míticos y legendarios shiny-locked en Scarlet/Violet
 const SV_SHINY_LOCKED_POKEMON: string[] = [
   // Starter que recibes al inicio (wild sí pueden ser shiny)
-  // Legendarios de la historia principal:
-  'koraidon', 'miraidon',
   // Legendarios de DLC:
   'ogerpon',       // Story legendary - shiny locked
   'terapagos',     // Story legendary - shiny locked

@@ -16,8 +16,8 @@ import { GAME_LEGALITY_RULES } from './legalityData'
 // Legends: Z-A uses a manual whitelist (see below) — no PokeAPI entry yet.
 //
 const GAME_POKEDEX_IDS: Partial<Record<GameVersion, number[]>> = {
-  scarlet: [27, 31, 32], // paldea, kitakami, blueberry
-  violet:  [27, 31, 32],
+  scarlet: [31, 32, 33], // paldea (31), kitakami (32), blueberry (33)
+  violet:  [31, 32, 33],
   // legends-za → handled via LEGENDS_ZA_WHITELIST below
 }
 
@@ -133,7 +133,7 @@ const LEGENDS_ZA_WHITELIST = new Set([
   'beldum', 'metang', 'metagross',
 
   // ── Legendaries / Mythicals (base game) ─────────────────────────────────
-  'xerneas', 'yveltal', 'zygarde-10', 'zygarde-complete',
+  'xerneas', 'yveltal', 'zygarde', 'zygarde-10', 'zygarde-10%', 'zygarde-50%', 'zygarde-complete',
   'diancie',
   'mewtwo',
 
