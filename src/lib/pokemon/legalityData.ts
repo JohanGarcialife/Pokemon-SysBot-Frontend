@@ -32,29 +32,12 @@ export interface GameRules {
 // Legendarios y míticos SHINY LOCKED en Z-A
 // Fuentes: destructoid.com, insider-gaming.com, serebii.net
 const LZA_SHINY_LOCKED_POKEMON: string[] = [
-  // Sub-legendarios disponibles solo por historia/misión, sin shiny
-  'xerneas', 'yveltal', 'zygarde-10', 'zygarde-complete',
-  // Legendarios que vienen por misiones especiales o eventos de juego
-  'mewtwo',      // Diciembre 2025 - via evento especial, shiny locked
-  'meloetta',    // Hyperspace Distortion, shiny locked
-  'keldeo',      // Hyperspace Distortion, shiny locked
-  'volcanion',   // Hyperspace Distortion, shiny locked (necesita DLC Zone)
-  'rayquaza',    // Hyperspace Distortion, shiny locked
-  'groudon',     // Hyperspace Distortion, shiny locked
-  'kyogre',      // Hyperspace Distortion, shiny locked
-  'heatran',     // Hyperspace Distortion, shiny locked
-  'darkrai',     // Hyperspace Distortion, shiny locked
-  'genesect',    // Hyperspace Distortion, shiny locked
-  'hoopa',       // DLC Mega Dimension, shiny locked
-  'magearna',    // Hyperspace Distortion, shiny locked
-  'marshadow',   // Hyperspace Distortion, shiny locked
-  'zeraora',     // Hyperspace Distortion, shiny locked
-  'meltan',      // Gift, shiny locked
-  'melmetal',    // Gift (evolución de Meltan), shiny locked
-  'diancie',     // Noviembre 2025 - evento, shiny locked
-  // Iniciales elegidos al inicio del juego
-  // (en wild pueden salir shiny, pero cuando son starters no)
-  // Los incluimos especificando que si el origen es 'Starter', están shiny-locked
+  // Solo mantenemos los que JAMÁS han sido shiny legalmente en ningún juego
+  'meloetta',
+  'keldeo',
+  'hoopa',
+  'magearna',
+  'marshadow',
 ]
 
 // Pokémon que no pueden ser Alpha en Z-A
@@ -63,7 +46,6 @@ const LZA_ALPHA_LOCKED_POKEMON: string[] = [
   'darkrai',
   'cobalion',
   'terrakion',
-  // Todos los míticos que son exclusivos de Hyperspace/eventos no pueden ser Alpha
   'mewtwo', 'diancie', 'hoopa', 'volcanion', 'magearna', 'marshadow',
   'zeraora', 'meltan', 'melmetal', 'genesect', 'keldeo',
   'meloetta', 'rayquaza', 'groudon', 'kyogre', 'heatran',
@@ -79,7 +61,6 @@ const LZA_NOT_AVAILABLE_POKEMON: string[] = [
   'regirock', 'regice', 'registeel', 'jirachi', 'deoxys',
   'uxie', 'mesprit', 'azelf', 'dialga', 'palkia', 'cresselia', 'phione', 'manaphy', 'shaymin', 'arceus',
   'victini', 'tornadus', 'thundurus', 'reshiram', 'zekrom', 'landorus', 'kyurem',
-  // Gen 7 Legendarios/Míticos que SÍ están como excepción ya mencionados arriba
   // Gen 7 Pokémon normales que NO están
   'rowlet', 'dartrix', 'decidueye', 'litten', 'torracat', 'incineroar',
   'popplio', 'brionne', 'primarina', 'pikipek', 'trumbeak', 'toucannon',
@@ -92,9 +73,7 @@ const LZA_NOT_AVAILABLE_POKEMON: string[] = [
   'palossand', 'pyukumuku', 'type-null', 'silvally', 'minior', 'komala',
   'turtonator', 'togedemaru', 'mimikyu', 'bruxish', 'drampa', 'dhelmise',
   'jangmo-o', 'hakamo-o', 'kommo-o', 'tapu-koko', 'tapu-lele', 'tapu-bulu',
-  'tapu-fini', 'cosmog', 'cosmoem', 'solgaleo', 'lunala', 'nihilego',
-  'buzzwole', 'pheromosa', 'xurkitree', 'celesteela', 'kartana', 'guzzlord',
-  'necrozma', 'poipole', 'naganadel', 'stakataka', 'blacephalon',
+  'tapu-fini',
   // Gen 8 Pokémon (Galar) - generalmente no disponibles
   'grookey', 'thwackey', 'rillaboom', 'scorbunny', 'raboot', 'cinderace',
   'sobble', 'drizzile', 'inteleon', 'skwovet', 'greedent', 'rookidee',

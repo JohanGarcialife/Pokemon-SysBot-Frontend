@@ -258,6 +258,11 @@ const LEGENDS_ZA_WHITELIST = new Set([
 
   // Gen 9 (Paldea) more
   'misdreavus', 'mismagius',
+
+  // HOME Transfer additions (Ultra Beasts & Alolan Legendaries)
+  'cosmog', 'cosmoem', 'solgaleo', 'lunala', 'nihilego',
+  'buzzwole', 'pheromosa', 'xurkitree', 'celesteela', 'kartana', 'guzzlord',
+  'necrozma', 'poipole', 'naganadel', 'stakataka', 'blacephalon',
 ])
 
 // ─── In-memory cache: GameVersion → Set of species names ────────────────────
