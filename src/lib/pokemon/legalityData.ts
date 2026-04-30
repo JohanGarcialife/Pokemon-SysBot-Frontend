@@ -168,7 +168,7 @@ export const GAME_LEGALITY_RULES: Partial<Record<GameVersion, GameRules>> = {
         fixedBall: 'Poké Ball'
       },
       'Event': {
-        shinyLocked: true,
+        shinyLocked: false,
         alphaLocked: true,
         minLevel: 10,
         fixedBall: 'Cherish Ball'
@@ -215,7 +215,7 @@ export const GAME_LEGALITY_RULES: Partial<Record<GameVersion, GameRules>> = {
       'Trade':           { shinyLocked: false, minLevel: 1 },
       'In-Game Gift':    { shinyLocked: true, alphaLocked: true, minLevel: 1, fixedBall: 'Poké Ball' },
       'Starter':         { shinyLocked: true, alphaLocked: true, minLevel: 5, fixedBall: 'Poké Ball' },
-      'Event':           { shinyLocked: true, alphaLocked: true, minLevel: 10, fixedBall: 'Cherish Ball' },
+      'Event':           { shinyLocked: false, alphaLocked: true, minLevel: 10, fixedBall: 'Cherish Ball' },
     },
     pokemonRules: {
       ...Object.fromEntries(
@@ -238,7 +238,7 @@ export const GAME_LEGALITY_RULES: Partial<Record<GameVersion, GameRules>> = {
       'Trade':           { shinyLocked: false, minLevel: 1 },
       'In-Game Gift':    { shinyLocked: true, alphaLocked: true, minLevel: 1, fixedBall: 'Poké Ball' },
       'Starter':         { shinyLocked: true, alphaLocked: true, minLevel: 5, fixedBall: 'Poké Ball' },
-      'Event':           { shinyLocked: true, alphaLocked: true, minLevel: 10, fixedBall: 'Cherish Ball' },
+      'Event':           { shinyLocked: false, alphaLocked: true, minLevel: 10, fixedBall: 'Cherish Ball' },
     },
     pokemonRules: {
       ...Object.fromEntries(
