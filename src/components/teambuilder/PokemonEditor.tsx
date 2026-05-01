@@ -17,6 +17,7 @@ import Image from 'next/image'
 import { useLegality } from '@/hooks/useLegality'
 import { useEncounterRules } from '@/hooks/useEncounterRules'
 import { LegalityPanel } from './LegalityPanel'
+import { EVENT_MOVESETS } from '@/lib/pokemon/eventMovesets'
 
 type AvailabilityStatus = 'loading' | 'available' | 'unavailable' | 'unknown'
 
@@ -110,6 +111,31 @@ export function PokemonEditor({ pokemon, onAddToTeam, gameVersion, availabilityS
       if (pokeball !== 'Cherish Ball') setPokeball('Cherish Ball')
     }
   }, [shiny, isShinyEventOnly])
+
+  // Auto-fill event moves when shiny event Pokémon is selected
+  React.useEffect(() => {
+    if (!pokemon || !shiny || !isShinyEventOnly) return
+    const slug = pokemon.name.toLowerCase()
+    const eventData = EVENT_MOVESETS[slug]
+    if (!eventData) return
+    // Build minimal Move objects from the event moveset names
+    const eventMoves: (Move | null)[] = eventData.moves.map((moveName, i) =>
+      moveName
+        ? { id: -(i + 1), name: moveName, type: 'normal', power: null, accuracy: null, pp: 5, damageClass: 'status' } as Move
+        : null
+    )
+    setMoves(eventMoves)
+  }, [shiny, isShinyEventOnly, pokemon])
+
+  // When shiny is turned OFF, clear the event-locked moves
+  React.useEffect(() => {
+    if (!shiny && isShinyEventOnly) {
+      setMoves([null, null, null, null])
+    }
+  }, [shiny, isShinyEventOnly])
+
+  // Moves are locked (read-only) when it's a shiny event-only Pokémon
+  const movesLocked = shiny && isShinyEventOnly
   
   const [showMoveSelector, setShowMoveSelector] = useState(false)
   const [activeMoveSlot, setActiveMoveSlot] = useState<number>(0)
@@ -398,7 +424,7 @@ export function PokemonEditor({ pokemon, onAddToTeam, gameVersion, availabilityS
         </div>
 
         {/* Moves */}
-        <div className="bg-white border-2 border-gray-300 rounded-lg p-6">
+        <div className={`border-2 rounded-lg p-6 ${movesLocked ? 'bg-amber-50 border-amber-300' : 'bg-white border-gray-300'}`}>
           <h3 className="text-lg font-black text-gray-900 uppercase mb-4">
             Movimientos
           </h3>
@@ -410,12 +436,19 @@ export function PokemonEditor({ pokemon, onAddToTeam, gameVersion, availabilityS
             </div>
           ) : (
             <div className="space-y-3">
+              {movesLocked && (
+                <p className="text-xs text-amber-700 font-bold bg-amber-100 border border-amber-300 rounded p-2 mb-3">
+                  🎁 Movimientos del evento oficial pre-asignados y bloqueados. Son necesarios para que el bot pueda generar este Pokémon de forma legal.
+                </p>
+              )}
               {moves.map((move, index) => (
                 <MoveSlot
                   key={index}
                   moveIndex={index}
                   move={move}
+                  locked={movesLocked}
                   onSelect={() => {
+                    if (movesLocked) return
                     setActiveMoveSlot(index)
                     setShowMoveSelector(true)
                   }}
