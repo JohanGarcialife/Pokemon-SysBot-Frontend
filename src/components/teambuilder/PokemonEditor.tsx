@@ -33,6 +33,27 @@ export function PokemonEditor({ pokemon, onAddToTeam, gameVersion, availabilityS
   // Origins that have Shiny Lock - cannot be shiny by game rules
   const GIFT_ORIGINS = ['In-Game Gift', 'Starter', 'Event']
 
+  // Pokémon that can ONLY be shiny via Mystery Gift / Event distribution.
+  // When the user toggles Shiny ON, we auto-lock: origin → 'Event', ball → 'Cherish Ball'.
+  const SHINY_EVENT_ONLY_POKEMON = new Set([
+    // SV / transferable via HOME
+    'koraidon', 'miraidon',
+    // ZA / transferable via HOME event
+    'zygarde', 'zygarde-10', 'zygarde-10%', 'zygarde-50%', 'zygarde-complete',
+    // Gen 6 events
+    'diancie', 'hoopa', 'volcanion',
+    // Gen 7 events
+    'marshadow', 'zeraora', 'meltan', 'melmetal',
+    // Gen 5 events
+    'genesect', 'meloetta', 'keldeo',
+    // Gen 4 events
+    'darkrai', 'shaymin', 'arceus',
+    // Other
+    'victini', 'magearna',
+  ])
+
+  const isShinyEventOnly = pokemon ? SHINY_EVENT_ONLY_POKEMON.has(pokemon.name.toLowerCase()) : false
+
   const [stats, setStats] = useState<PokemonStats>({
     hp: { iv: 31, ev: 0 },
     attack: { iv: 31, ev: 0 },
@@ -81,6 +102,14 @@ export function PokemonEditor({ pokemon, onAddToTeam, gameVersion, availabilityS
       setAlpha(false)
     }
   }, [isAlphaDisabled, alpha])
+
+  // Auto-lock: if shiny is turned ON for an event-only Pokémon → force Event origin + Cherish Ball
+  React.useEffect(() => {
+    if (shiny && isShinyEventOnly) {
+      if (origin !== 'Event') setOrigin('Event')
+      if (pokeball !== 'Cherish Ball') setPokeball('Cherish Ball')
+    }
+  }, [shiny, isShinyEventOnly])
   
   const [showMoveSelector, setShowMoveSelector] = useState(false)
   const [activeMoveSlot, setActiveMoveSlot] = useState<number>(0)
@@ -233,6 +262,12 @@ export function PokemonEditor({ pokemon, onAddToTeam, gameVersion, availabilityS
                 ✨ Shiny {isShinyDisabled ? '(bloqueado por origen)' : ''}
               </label>
             </div>
+            {/* Hint: event-only shiny auto-lock */}
+            {shiny && isShinyEventOnly && (
+              <p className="text-xs text-amber-600 font-bold mt-1 bg-amber-50 border border-amber-200 rounded p-2">
+                🎁 Este Pokémon solo existe shiny como evento. Se ha seleccionado automáticamente: <b>Origen: Evento</b> + <b>Gloria Ball</b>.
+              </p>
+            )}
 
             {/* Alpha — only for Legends ZA */}
             {isLegendsZA && (
