@@ -133,7 +133,7 @@ const LEGENDS_ZA_WHITELIST = new Set([
   'beldum', 'metang', 'metagross',
 
   // ── Legendaries / Mythicals (base game) ─────────────────────────────────
-  'xerneas', 'yveltal', 'zygarde', 'zygarde-10', 'zygarde-10%', 'zygarde-50%', 'zygarde-complete',
+  'xerneas', 'yveltal', 'zygarde', 'zygarde-10', 'zygarde-10%', 'zygarde-50', 'zygarde-50%', 'zygarde-complete',
   'diancie',
   'mewtwo',
 
@@ -197,18 +197,18 @@ const LEGENDS_ZA_WHITELIST = new Set([
   'kleavor',
   // Swords of Justice + Mythicals
   'cobalion', 'terrakion', 'virizion', 'keldeo',
-  'meloetta', 'genesect',
+  'meloetta', 'meloetta-aria', 'meloetta-pirouette', 'genesect',
   'heatran', 'volcanion',
 
   // Gen 6 extras (DLC side)
-  'hoopa',
+  'hoopa', 'hoopa-confined', 'hoopa-unbound',
 
   // Gen 7 extras + regional forms
   'mimikyu',
   'wimpod', 'golisopod',
   'sandygast', 'palossand',
   'marshadow',
-  'magearna', 'zeraora',
+  'magearna', 'magearna-original', 'zeraora',
   'meltan', 'melmetal',
   'rotom',
   'morpeko',
@@ -262,7 +262,8 @@ const LEGENDS_ZA_WHITELIST = new Set([
   // HOME Transfer additions (Ultra Beasts & Alolan Legendaries)
   'cosmog', 'cosmoem', 'solgaleo', 'lunala', 'nihilego',
   'buzzwole', 'pheromosa', 'xurkitree', 'celesteela', 'kartana', 'guzzlord',
-  'necrozma', 'poipole', 'naganadel', 'stakataka', 'blacephalon',
+  'necrozma', 'necrozma-dusk', 'necrozma-dawn', 'necrozma-ultra',
+  'poipole', 'naganadel', 'stakataka', 'blacephalon',
 ])
 
 // ─── In-memory cache: GameVersion → Set of species names ────────────────────
@@ -374,7 +375,14 @@ export async function isPokemonInGame(
       // Alolan forms
       'rattata-alola', 'raticate-alola', 'raichu-alola', 'sandshrew-alola', 'sandslash-alola', 'vulpix-alola', 'ninetales-alola', 'diglett-alola', 'dugtrio-alola', 'meowth-alola', 'persian-alola', 'geodude-alola', 'graveler-alola', 'golem-alola', 'grimer-alola', 'muk-alola', 'exeggutor-alola',
       // Galarian forms
-      'meowth-galar', 'ponyta-galar', 'rapidash-galar', 'slowpoke-galar', 'slowbro-galar', 'farfetchd-galar', 'weezing-galar', 'mr-mime-galar', 'corsola-galar', 'zigzagoon-galar', 'linoone-galar', 'darumaka-galar', 'darmanitan-galar', 'yamask-galar', 'stunfisk-galar', 'slowking-galar'
+      'meowth-galar', 'ponyta-galar', 'rapidash-galar', 'slowpoke-galar', 'slowbro-galar', 'farfetchd-galar', 'weezing-galar', 'mr-mime-galar', 'corsola-galar', 'zigzagoon-galar', 'linoone-galar', 'darumaka-galar', 'darmanitan-galar', 'yamask-galar', 'stunfisk-galar', 'slowking-galar',
+      // SV DLC Exclusives (Fallback for PokeAPI cache issues)
+      'ogerpon', 'ogerpon-wellspring-mask', 'ogerpon-hearthflame-mask', 'ogerpon-cornerstone-mask',
+      'pecharunt', 'okidogi', 'munkidori', 'fezandipiti',
+      'terapagos', 'terapagos-terastal', 'terapagos-stellar',
+      'gouging-fire', 'raging-bolt', 'walking-wake',
+      'iron-leaves', 'iron-boulder', 'iron-crown',
+      'poltchageist', 'sinistcha', 'dipplin', 'hydrapple', 'archaludon'
     ])
     if (SV_HOME_TRANSFER_WHITELIST.has(normalised)) {
       return true
