@@ -66,6 +66,14 @@ export function useEncounterRules(
     // Pokémon no disponible en este juego
     const isPokemonNotAvailable = speciesRules?.notAvailable ?? false
 
+    // Calcular orígenes deshabilitados (combinando los del juego y los de la especie)
+    let disabledOrigins = [...(gameRules.disabledOrigins || [])]
+    if (speciesRules?.availableOrigins) {
+      const allOrigins = Object.keys(gameRules.origins)
+      const notAvailable = allOrigins.filter(o => !speciesRules.availableOrigins!.includes(o))
+      disabledOrigins = [...new Set([...disabledOrigins, ...notAvailable])]
+    }
+
     return {
       isShinyDisabled,
       isAlphaDisabled,
@@ -73,7 +81,7 @@ export function useEncounterRules(
       forcedBall: originRules?.fixedBall ?? null,
       minAllowedLevel: originRules?.minLevel ?? 1,
       disabledFeatures: gameRules.disabledFeatures || [],
-      disabledOrigins: gameRules.disabledOrigins || [],
+      disabledOrigins,
       speciesRules
     }
   }, [gameVersion, origin, pokemonSlug])

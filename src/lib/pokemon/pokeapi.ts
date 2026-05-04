@@ -69,7 +69,7 @@ class PokeAPIClient {
     return data
   }
 
-  async getPokemonList(limit: number = 1010, offset: number = 0): Promise<PokemonListResponse> {
+  async getPokemonList(limit: number = 1300, offset: number = 0): Promise<PokemonListResponse> {
     return this.fetchWithCache(
       `pokemon_list_${limit}_${offset}`,
       async () => {
@@ -128,6 +128,29 @@ class PokeAPIClient {
       // Zygarde forms
       { name: 'zygarde-10%',      displayName: 'zygarde-10%', apiName: 'zygarde-10' },
       { name: 'zygarde-complete',   displayName: 'zygarde-complete' },
+      // SV DLC Exclusives (Not available in standard limit due to API offset)
+      { name: 'ogerpon', displayName: 'ogerpon' },
+      { name: 'ogerpon-wellspring-mask', displayName: 'ogerpon-wellspring-mask' },
+      { name: 'ogerpon-hearthflame-mask', displayName: 'ogerpon-hearthflame-mask' },
+      { name: 'ogerpon-cornerstone-mask', displayName: 'ogerpon-cornerstone-mask' },
+      { name: 'pecharunt', displayName: 'pecharunt' },
+      { name: 'terapagos', displayName: 'terapagos' },
+      { name: 'terapagos-terastal', displayName: 'terapagos-terastal' },
+      { name: 'terapagos-stellar', displayName: 'terapagos-stellar' },
+      { name: 'okidogi', displayName: 'okidogi' },
+      { name: 'munkidori', displayName: 'munkidori' },
+      { name: 'fezandipiti', displayName: 'fezandipiti' },
+      { name: 'gouging-fire', displayName: 'gouging-fire' },
+      { name: 'raging-bolt', displayName: 'raging-bolt' },
+      { name: 'walking-wake', displayName: 'walking-wake' },
+      { name: 'iron-leaves', displayName: 'iron-leaves' },
+      { name: 'iron-boulder', displayName: 'iron-boulder' },
+      { name: 'iron-crown', displayName: 'iron-crown' },
+      { name: 'poltchageist', displayName: 'poltchageist' },
+      { name: 'sinistcha', displayName: 'sinistcha' },
+      { name: 'dipplin', displayName: 'dipplin' },
+      { name: 'hydrapple', displayName: 'hydrapple' },
+      { name: 'archaludon', displayName: 'archaludon' },
     ]
 
     // 1. Standard results from the main Pokémon list

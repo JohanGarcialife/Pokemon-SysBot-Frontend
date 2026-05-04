@@ -182,6 +182,7 @@ export const GAME_LEGALITY_RULES: Partial<Record<GameVersion, GameRules>> = {
           {
             shinyLocked: true,
             alphaLocked: LZA_ALPHA_LOCKED_POKEMON.includes(slug),
+            availableOrigins: ['Wild Encounter'] // Obligamos a "Captura normal" para evitar errores del usuario
           } satisfies PokemonSpeciesRules,
         ])
       ),

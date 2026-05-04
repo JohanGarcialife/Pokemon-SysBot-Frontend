@@ -104,6 +104,16 @@ export function PokemonEditor({ pokemon, onAddToTeam, gameVersion, availabilityS
     }
   }, [isAlphaDisabled, alpha])
 
+  // Auto-reset origin si el actual está deshabilitado
+  React.useEffect(() => {
+    if (disabledOrigins.includes(origin)) {
+      // Find the first available origin, defaults to Wild Encounter
+      const allOrigins = ['Wild Encounter', 'Tera Raid', 'Egg', 'Mass Outbreak', 'Trade', 'In-Game Gift', 'Starter', 'Event']
+      const firstAvailable = allOrigins.find(o => !disabledOrigins.includes(o)) || 'Wild Encounter'
+      setOrigin(firstAvailable)
+    }
+  }, [disabledOrigins, origin])
+
   // Auto-lock: if shiny is turned ON for an event-only Pokémon → force Event origin + Cherish Ball
   React.useEffect(() => {
     if (shiny && isShinyEventOnly) {
