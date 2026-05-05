@@ -17,7 +17,7 @@ import Image from 'next/image'
 import { useLegality } from '@/hooks/useLegality'
 import { useEncounterRules } from '@/hooks/useEncounterRules'
 import { LegalityPanel } from './LegalityPanel'
-import { EVENT_MOVESETS } from '@/lib/pokemon/eventMovesets'
+import { EVENT_MOVESETS, LEGENDARY_PRESETS } from '@/lib/pokemon/eventMovesets'
 
 type AvailabilityStatus = 'loading' | 'available' | 'unavailable' | 'unknown'
 
@@ -54,6 +54,10 @@ export function PokemonEditor({ pokemon, onAddToTeam, gameVersion, availabilityS
   ])
 
   const isShinyEventOnly = pokemon ? SHINY_EVENT_ONLY_POKEMON.has(pokemon.name.toLowerCase()) : false
+
+  // Legendary preset: fully locked build with fixed stats/moves
+  const legendaryPreset = pokemon ? (LEGENDARY_PRESETS[pokemon.name.toLowerCase()] ?? null) : null
+  const isLegendaryPreset = legendaryPreset !== null
 
   const [stats, setStats] = useState<PokemonStats>({
     hp: { iv: 31, ev: 0 },
@@ -114,6 +118,22 @@ export function PokemonEditor({ pokemon, onAddToTeam, gameVersion, availabilityS
     }
   }, [disabledOrigins, origin])
 
+  // Auto-apply legendary preset when Pokémon changes
+  React.useEffect(() => {
+    if (!legendaryPreset) return
+    setLevel(legendaryPreset.level)
+    setOrigin(legendaryPreset.forcedOrigin)
+    setPokeball(legendaryPreset.forcedBall)
+    setShiny(false) // presets are never shiny by default
+    setAlpha(false)
+    const presetMoves: (Move | null)[] = legendaryPreset.moves.map((moveName, i) =>
+      moveName
+        ? { id: -(i + 1), name: moveName, type: 'normal', power: null, accuracy: null, pp: 5, damageClass: 'status' } as Move
+        : null
+    )
+    setMoves(presetMoves)
+  }, [legendaryPreset, pokemon])
+
   // Auto-lock: if shiny is turned ON for an event-only Pokémon → force Event origin + Cherish Ball
   React.useEffect(() => {
     if (shiny && isShinyEventOnly) {
@@ -144,8 +164,8 @@ export function PokemonEditor({ pokemon, onAddToTeam, gameVersion, availabilityS
     }
   }, [shiny, isShinyEventOnly])
 
-  // Moves are locked (read-only) when it's a shiny event-only Pokémon
-  const movesLocked = shiny && isShinyEventOnly
+  // Moves are locked (read-only) when it's a shiny event-only Pokémon OR a fully locked legendary
+  const movesLocked = (shiny && isShinyEventOnly) || isLegendaryPreset
   
   const [showMoveSelector, setShowMoveSelector] = useState(false)
   const [activeMoveSlot, setActiveMoveSlot] = useState<number>(0)
@@ -265,6 +285,18 @@ export function PokemonEditor({ pokemon, onAddToTeam, gameVersion, availabilityS
             ))}
           </div>
 
+          {/* Legendary Preset Banner */}
+          {isLegendaryPreset && (
+            <div className="mb-4 bg-amber-50 border-2 border-amber-400 rounded-lg p-3">
+              <p className="text-xs font-black text-amber-800 uppercase tracking-wide mb-1">⚡ Pokémon Legendario</p>
+              <p className="text-xs text-amber-700 font-medium">{legendaryPreset?.label}</p>
+              <p className="text-xs text-amber-600 mt-1">🔒 Stats, ataques, origen y nivel están bloqueados para garantizar legalidad en el bot.</p>
+              {legendaryPreset?.shinyAllowed && (
+                <p className="text-xs text-green-700 font-bold mt-1">✨ Este Pokémon sí puede ser shiny (captura en el juego).</p>
+              )}
+            </div>
+          )}
+
           {/* Level, Shiny, Gender */}
           <div className="space-y-3 border-t-2 border-gray-200 pt-4">
             <div>
@@ -277,7 +309,8 @@ export function PokemonEditor({ pokemon, onAddToTeam, gameVersion, availabilityS
                 max={100}
                 value={level}
                 onChange={(e) => setLevel(Number(e.target.value))}
-                className="w-full px-3 py-2 border-2 border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-psychic text-gray-900 font-bold"
+                disabled={isLegendaryPreset}
+                className={`w-full px-3 py-2 border-2 rounded-lg focus:outline-none focus:ring-2 focus:ring-psychic text-gray-900 font-bold ${isLegendaryPreset ? 'bg-gray-100 border-gray-200 text-gray-500 cursor-not-allowed' : 'border-gray-300'}`}
               />
               {minAllowedLevel > 1 && (
                 <p className="text-xs text-orange-500 font-bold mt-1">Nivel mínimo por origen: {minAllowedLevel}</p>
@@ -289,13 +322,13 @@ export function PokemonEditor({ pokemon, onAddToTeam, gameVersion, availabilityS
               <input
                 type="checkbox"
                 id="shiny"
-                checked={isShinyDisabled ? false : shiny}
-                disabled={isShinyDisabled}
+                checked={(isShinyDisabled || (isLegendaryPreset && !legendaryPreset?.shinyAllowed)) ? false : shiny}
+                disabled={isShinyDisabled || (isLegendaryPreset && !legendaryPreset?.shinyAllowed)}
                 onChange={(e) => setShiny(e.target.checked)}
                 className="w-4 h-4 disabled:opacity-40"
               />
-              <label htmlFor="shiny" className={`text-sm font-bold ${isShinyDisabled ? 'text-gray-400 line-through' : 'text-gray-700'}`}>
-                ✨ Shiny {isShinyDisabled ? '(bloqueado por origen)' : ''}
+              <label htmlFor="shiny" className={`text-sm font-bold ${(isShinyDisabled || (isLegendaryPreset && !legendaryPreset?.shinyAllowed)) ? 'text-gray-400 line-through' : 'text-gray-700'}`}>
+                ✨ Shiny {isShinyDisabled ? '(bloqueado por origen)' : (isLegendaryPreset && !legendaryPreset?.shinyAllowed) ? '(shiny no disponible)' : ''}
               </label>
             </div>
             {/* Hint: event-only shiny auto-lock */}
@@ -403,7 +436,7 @@ export function PokemonEditor({ pokemon, onAddToTeam, gameVersion, availabilityS
           <PokeBallSelector
             selectedBall={pokeball}
             onBallChange={setPokeball}
-            disabled={!!forcedBall}
+            disabled={!!forcedBall || isLegendaryPreset}
           />
         </div>
 
@@ -429,8 +462,14 @@ export function PokemonEditor({ pokemon, onAddToTeam, gameVersion, availabilityS
           <OriginSelector
             selectedOrigin={origin}
             onOriginChange={setOrigin}
-            disabledOrigins={disabledOrigins}
+            disabledOrigins={isLegendaryPreset
+              ? ['Wild Encounter', 'Tera Raid', 'Egg', 'Mass Outbreak', 'Trade', 'In-Game Gift', 'Starter', 'Event'].filter(o => o !== legendaryPreset?.forcedOrigin)
+              : disabledOrigins
+            }
           />
+          {isLegendaryPreset && (
+            <p className="text-xs text-amber-600 font-bold mt-2">🔒 Origen fijo: captura en el juego (necesario para legalidad).</p>
+          )}
         </div>
 
         {/* Moves */}

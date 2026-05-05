@@ -135,8 +135,7 @@ class PokeAPIClient {
       { name: 'ogerpon-cornerstone-mask', displayName: 'ogerpon-cornerstone-mask' },
       { name: 'pecharunt', displayName: 'pecharunt' },
       { name: 'terapagos', displayName: 'terapagos' },
-      { name: 'terapagos-terastal', displayName: 'terapagos-terastal' },
-      { name: 'terapagos-stellar', displayName: 'terapagos-stellar' },
+      // NOTE: terapagos-terastal and terapagos-stellar are NOT tradeable — excluded
       { name: 'okidogi', displayName: 'okidogi' },
       { name: 'munkidori', displayName: 'munkidori' },
       { name: 'fezandipiti', displayName: 'fezandipiti' },
@@ -153,7 +152,16 @@ class PokeAPIClient {
       { name: 'archaludon', displayName: 'archaludon' },
     ]
 
-    // 1. Standard results from the main Pokémon list
+    // Forms that are NOT tradeable and should be hidden from the teambuilder search
+    const NON_TRADEABLE_SUFFIXES = ['-mega', '-gmax', '-eternamax', '-primal', '-origin', '-ultra']
+    const NON_TRADEABLE_EXACT = new Set([
+      'terapagos-terastal', 'terapagos-stellar',
+      'zacian-crowned', 'zamazenta-crowned',
+      'calyrex-ice', 'calyrex-shadow',
+      'urshifu-rapid-strike-gmax', 'urshifu-single-strike-gmax',
+    ])
+
+    // 1. Standard results from the main Pokémon list — filter non-tradeable forms
     const standardResults = list.results
       .map((item, index) => ({
         id: index + 1,
@@ -163,6 +171,10 @@ class PokeAPIClient {
         apiName: item.name,
       }))
       .filter(item => {
+        // Exclude non-tradeable forms
+        if (NON_TRADEABLE_EXACT.has(item.name)) return false
+        if (NON_TRADEABLE_SUFFIXES.some(suffix => item.name.endsWith(suffix))) return false
+        // Match query
         const matchesName = item.name.includes(normalizedQuery)
         const matchesId = item.id.toString() === normalizedQuery
         return matchesName || matchesId

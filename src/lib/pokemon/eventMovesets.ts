@@ -221,3 +221,258 @@ export const EVENT_MOVESETS: Record<string, EventMoveset> = {
     moves: ['judgment', 'recover', 'swords-dance', 'extreme-speed'],
   },
 }
+
+/**
+ * LEGENDARY_PRESETS — Fixed configurations for in-game legendary Pokémon.
+ *
+ * These Pokémon are obtainable by capturing in-game but ALM/PKHeX requires
+ * very specific parameters to validate them as legal. Users cannot freely
+ * edit their stats or moves.
+ *
+ * Key difference from EVENT_MOVESETS:
+ *  - EVENT_MOVESETS = only shiny-locked + only via Mystery Gift
+ *  - LEGENDARY_PRESETS = in-game capture, but fixed set required for legality
+ */
+export interface LegendaryPreset {
+  label: string
+  level: number
+  nature: string
+  ability: string
+  moves: [string, string, string, string]
+  /** Whether shiny is allowed for this Pokémon in this game */
+  shinyAllowed: boolean
+  /** The origin to force */
+  forcedOrigin: string
+  /** The ball to force */
+  forcedBall: string
+  /** If true, ALL fields are read-only (level, nature, ability, moves, ball, origin) */
+  fullyLocked: boolean
+}
+
+export const LEGENDARY_PRESETS: Record<string, LegendaryPreset> = {
+  // ── Scarlet / Violet ────────────────────────────────────────────────────────
+  terapagos: {
+    label: 'Terapagos — Captura en Zero Lab',
+    level: 85,
+    nature: 'timid',
+    ability: 'tera-shift',
+    moves: ['tera-starstorm', 'earth-power', 'calm-mind', 'protect'],
+    shinyAllowed: false,
+    forcedOrigin: 'Wild Encounter',
+    forcedBall: 'Poké Ball',
+    fullyLocked: true,
+  },
+  'walking-wake': {
+    label: 'Walking Wake — Tera Raid 7★',
+    level: 100,
+    nature: 'timid',
+    ability: 'protosynthesis',
+    moves: ['hydro-steam', 'draco-meteor', 'flamethrower', 'noble-roar'],
+    shinyAllowed: false,
+    forcedOrigin: 'Wild Encounter',
+    forcedBall: 'Poké Ball',
+    fullyLocked: true,
+  },
+  'iron-leaves': {
+    label: 'Iron Leaves — Tera Raid 7★',
+    level: 100,
+    nature: 'jolly',
+    ability: 'quark-drive',
+    moves: ['psyblade', 'close-combat', 'leaf-blade', 'swords-dance'],
+    shinyAllowed: false,
+    forcedOrigin: 'Wild Encounter',
+    forcedBall: 'Poké Ball',
+    fullyLocked: true,
+  },
+  'gouging-fire': {
+    label: 'Gouging Fire — DLC Area Zero',
+    level: 72,
+    nature: 'adamant',
+    ability: 'protosynthesis',
+    moves: ['burning-bulwark', 'heat-crash', 'dragon-dance', 'flare-blitz'],
+    shinyAllowed: false,
+    forcedOrigin: 'Wild Encounter',
+    forcedBall: 'Poké Ball',
+    fullyLocked: true,
+  },
+  'raging-bolt': {
+    label: 'Raging Bolt — DLC Area Zero',
+    level: 72,
+    nature: 'modest',
+    ability: 'protosynthesis',
+    moves: ['thunderclap', 'dragon-pulse', 'calm-mind', 'ancient-power'],
+    shinyAllowed: false,
+    forcedOrigin: 'Wild Encounter',
+    forcedBall: 'Poké Ball',
+    fullyLocked: true,
+  },
+  'iron-boulder': {
+    label: 'Iron Boulder — DLC Area Zero',
+    level: 72,
+    nature: 'jolly',
+    ability: 'quark-drive',
+    moves: ['mighty-cleave', 'sacred-sword', 'stone-axe', 'swords-dance'],
+    shinyAllowed: false,
+    forcedOrigin: 'Wild Encounter',
+    forcedBall: 'Poké Ball',
+    fullyLocked: true,
+  },
+  'iron-crown': {
+    label: 'Iron Crown — DLC Area Zero',
+    level: 72,
+    nature: 'modest',
+    ability: 'quark-drive',
+    moves: ['tachyon-cutter', 'calm-mind', 'flash-cannon', 'psychic'],
+    shinyAllowed: false,
+    forcedOrigin: 'Wild Encounter',
+    forcedBall: 'Poké Ball',
+    fullyLocked: true,
+  },
+
+  // ── Legends: Z-A ────────────────────────────────────────────────────────────
+  rayquaza: {
+    label: 'Rayquaza — Captura en Leyendas Z-A',
+    level: 70,
+    nature: 'rash',
+    ability: 'air-lock',
+    moves: ['dragon-ascent', 'draco-meteor', 'extreme-speed', 'earthquake'],
+    shinyAllowed: false,   // shiny only from HOME event
+    forcedOrigin: 'Wild Encounter',
+    forcedBall: 'Poké Ball',
+    fullyLocked: true,
+  },
+  groudon: {
+    label: 'Groudon — Captura en Leyendas Z-A',
+    level: 70,
+    nature: 'adamant',
+    ability: 'drought',
+    moves: ['precipice-blades', 'fire-punch', 'swords-dance', 'roar-of-time'],
+    shinyAllowed: false,
+    forcedOrigin: 'Wild Encounter',
+    forcedBall: 'Poké Ball',
+    fullyLocked: true,
+  },
+  kyogre: {
+    label: 'Kyogre — Captura en Leyendas Z-A',
+    level: 70,
+    nature: 'modest',
+    ability: 'drizzle',
+    moves: ['origin-pulse', 'thunder', 'ice-beam', 'calm-mind'],
+    shinyAllowed: false,
+    forcedOrigin: 'Wild Encounter',
+    forcedBall: 'Poké Ball',
+    fullyLocked: true,
+  },
+  heatran: {
+    label: 'Heatran — Captura en Leyendas Z-A',
+    level: 70,
+    nature: 'modest',
+    ability: 'flash-fire',
+    moves: ['magma-storm', 'earth-power', 'flash-cannon', 'stealth-rock'],
+    shinyAllowed: false,
+    forcedOrigin: 'Wild Encounter',
+    forcedBall: 'Poké Ball',
+    fullyLocked: true,
+  },
+  // Latios/Latias can be shiny (wild encounter in Z-A)
+  latios: {
+    label: 'Latios — Captura en Leyendas Z-A',
+    level: 60,
+    nature: 'timid',
+    ability: 'levitate',
+    moves: ['luster-purge', 'draco-meteor', 'psychic', 'recover'],
+    shinyAllowed: true,
+    forcedOrigin: 'Wild Encounter',
+    forcedBall: 'Poké Ball',
+    fullyLocked: true,
+  },
+  latias: {
+    label: 'Latias — Captura en Leyendas Z-A',
+    level: 60,
+    nature: 'timid',
+    ability: 'levitate',
+    moves: ['mist-ball', 'draco-meteor', 'psychic', 'recover'],
+    shinyAllowed: true,
+    forcedOrigin: 'Wild Encounter',
+    forcedBall: 'Poké Ball',
+    fullyLocked: true,
+  },
+  cobalion: {
+    label: 'Cobalion — Captura en Leyendas Z-A',
+    level: 65,
+    nature: 'jolly',
+    ability: 'justified',
+    moves: ['sacred-sword', 'iron-head', 'close-combat', 'swords-dance'],
+    shinyAllowed: true,
+    forcedOrigin: 'Wild Encounter',
+    forcedBall: 'Poké Ball',
+    fullyLocked: true,
+  },
+  virizion: {
+    label: 'Virizion — Captura en Leyendas Z-A',
+    level: 65,
+    nature: 'jolly',
+    ability: 'justified',
+    moves: ['sacred-sword', 'leaf-blade', 'close-combat', 'swords-dance'],
+    shinyAllowed: true,
+    forcedOrigin: 'Wild Encounter',
+    forcedBall: 'Poké Ball',
+    fullyLocked: true,
+  },
+  terrakion: {
+    label: 'Terrakion — Captura en Leyendas Z-A',
+    level: 65,
+    nature: 'jolly',
+    ability: 'justified',
+    moves: ['sacred-sword', 'stone-edge', 'close-combat', 'swords-dance'],
+    shinyAllowed: true,
+    forcedOrigin: 'Wild Encounter',
+    forcedBall: 'Poké Ball',
+    fullyLocked: true,
+  },
+  mewtwo: {
+    label: 'Mewtwo — Captura en Leyendas Z-A',
+    level: 70,
+    nature: 'timid',
+    ability: 'pressure',
+    moves: ['psystrike', 'ice-beam', 'thunderbolt', 'nasty-plot'],
+    shinyAllowed: false,
+    forcedOrigin: 'Wild Encounter',
+    forcedBall: 'Poké Ball',
+    fullyLocked: true,
+  },
+  xerneas: {
+    label: 'Xerneas — Captura en Leyendas Z-A',
+    level: 70,
+    nature: 'modest',
+    ability: 'fairy-aura',
+    moves: ['geomancy', 'moonblast', 'focus-blast', 'thunder'],
+    shinyAllowed: false,
+    forcedOrigin: 'Wild Encounter',
+    forcedBall: 'Poké Ball',
+    fullyLocked: true,
+  },
+  yveltal: {
+    label: 'Yveltal — Captura en Leyendas Z-A',
+    level: 70,
+    nature: 'timid',
+    ability: 'dark-aura',
+    moves: ['oblivion-wing', 'dark-pulse', 'foul-play', 'sucker-punch'],
+    shinyAllowed: false,
+    forcedOrigin: 'Wild Encounter',
+    forcedBall: 'Poké Ball',
+    fullyLocked: true,
+  },
+  // Genesect is capturable in Z-A (not event-only)
+  genesect: {
+    label: 'Genesect — Captura en Leyendas Z-A',
+    level: 60,
+    nature: 'hasty',
+    ability: 'download',
+    moves: ['techno-blast', 'extreme-speed', 'x-scissor', 'metal-claw'],
+    shinyAllowed: false,   // shiny only from 2013 JP event
+    forcedOrigin: 'Wild Encounter',
+    forcedBall: 'Poké Ball',
+    fullyLocked: true,
+  },
+}
