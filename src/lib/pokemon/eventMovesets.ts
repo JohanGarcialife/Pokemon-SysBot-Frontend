@@ -227,7 +227,7 @@ export const EVENT_MOVESETS: Record<string, EventMoveset> = {
   groudon: {
     eventName: 'Groudon Shiny HOME Gift — Leyendas Z-A (2025)',
     year: 2025,
-    level: 70,
+    level: 100,
     nature: 'adamant',
     ability: 'drought',
     moves: ['precipice-blades', 'fire-punch', 'solar-beam', 'swords-dance'],
@@ -235,7 +235,7 @@ export const EVENT_MOVESETS: Record<string, EventMoveset> = {
   kyogre: {
     eventName: 'Kyogre Shiny HOME Gift — Leyendas Z-A (2025)',
     year: 2025,
-    level: 70,
+    level: 100,
     nature: 'modest',
     ability: 'drizzle',
     moves: ['origin-pulse', 'thunder', 'blizzard', 'calm-mind'],
@@ -243,7 +243,7 @@ export const EVENT_MOVESETS: Record<string, EventMoveset> = {
   rayquaza: {
     eventName: 'Rayquaza Shiny HOME Gift — Leyendas Z-A (2025)',
     year: 2025,
-    level: 70,
+    level: 100,
     nature: 'rash',
     ability: 'air-lock',
     moves: ['dragon-ascent', 'draco-meteor', 'extreme-speed', 'earthquake'],
@@ -360,40 +360,40 @@ export const LEGENDARY_PRESETS: Record<string, LegendaryPreset> = {
   // ── Legends: Z-A ────────────────────────────────────────────────────────────
   rayquaza: {
     label: 'Rayquaza — Captura en Leyendas Z-A',
-    level: 70,
+    level: 80,
     nature: 'rash',
     ability: 'air-lock',
     moves: ['dragon-ascent', 'draco-meteor', 'extreme-speed', 'earthquake'],
-    shinyAllowed: true,    // shiny available via HOME event (different preset auto-applied)
+    shinyAllowed: true,
     forcedOrigin: 'Wild Encounter',
     forcedBall: 'Poké Ball',
     fullyLocked: true,
   },
   groudon: {
     label: 'Groudon — Captura en Leyendas Z-A',
-    level: 70,
+    level: 80,
     nature: 'adamant',
     ability: 'drought',
     moves: ['precipice-blades', 'fire-punch', 'swords-dance', 'roar-of-time'],
-    shinyAllowed: true,    // shiny available via HOME event
+    shinyAllowed: true,
     forcedOrigin: 'Wild Encounter',
     forcedBall: 'Poké Ball',
     fullyLocked: true,
   },
   kyogre: {
     label: 'Kyogre — Captura en Leyendas Z-A',
-    level: 70,
+    level: 80,
     nature: 'modest',
     ability: 'drizzle',
     moves: ['origin-pulse', 'thunder', 'ice-beam', 'calm-mind'],
-    shinyAllowed: true,    // shiny available via HOME event
+    shinyAllowed: true,
     forcedOrigin: 'Wild Encounter',
     forcedBall: 'Poké Ball',
     fullyLocked: true,
   },
   heatran: {
     label: 'Heatran — Captura en Leyendas Z-A',
-    level: 70,
+    level: 80,
     nature: 'modest',
     ability: 'flash-fire',
     moves: ['magma-storm', 'earth-power', 'flash-cannon', 'stealth-rock'],
