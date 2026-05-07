@@ -36,6 +36,8 @@ export function PokemonEditor({ pokemon, onAddToTeam, gameVersion, availabilityS
 
   // Pokémon that can ONLY be shiny via Mystery Gift / Event distribution.
   // When the user toggles Shiny ON, we auto-lock: origin → 'Event', ball → 'Cherish Ball'.
+  // NOTE: Pokémon that are in LEGENDARY_PRESETS (groudon, kyogre, etc.) are handled
+  // separately below and must NOT be in this set to avoid double-processing.
   const SHINY_EVENT_ONLY_POKEMON = new Set([
     // SV / transferable via HOME
     'koraidon', 'miraidon',
@@ -45,8 +47,8 @@ export function PokemonEditor({ pokemon, onAddToTeam, gameVersion, availabilityS
     'diancie', 'hoopa', 'volcanion',
     // Gen 7 events
     'marshadow', 'zeraora', 'meltan', 'melmetal',
-    // Gen 5 events
-    'genesect', 'meloetta', 'keldeo',
+    // Gen 5 events (genesect removed: now handled by LEGENDARY_PRESETS dual-state)
+    'meloetta', 'keldeo',
     // Gen 4 events
     'darkrai', 'shaymin', 'arceus',
     // Other
@@ -118,51 +120,70 @@ export function PokemonEditor({ pokemon, onAddToTeam, gameVersion, availabilityS
     }
   }, [disabledOrigins, origin])
 
-  // Auto-apply legendary preset when Pokémon changes
+  // ── Legendary dual-state logic ─────────────────────────────────────────
+  // Pokémon in LEGENDARY_PRESETS have two states:
+  //   • Non-shiny: in-game capture preset (level, moves, etc. locked; ball FREE)
+  //   • Shiny:     HOME event preset from EVENT_MOVESETS (Cherish Ball + Event origin locked)
   React.useEffect(() => {
-    if (!legendaryPreset) return
-    setLevel(legendaryPreset.level)
-    setOrigin(legendaryPreset.forcedOrigin)
-    setPokeball(legendaryPreset.forcedBall)
-    setShiny(false) // presets are never shiny by default
-    setAlpha(false)
-    const presetMoves: (Move | null)[] = legendaryPreset.moves.map((moveName, i) =>
-      moveName
-        ? { id: -(i + 1), name: moveName, type: 'normal', power: null, accuracy: null, pp: 5, damageClass: 'status' } as Move
-        : null
-    )
-    setMoves(presetMoves)
-  }, [legendaryPreset, pokemon])
+    if (!legendaryPreset || !pokemon) return
+    const slug = pokemon.name.toLowerCase()
 
-  // Auto-lock: if shiny is turned ON for an event-only Pokémon → force Event origin + Cherish Ball
+    if (shiny && legendaryPreset.shinyAllowed && EVENT_MOVESETS[slug]) {
+      // Apply the HOME shiny event preset
+      const eventData = EVENT_MOVESETS[slug]
+      setOrigin('Event')
+      setPokeball('Cherish Ball')
+      setLevel(eventData.level)
+      const eventMoves: (Move | null)[] = eventData.moves.map((moveName, i) =>
+        moveName
+          ? { id: -(i + 1), name: moveName, type: 'normal', power: null, accuracy: null, pp: 5, damageClass: 'status' } as Move
+          : null
+      )
+      setMoves(eventMoves)
+    } else {
+      // Apply (or revert to) the in-game capture preset
+      setLevel(legendaryPreset.level)
+      setOrigin(legendaryPreset.forcedOrigin)
+      // Ball is FREE in non-shiny mode — only reset when Pokémon changes (not on shiny toggle)
+      if (!shiny) setPokeball(legendaryPreset.forcedBall)
+      const presetMoves: (Move | null)[] = legendaryPreset.moves.map((moveName, i) =>
+        moveName
+          ? { id: -(i + 1), name: moveName, type: 'normal', power: null, accuracy: null, pp: 5, damageClass: 'status' } as Move
+          : null
+      )
+      setMoves(presetMoves)
+    }
+  }, [shiny, legendaryPreset, pokemon])
+
+  // Auto-lock: if shiny is turned ON for a pure-event Pokémon (NOT in LEGENDARY_PRESETS)
+  // → force Event origin + Cherish Ball
   React.useEffect(() => {
-    if (shiny && isShinyEventOnly) {
+    if (shiny && isShinyEventOnly && !isLegendaryPreset) {
       if (origin !== 'Event') setOrigin('Event')
       if (pokeball !== 'Cherish Ball') setPokeball('Cherish Ball')
     }
-  }, [shiny, isShinyEventOnly])
+  }, [shiny, isShinyEventOnly, isLegendaryPreset])
 
-  // Auto-fill event moves when shiny event Pokémon is selected
+  // Auto-fill event moves when shiny event Pokémon is selected (pure-event, not legendary preset)
   React.useEffect(() => {
-    if (!pokemon || !shiny || !isShinyEventOnly) return
+    if (!pokemon || !shiny || !isShinyEventOnly || isLegendaryPreset) return
     const slug = pokemon.name.toLowerCase()
     const eventData = EVENT_MOVESETS[slug]
     if (!eventData) return
-    // Build minimal Move objects from the event moveset names
     const eventMoves: (Move | null)[] = eventData.moves.map((moveName, i) =>
       moveName
         ? { id: -(i + 1), name: moveName, type: 'normal', power: null, accuracy: null, pp: 5, damageClass: 'status' } as Move
         : null
     )
     setMoves(eventMoves)
-  }, [shiny, isShinyEventOnly, pokemon])
+  }, [shiny, isShinyEventOnly, isLegendaryPreset, pokemon])
 
-  // When shiny is turned OFF, clear the event-locked moves
+  // When shiny is turned OFF on a pure-event Pokémon, clear event-locked moves
   React.useEffect(() => {
-    if (!shiny && isShinyEventOnly) {
+    if (!shiny && isShinyEventOnly && !isLegendaryPreset) {
       setMoves([null, null, null, null])
     }
-  }, [shiny, isShinyEventOnly])
+  }, [shiny, isShinyEventOnly, isLegendaryPreset])
 
   // Moves are locked (read-only) when it's a shiny event-only Pokémon OR a fully locked legendary
   const movesLocked = (shiny && isShinyEventOnly) || isLegendaryPreset
@@ -287,12 +308,22 @@ export function PokemonEditor({ pokemon, onAddToTeam, gameVersion, availabilityS
 
           {/* Legendary Preset Banner */}
           {isLegendaryPreset && (
-            <div className="mb-4 bg-amber-50 border-2 border-amber-400 rounded-lg p-3">
-              <p className="text-xs font-black text-amber-800 uppercase tracking-wide mb-1">⚡ Pokémon Legendario</p>
-              <p className="text-xs text-amber-700 font-medium">{legendaryPreset?.label}</p>
-              <p className="text-xs text-amber-600 mt-1">🔒 Stats, ataques, origen y nivel están bloqueados para garantizar legalidad en el bot.</p>
-              {legendaryPreset?.shinyAllowed && (
-                <p className="text-xs text-green-700 font-bold mt-1">✨ Este Pokémon sí puede ser shiny (captura en el juego).</p>
+            <div className={`mb-4 border-2 rounded-lg p-3 ${shiny && legendaryPreset?.shinyAllowed ? 'bg-purple-50 border-purple-400' : 'bg-amber-50 border-amber-400'}`}>
+              {shiny && legendaryPreset?.shinyAllowed ? (
+                <>
+                  <p className="text-xs font-black text-purple-800 uppercase tracking-wide mb-1">✨ Evento HOME — Shiny</p>
+                  <p className="text-xs text-purple-700 font-medium">{legendaryPreset?.label} (versión shiny de evento)</p>
+                  <p className="text-xs text-purple-600 mt-1">🔒 Set de evento oficial aplicado automáticamente. Cherish Ball y origen Evento obligatorios.</p>
+                </>
+              ) : (
+                <>
+                  <p className="text-xs font-black text-amber-800 uppercase tracking-wide mb-1">⚡ Pokémon Legendario — Captura</p>
+                  <p className="text-xs text-amber-700 font-medium">{legendaryPreset?.label}</p>
+                  <p className="text-xs text-amber-600 mt-1">🔒 Nivel, ataques y origen bloqueados. <strong>Pokéball libre</strong> (la que usaste para capturarlo).</p>
+                  {legendaryPreset?.shinyAllowed && (
+                    <p className="text-xs text-purple-700 font-bold mt-1">✨ Activa Shiny para obtenerlo con el preset del evento HOME.</p>
+                  )}
+                </>
               )}
             </div>
           )}
@@ -436,7 +467,7 @@ export function PokemonEditor({ pokemon, onAddToTeam, gameVersion, availabilityS
           <PokeBallSelector
             selectedBall={pokeball}
             onBallChange={setPokeball}
-            disabled={!!forcedBall || isLegendaryPreset}
+            disabled={!!forcedBall || (isLegendaryPreset && shiny)}
           />
         </div>
 

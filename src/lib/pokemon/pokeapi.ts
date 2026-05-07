@@ -159,6 +159,7 @@ class PokeAPIClient {
       'zacian-crowned', 'zamazenta-crowned',
       'calyrex-ice', 'calyrex-shadow',
       'urshifu-rapid-strike-gmax', 'urshifu-single-strike-gmax',
+      'meloetta-pirouette',  // Only base Meloetta is selectable (pirouette is a battle-only form)
     ])
 
     // 1. Standard results from the main Pokémon list — filter non-tradeable forms

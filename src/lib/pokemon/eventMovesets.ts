@@ -220,6 +220,34 @@ export const EVENT_MOVESETS: Record<string, EventMoveset> = {
     ability: 'multitype',
     moves: ['judgment', 'recover', 'swords-dance', 'extreme-speed'],
   },
+
+  // ── Legends: Z-A — HOME Shiny Gifts ─────────────────────────────────────────
+  // These legendaries are capturable non-shiny in Z-A, but their shiny forms
+  // come exclusively from Pokémon HOME distribution events with a fixed set.
+  groudon: {
+    eventName: 'Groudon Shiny HOME Gift — Leyendas Z-A (2025)',
+    year: 2025,
+    level: 70,
+    nature: 'adamant',
+    ability: 'drought',
+    moves: ['precipice-blades', 'fire-punch', 'solar-beam', 'swords-dance'],
+  },
+  kyogre: {
+    eventName: 'Kyogre Shiny HOME Gift — Leyendas Z-A (2025)',
+    year: 2025,
+    level: 70,
+    nature: 'modest',
+    ability: 'drizzle',
+    moves: ['origin-pulse', 'thunder', 'blizzard', 'calm-mind'],
+  },
+  rayquaza: {
+    eventName: 'Rayquaza Shiny HOME Gift — Leyendas Z-A (2025)',
+    year: 2025,
+    level: 70,
+    nature: 'rash',
+    ability: 'air-lock',
+    moves: ['dragon-ascent', 'draco-meteor', 'extreme-speed', 'earthquake'],
+  },
 }
 
 /**
@@ -336,7 +364,7 @@ export const LEGENDARY_PRESETS: Record<string, LegendaryPreset> = {
     nature: 'rash',
     ability: 'air-lock',
     moves: ['dragon-ascent', 'draco-meteor', 'extreme-speed', 'earthquake'],
-    shinyAllowed: false,   // shiny only from HOME event
+    shinyAllowed: true,    // shiny available via HOME event (different preset auto-applied)
     forcedOrigin: 'Wild Encounter',
     forcedBall: 'Poké Ball',
     fullyLocked: true,
@@ -347,7 +375,7 @@ export const LEGENDARY_PRESETS: Record<string, LegendaryPreset> = {
     nature: 'adamant',
     ability: 'drought',
     moves: ['precipice-blades', 'fire-punch', 'swords-dance', 'roar-of-time'],
-    shinyAllowed: false,
+    shinyAllowed: true,    // shiny available via HOME event
     forcedOrigin: 'Wild Encounter',
     forcedBall: 'Poké Ball',
     fullyLocked: true,
@@ -358,7 +386,7 @@ export const LEGENDARY_PRESETS: Record<string, LegendaryPreset> = {
     nature: 'modest',
     ability: 'drizzle',
     moves: ['origin-pulse', 'thunder', 'ice-beam', 'calm-mind'],
-    shinyAllowed: false,
+    shinyAllowed: true,    // shiny available via HOME event
     forcedOrigin: 'Wild Encounter',
     forcedBall: 'Poké Ball',
     fullyLocked: true,
@@ -463,14 +491,14 @@ export const LEGENDARY_PRESETS: Record<string, LegendaryPreset> = {
     forcedBall: 'Poké Ball',
     fullyLocked: true,
   },
-  // Genesect is capturable in Z-A (not event-only)
+  // Genesect is capturable in Z-A (not event-only). Shiny via 2013 JP HOME event.
   genesect: {
     label: 'Genesect — Captura en Leyendas Z-A',
     level: 60,
     nature: 'hasty',
     ability: 'download',
     moves: ['techno-blast', 'extreme-speed', 'x-scissor', 'metal-claw'],
-    shinyAllowed: false,   // shiny only from 2013 JP event
+    shinyAllowed: true,    // shiny from the 2013 JP event (already in EVENT_MOVESETS)
     forcedOrigin: 'Wild Encounter',
     forcedBall: 'Poké Ball',
     fullyLocked: true,
