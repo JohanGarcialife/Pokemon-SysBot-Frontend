@@ -230,7 +230,8 @@ export const EVENT_MOVESETS: Record<string, EventMoveset> = {
     level: 100,
     nature: 'adamant',
     ability: 'drought',
-    moves: ['precipice-blades', 'fire-punch', 'solar-beam', 'swords-dance'],
+    // Moves from client's official .pk9 file
+    moves: ['rest', 'fire-blast', 'solar-beam', 'eruption'],
   },
   kyogre: {
     eventName: 'Kyogre Shiny HOME Gift — Leyendas Z-A (2025)',
@@ -238,7 +239,8 @@ export const EVENT_MOVESETS: Record<string, EventMoveset> = {
     level: 100,
     nature: 'modest',
     ability: 'drizzle',
-    moves: ['origin-pulse', 'thunder', 'blizzard', 'calm-mind'],
+    // Moves from client's official .pk9 file
+    moves: ['aqua-ring', 'hydro-pump', 'double-edge', 'water-spout'],
   },
   rayquaza: {
     eventName: 'Rayquaza Shiny HOME Gift — Leyendas Z-A (2025)',
@@ -246,7 +248,8 @@ export const EVENT_MOVESETS: Record<string, EventMoveset> = {
     level: 100,
     nature: 'rash',
     ability: 'air-lock',
-    moves: ['dragon-ascent', 'draco-meteor', 'extreme-speed', 'earthquake'],
+    // Moves from client's official .pk9 file
+    moves: ['dragon-pulse', 'hex', 'earthquake', 'extreme-speed'],
   },
 }
 
@@ -358,34 +361,37 @@ export const LEGENDARY_PRESETS: Record<string, LegendaryPreset> = {
   },
 
   // ── Legends: Z-A ────────────────────────────────────────────────────────────
+  // Rayquaza: captured in Z-A (actual file: fly/hex/outrage/hyper-beam at lvl100)
   rayquaza: {
     label: 'Rayquaza — Captura en Leyendas Z-A',
     level: 80,
-    nature: 'rash',
+    nature: 'hardy',
     ability: 'air-lock',
-    moves: ['dragon-ascent', 'draco-meteor', 'extreme-speed', 'earthquake'],
+    moves: ['fly', 'hex', 'outrage', 'hyper-beam'],
     shinyAllowed: true,
     forcedOrigin: 'Wild Encounter',
     forcedBall: 'Poké Ball',
     fullyLocked: true,
   },
+  // Groudon: captured in Z-A DLC (actual file: lvl66, Ultra Ball, dynamic-punch/fire-blast/final-gambit/solar-beam)
   groudon: {
     label: 'Groudon — Captura en Leyendas Z-A',
-    level: 80,
-    nature: 'adamant',
+    level: 66,
+    nature: 'hardy',
     ability: 'drought',
-    moves: ['precipice-blades', 'fire-punch', 'swords-dance', 'roar-of-time'],
+    moves: ['dynamic-punch', 'fire-blast', 'final-gambit', 'solar-beam'],
     shinyAllowed: true,
     forcedOrigin: 'Wild Encounter',
     forcedBall: 'Poké Ball',
     fullyLocked: true,
   },
+  // Kyogre: captured in Z-A DLC (actual file: aqua-ring/blizzard/double-edge/hydro-pump)
   kyogre: {
     label: 'Kyogre — Captura en Leyendas Z-A',
     level: 80,
-    nature: 'modest',
+    nature: 'hardy',
     ability: 'drizzle',
-    moves: ['origin-pulse', 'thunder', 'ice-beam', 'calm-mind'],
+    moves: ['aqua-ring', 'blizzard', 'double-edge', 'hydro-pump'],
     shinyAllowed: true,
     forcedOrigin: 'Wild Encounter',
     forcedBall: 'Poké Ball',
