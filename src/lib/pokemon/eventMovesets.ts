@@ -361,42 +361,38 @@ export const LEGENDARY_PRESETS: Record<string, LegendaryPreset> = {
   },
 
   // ── Legends: Z-A ────────────────────────────────────────────────────────────
-  // Shiny versions via HOME event CANNOT be generated via Showdown format
-  // (ShinyType.Always is not valid for these legendaries in PKHeX/ALM).
-  // Direct .pk9 file injection into the bot is required for shiny HOME versions.
+  // Shiny versions are delivered as .pa9/.pk9 files directly to the bot by the backend.
   rayquaza: {
     label: 'Rayquaza — Captura en Leyendas Z-A',
     level: 80,
     nature: 'hardy',
     ability: 'air-lock',
     moves: ['fly', 'hex', 'outrage', 'hyper-beam'],
-    shinyAllowed: false,
+    shinyAllowed: true,
     forcedOrigin: 'Wild Encounter',
     forcedBall: 'Poké Ball',
     fullyLocked: true,
   },
   // Groudon: bot requires minimum level 80
-  // Shiny version (HOME event) CANNOT be generated via Showdown format.
   groudon: {
     label: 'Groudon — Captura en Leyendas Z-A',
     level: 80,
     nature: 'hardy',
     ability: 'drought',
     moves: ['dynamic-punch', 'fire-blast', 'final-gambit', 'solar-beam'],
-    shinyAllowed: false,
+    shinyAllowed: true,
     forcedOrigin: 'Wild Encounter',
     forcedBall: 'Poké Ball',
     fullyLocked: true,
   },
-  // Kyogre: captured in Z-A DLC (actual file: aqua-ring/blizzard/double-edge/hydro-pump)
-  // Shiny version (HOME event) CANNOT be generated via Showdown format.
+  // Kyogre: captured in Z-A DLC
   kyogre: {
     label: 'Kyogre — Captura en Leyendas Z-A',
     level: 80,
     nature: 'hardy',
     ability: 'drizzle',
     moves: ['aqua-ring', 'blizzard', 'double-edge', 'hydro-pump'],
-    shinyAllowed: false,
+    shinyAllowed: true,
     forcedOrigin: 'Wild Encounter',
     forcedBall: 'Poké Ball',
     fullyLocked: true,
