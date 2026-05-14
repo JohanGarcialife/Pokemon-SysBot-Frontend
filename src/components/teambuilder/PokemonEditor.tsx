@@ -18,6 +18,7 @@ import { useLegality } from '@/hooks/useLegality'
 import { useEncounterRules } from '@/hooks/useEncounterRules'
 import { LegalityPanel } from './LegalityPanel'
 import { EVENT_MOVESETS, LEGENDARY_PRESETS } from '@/lib/pokemon/eventMovesets'
+import { GENDERLESS_POKEMON } from '@/lib/pokemon/legalityData'
 
 type AvailabilityStatus = 'loading' | 'available' | 'unavailable' | 'unknown'
 
@@ -61,6 +62,9 @@ export function PokemonEditor({ pokemon, onAddToTeam, gameVersion, availabilityS
   const legendaryPreset = pokemon ? (LEGENDARY_PRESETS[pokemon.name.toLowerCase()] ?? null) : null
   const isLegendaryPreset = legendaryPreset !== null
 
+  // Derived: is this Pokémon always genderless?
+  const isGenderless = pokemon ? GENDERLESS_POKEMON.has(pokemon.name.toLowerCase()) : false
+
   const [stats, setStats] = useState<PokemonStats>({
     hp: { iv: 31, ev: 0 },
     attack: { iv: 31, ev: 0 },
@@ -77,7 +81,7 @@ export function PokemonEditor({ pokemon, onAddToTeam, gameVersion, availabilityS
   const [level, setLevel] = useState<number>(100)
   const [shiny, setShiny] = useState<boolean>(false)
   const [alpha, setAlpha] = useState<boolean>(false)
-  const [gender, setGender] = useState<'male' | 'female' | 'genderless'>('genderless')
+  const [gender, setGender] = useState<'male' | 'female' | 'genderless'>('male')
   const [pokeball, setPokeball] = useState<string>('Poké Ball')
   const [heldItem, setHeldItem] = useState<string>('None')
   const [origin, setOrigin] = useState<string>('Wild Encounter')
@@ -206,6 +210,11 @@ export function PokemonEditor({ pokemon, onAddToTeam, gameVersion, availabilityS
       if (pokemon.types.length > 0) {
         setTeraType(pokemon.types[0].type.name)
       }
+    }
+    // Auto-set gender: genderless Pokémon → 'genderless', others → 'male'
+    if (pokemon) {
+      const slug = pokemon.name.toLowerCase()
+      setGender(GENDERLESS_POKEMON.has(slug) ? 'genderless' : 'male')
     }
   }, [pokemon])
 
@@ -393,12 +402,21 @@ export function PokemonEditor({ pokemon, onAddToTeam, gameVersion, availabilityS
               <select
                 value={gender}
                 onChange={(e) => setGender(e.target.value as 'male' | 'female' | 'genderless')}
-                className="w-full px-3 py-2 border-2 border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-psychic text-gray-900 font-bold bg-white"
+                disabled={isGenderless}
+                className={`w-full px-3 py-2 border-2 border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-psychic text-gray-900 font-bold bg-white ${isGenderless ? 'bg-gray-100 text-gray-500 cursor-not-allowed' : ''}`}
               >
-                <option value="male">♂️ Macho</option>
-                <option value="female">♀️ Hembra</option>
-                <option value="genderless">⚪ Sin género</option>
+                {isGenderless ? (
+                  <option value="genderless">⚪ Sin género</option>
+                ) : (
+                  <>
+                    <option value="male">♂️ Macho</option>
+                    <option value="female">♀️ Hembra</option>
+                  </>
+                )}
               </select>
+              {isGenderless && (
+                <p className="text-xs text-gray-400 mt-1">Este Pokémon no tiene género.</p>
+              )}
             </div>
           </div>
 

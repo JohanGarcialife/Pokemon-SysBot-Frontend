@@ -251,3 +251,61 @@ export const GAME_LEGALITY_RULES: Partial<Record<GameVersion, GameRules>> = {
     },
   },
 }
+
+// ============================================================
+// GENDER DATA
+// Pokémon that are always genderless (gender_rate = -1 in PokéAPI)
+// Covers Gen 1-9 + Legends Z-A.
+// ============================================================
+export const GENDERLESS_POKEMON = new Set([
+  // Gen 1
+  'magnemite', 'magneton', 'voltorb', 'electrode', 'staryu', 'ditto', 'porygon',
+  // Gen 2
+  'unown', 'lugia', 'ho-oh', 'celebi', 'porygon2',
+  // Gen 3
+  'beldum', 'metang', 'metagross',
+  'regirock', 'regice', 'registeel',
+  'latias', 'latios',
+  'kyogre', 'groudon', 'rayquaza',
+  'jirachi', 'deoxys', 'deoxys-attack', 'deoxys-defense', 'deoxys-speed',
+  // Gen 4
+  'uxie', 'mesprit', 'azelf',
+  'dialga', 'palkia', 'heatran', 'regigigas', 'giratina', 'giratina-origin',
+  'cresselia', 'phione', 'manaphy', 'darkrai', 'shaymin', 'shaymin-sky', 'arceus',
+  'porygon-z',
+  // Gen 5
+  'victini',
+  'cobalion', 'terrakion', 'virizion',
+  'tornadus', 'tornadus-therian', 'thundurus', 'thundurus-therian',
+  'landorus', 'landorus-therian',
+  'reshiram', 'zekrom', 'kyurem', 'kyurem-black', 'kyurem-white',
+  'keldeo', 'meloetta', 'meloetta-pirouette', 'genesect',
+  'klink', 'klang', 'klinklang',
+  // Gen 6
+  'xerneas', 'yveltal',
+  'zygarde', 'zygarde-10', 'zygarde-10%', 'zygarde-50%', 'zygarde-complete',
+  'diancie', 'hoopa', 'hoopa-unbound', 'volcanion',
+  // Gen 7
+  'type-null', 'silvally',
+  'tapu-koko', 'tapu-lele', 'tapu-bulu', 'tapu-fini',
+  'cosmog', 'cosmoem', 'solgaleo', 'lunala',
+  'nihilego', 'buzzwole', 'pheromosa', 'xurkitree', 'celesteela',
+  'kartana', 'guzzlord', 'necrozma',
+  'magearna', 'marshadow', 'poipole', 'naganadel', 'stakataka', 'blacephalon', 'zeraora',
+  'meltan', 'melmetal',
+  // Gen 8
+  'zacian', 'zamazenta', 'eternatus', 'kubfu', 'urshifu', 'urshifu-rapid-strike',
+  'zarude', 'regieleki', 'regidrago', 'glastrier', 'spectrier', 'calyrex',
+  'enamorus', 'enamorus-therian',
+  'magnezone', 'voltorb-hisui', 'electrode-hisui',
+  // Gen 9
+  'koraidon', 'miraidon',
+  'wo-chien', 'chien-pao', 'ting-lu', 'chi-yu',
+  'roaring-moon', 'iron-valiant', 'iron-treads', 'iron-bundle', 'iron-hands',
+  'iron-jugulis', 'iron-moth', 'iron-thorns',
+  'flutter-mane', 'slither-wing', 'sandy-shocks', 'scream-tail', 'brute-bonnet',
+  'walking-wake', 'iron-leaves', 'gouging-fire', 'raging-bolt', 'iron-boulder', 'iron-crown',
+  'ogerpon', 'ogerpon-wellspring-mask', 'ogerpon-hearthflame-mask', 'ogerpon-cornerstone-mask',
+  'terapagos', 'terapagos-terastal', 'terapagos-stellar',
+  'pecharunt',
+])
