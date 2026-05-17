@@ -129,9 +129,8 @@ const SV_SHINY_LOCKED_POKEMON: string[] = [
   'walking-wake', 'iron-leaves', 'gouging-fire', 'raging-bolt', 'iron-boulder', 'iron-crown',
   // Míticos:
   'pecharunt',     // Event only, shiny locked
-  // Ruinous quartet: pueden ser shiny en eventos específicos pero normalmente shiny-locked
-  // en encuentro estático
-  'wo-chien', 'chien-pao', 'ting-lu', 'chi-yu',
+  // NOTA: Wo-Chien, Chien-Pao, Ting-Lu y Chi-Yu SÍ pueden ser shiny via HOME event distributions.
+  // NO se incluyen aquí para permitir que los usuarios los soliciten shiny.
 ]
 
 // ============================================================
