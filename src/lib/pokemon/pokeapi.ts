@@ -5,6 +5,16 @@ const POKEAPI_BASE_URL = 'https://pokeapi.co/api/v2'
 const CACHE_KEY_PREFIX = 'pokeapi_'
 const CACHE_DURATION = 24 * 60 * 60 * 1000 // 24 horas
 
+const formArtwork: Record<string, number> = {
+  '19-1':10091,'20-1':10092,'26-1':10100,'27-1':10101,'28-1':10102,'37-1':10103,'38-1':10104,'50-1':10105,'51-1':10106,'52-1':10107,'52-2':10161,'53-1':10108,'58-1':10229,'59-1':10230,'79-1':10164,'80-2':10165,'83-1':10166,'88-1':10112,'89-1':10113,'100-1':10231,'101-1':10232,'103-1':10114,'105-1':10115,'110-1':10167,'122-1':10168,'199-1':10172,'211-1':10234,'215-1':10235,'222-1':10173,'263-1':10174,'264-1':10175,'479-1':10008,'479-2':10009,'479-3':10010,'479-4':10011,'479-5':10012,'503-1':10236,'549-1':10237,'550-1':10016,'550-2':10247,'562-1':10179,'570-1':10238,'571-1':10239,'618-1':10180,'628-1':10240,'705-1':10241,'706-1':10242,'713-1':10243,'724-1':10244,'849-1':10184,'876-1':10186,'877-1':10187,'901-1':10272,'902-1':10248,'916-1':10254,'931-1':10261,'931-2':10262,'931-3':10263,'978-1':10258,'978-2':10259,'999-1':10264
+};
+
+function getPokemonSpriteUrl(species: number, form: number = 0): string {
+  const key = `${species}-${form}`;
+  const artworkId = formArtwork[key] || species;
+  return `https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/${artworkId}.png`;
+}
+
 interface CacheEntry<T> {
   data: T
   timestamp: number
@@ -133,84 +143,65 @@ class PokeAPIClient {
     return matched ? { species: matched.species, form: matched.form } : null
   }
 
-  async searchPokemon(query: string, gameVersion?: GameVersion): Promise<PokemonSearchResult[]> {
+  async searchPokemon(query: string, gameVersion?: GameVersion, methodFilter?: string): Promise<PokemonSearchResult[]> {
     const normalizedQuery = query.toLowerCase().trim()
 
     if (gameVersion === 'legends-za') {
       const list = await this.getZAPokemonList()
       const filtered = list.filter(item => {
-        const nameMatch = item.name.toLowerCase().includes(normalizedQuery) || 
-                          item.displayName.toLowerCase().includes(normalizedQuery)
-        const idMatch = item.species.toString() === normalizedQuery ||
-                        item.dexNumber.toString() === normalizedQuery
-        return nameMatch || idMatch
-      }).slice(0, 12)
+        const nameMatch = !normalizedQuery || [
+          item.displayName,
+          item.displayNameEn,
+          item.name,
+          item.nameEn,
+          item.formLabel,
+          String(item.species),
+          ...(item.searchAliases || [])
+        ].some(v => String(v || '').toLowerCase().includes(normalizedQuery))
 
-      return Promise.all(
-        filtered.map(async item => {
-          try {
-            const pokemon = await this.getPokemon(item.name)
-            return {
-              id: pokemon.id,
-              name: item.displayName,
-              sprite: pokemon.sprites.other?.['official-artwork']?.front_default || 
-                      pokemon.sprites.front_default || 
-                      '',
-              apiName: item.name,
-              zaSpecies: item.species,
-              zaForm: item.form
-            }
-          } catch (error) {
-            console.error(`Error fetching sprite for ZA Pokemon ${item.name}:`, error)
-            return {
-              id: 0,
-              name: item.displayName,
-              sprite: '',
-              apiName: item.name,
-              zaSpecies: item.species,
-              zaForm: item.form
-            }
-          }
-        })
-      )
+        const methodMatch = !methodFilter || (item.methods || []).includes(methodFilter)
+        return nameMatch && methodMatch
+      })
+
+      return filtered.map(item => ({
+        id: item.species,
+        name: item.displayName || item.name,
+        sprite: getPokemonSpriteUrl(item.species, item.form || 0),
+        apiName: item.name,
+        zaSpecies: item.species,
+        zaForm: item.form,
+        methods: item.methods || [],
+        encounterCount: item.encounterCount || 0
+      }))
     }
 
     if (gameVersion === 'scarlet' || gameVersion === 'violet') {
       const list = await this.getSVPokemonList()
       const filtered = list.filter(item => {
-        const nameMatch = item.name.toLowerCase().includes(normalizedQuery) || 
-                          item.displayName.toLowerCase().includes(normalizedQuery)
-        const idMatch = item.species.toString() === normalizedQuery
-        return nameMatch || idMatch
-      }).slice(0, 12)
+        const nameMatch = !normalizedQuery || [
+          item.displayName,
+          item.displayNameEn,
+          item.name,
+          item.nameEn,
+          item.formLabel,
+          String(item.species),
+          ...(item.searchAliases || [])
+        ].some(v => String(v || '').toLowerCase().includes(normalizedQuery))
 
-      return Promise.all(
-        filtered.map(async item => {
-          try {
-            const pokemon = await this.getPokemon(item.name)
-            return {
-              id: pokemon.id,
-              name: item.displayName,
-              sprite: pokemon.sprites.other?.['official-artwork']?.front_default || 
-                      pokemon.sprites.front_default || 
-                      '',
-              apiName: item.name,
-              svSpecies: item.species,
-              svForm: item.form
-            }
-          } catch (error) {
-            console.error(`Error fetching sprite for SV Pokemon ${item.name}:`, error)
-            return {
-              id: 0,
-              name: item.displayName,
-              sprite: '',
-              apiName: item.name,
-              svSpecies: item.species,
-              svForm: item.form
-            }
-          }
-        })
-      )
+        const methodMatch = !methodFilter || (item.methods || []).includes(methodFilter)
+        return nameMatch && methodMatch
+      })
+
+      return filtered.map(item => ({
+        id: item.species,
+        name: item.displayName || item.name,
+        sprite: getPokemonSpriteUrl(item.species, item.form || 0),
+        apiName: item.name,
+        svSpecies: item.species,
+        svForm: item.form,
+        methods: item.methods || [],
+        encounterCount: item.encounterCount || 0
+      }))
     }
 
     const list = await this.getPokemonList()

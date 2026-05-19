@@ -123,6 +123,8 @@ export interface PokemonSearchResult {
   zaForm?: number
   svSpecies?: number
   svForm?: number
+  methods?: string[]
+  encounterCount?: number
 }
 
 // Tipos de Pokémon por generación

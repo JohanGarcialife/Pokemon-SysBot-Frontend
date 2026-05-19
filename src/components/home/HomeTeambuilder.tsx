@@ -111,7 +111,7 @@ export default function HomeTeambuilder({ user }: HomeTeambuilderProps) {
   // Which slot is currently being edited (for replacing)
   const [editingSlot, setEditingSlot] = useState<number | null>(null)
 
-  const { query, setQuery, results, loading } = usePokemonSearch('', selectedGame)
+  const { query, setQuery, method, setMethod, availableMethods, results, loading } = usePokemonSearch('', selectedGame)
 
   // Restore pending build saved before login redirect
   useEffect(() => {
@@ -247,29 +247,71 @@ export default function HomeTeambuilder({ user }: HomeTeambuilderProps) {
             </div>
 
             {/* Search Bar */}
-            <div className="md:col-span-6 flex flex-col justify-center">
+            <div className="md:col-span-7 flex flex-col justify-center">
               <label className="flex items-center gap-2 text-sm font-black text-gray-900 mb-4 uppercase tracking-wider">
                 <span className="bg-pokemon-blue w-6 h-6 flex items-center justify-center rounded-full text-white">2</span>
-                Buscar Pokémon
+                Buscar y Filtrar Pokémon
               </label>
-              <div className="relative">
-                <Search className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" />
-                <input
-                  type="text"
-                  value={query}
-                  onChange={(e) => setQuery(e.target.value)}
-                  placeholder="Ejemplo: Charizard, Arceus..."
-                  className="w-full bg-white border-2 border-gray-300 rounded-xl py-3.5 pl-12 pr-12 text-gray-900 placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-pokemon-blue focus:border-transparent transition-all font-medium"
-                />
-                {loading && (
-                  <Loader2 className="absolute right-4 top-1/2 -translate-y-1/2 w-5 h-5 text-pokemon-blue animate-spin" />
-                )}
+              <div className="flex flex-col sm:flex-row gap-3">
+                <div className="relative flex-1">
+                  <Search className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" />
+                  <input
+                    type="text"
+                    value={query}
+                    onChange={(e) => setQuery(e.target.value)}
+                    placeholder="Ejemplo: Charizard, Arceus..."
+                    className="w-full bg-white border-2 border-gray-300 rounded-xl py-3.5 pl-12 pr-12 text-gray-900 placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-pokemon-blue focus:border-transparent transition-all font-medium"
+                  />
+                  {loading && (
+                    <Loader2 className="absolute right-4 top-1/2 -translate-y-1/2 w-5 h-5 text-pokemon-blue animate-spin" />
+                  )}
+                </div>
+
+                <select
+                  value={method}
+                  onChange={(e) => setMethod(e.target.value)}
+                  className="bg-white border-2 border-gray-300 rounded-xl px-4 py-3.5 text-gray-900 font-medium focus:outline-none focus:ring-2 focus:ring-pokemon-blue focus:border-transparent transition-all cursor-pointer min-w-[180px]"
+                >
+                  <option value="">Todos los métodos</option>
+                  {availableMethods.map((m) => (
+                    <option key={m} value={m}>
+                      {m}
+                    </option>
+                  ))}
+                </select>
               </div>
-              <div className="flex gap-2 mt-4 items-center">
+              
+              <div className="flex gap-2 mt-4 items-center flex-wrap">
                 <Filter className="w-4 h-4 text-gray-400" />
                 <span className="text-xs text-gray-500 font-bold uppercase tracking-wide">Filtros Rápidos:</span>
-                <span className="text-xs bg-white border border-gray-200 px-2 py-1 rounded-full text-gray-600 hover:border-pokemon-blue cursor-pointer transition-colors">🔥 Fuego</span>
-                <span className="text-xs bg-white border border-gray-200 px-2 py-1 rounded-full text-gray-600 hover:border-pokemon-blue cursor-pointer transition-colors">✨ Legendarios</span>
+                <button
+                  type="button"
+                  onClick={() => { setQuery(''); setMethod(''); }}
+                  className="text-xs bg-white border border-gray-200 px-2 py-1 rounded-full text-gray-600 hover:border-pokemon-blue hover:text-pokemon-blue transition-colors font-semibold"
+                >
+                  🔄 Todo
+                </button>
+                <button
+                  type="button"
+                  onClick={() => setQuery('fuego')}
+                  className="text-xs bg-white border border-gray-200 px-2 py-1 rounded-full text-gray-600 hover:border-pokemon-blue hover:text-pokemon-blue transition-colors font-semibold"
+                >
+                  🔥 Fuego
+                </button>
+                <button
+                  type="button"
+                  onClick={() => setQuery('legendary')}
+                  className="text-xs bg-white border border-gray-200 px-2 py-1 rounded-full text-gray-600 hover:border-pokemon-blue hover:text-pokemon-blue transition-colors font-semibold"
+                >
+                  ✨ Legendarios
+                </button>
+                <button
+                  type="button"
+                  onClick={() => setMethod('Wild')}
+                  className="text-xs bg-white border border-gray-200 px-2 py-1 rounded-full text-gray-600 hover:border-pokemon-blue hover:text-pokemon-blue transition-colors font-semibold"
+                >
+                  🌿 Salvajes
+                </button>
               </div>
             </div>
           </div>
