@@ -26,7 +26,28 @@ export interface EventMoveset {
   nature: string
   /** Ability (PokeAPI slug) */
   ability: string
+  /**
+   * Original Trainer name from the event distribution.
+   * CRITICAL for ALM to match the Pokémon to the correct event record.
+   * Without this, ALM cannot validate shiny event Pokémon (ShinyType.Always error).
+   */
+  ot?: string
+  /**
+   * Trainer ID from the event distribution (numeric, e.g. 10072).
+   * Used alongside ot to uniquely identify the event for ALM.
+   */
+  tid?: number
+  /**
+   * Language of the event (e.g. 'Japanese', 'English', 'Spanish').
+   * Overrides the global language setting for this specific event Pokémon.
+   */
+  language?: string
+  /**
+   * Ball override for this event Pokémon (e.g. 'Cherish Ball').
+   */
+  ball?: string
 }
+
 
 /**
  * Map from PokeAPI species slug → event moveset.
@@ -163,12 +184,17 @@ export const EVENT_MOVESETS: Record<string, EventMoveset> = {
 
   // ── Gen 5 Mythicals ─────────────────────────────────────────────────────────
   genesect: {
-    eventName: 'Genesect Shiny Event (2013)',
+    eventName: 'Genesect Shiny — Plasma Event (2013)',
     year: 2013,
     level: 100,
     nature: 'hasty',
     ability: 'download',
     moves: ['techno-blast', 'extreme-speed', 'blaze-kick', 'shift-gear'],
+    // Plasma Genesect event data — required for ALM to match the event record
+    ot: 'Plasma',
+    tid: 10072,
+    language: 'Japanese',
+    ball: 'Cherish Ball',
   },
   meloetta: {
     eventName: 'Meloetta Event (2013)',
@@ -224,14 +250,19 @@ export const EVENT_MOVESETS: Record<string, EventMoveset> = {
   // ── Legends: Z-A — HOME Shiny Gifts ─────────────────────────────────────────
   // These legendaries are capturable non-shiny in Z-A, but their shiny forms
   // come exclusively from Pokémon HOME distribution events with a fixed set.
+  // OT/TID/Language are REQUIRED by ALM to match the event record.
+  // Without them, ALM rejects with: "ShinyType.Always is not possible for the given set"
   groudon: {
     eventName: 'Groudon Shiny HOME Gift — Leyendas Z-A (2025)',
     year: 2025,
     level: 100,
     nature: 'adamant',
     ability: 'drought',
-    // Moves from client's official .pk9 file
     moves: ['rest', 'fire-blast', 'solar-beam', 'eruption'],
+    ot: 'HOME',
+    tid: 240001,
+    language: 'Spanish',
+    ball: 'Cherish Ball',
   },
   kyogre: {
     eventName: 'Kyogre Shiny HOME Gift — Leyendas Z-A (2025)',
@@ -239,8 +270,11 @@ export const EVENT_MOVESETS: Record<string, EventMoveset> = {
     level: 100,
     nature: 'modest',
     ability: 'drizzle',
-    // Moves from client's official .pk9 file
     moves: ['aqua-ring', 'hydro-pump', 'double-edge', 'water-spout'],
+    ot: 'HOME',
+    tid: 240001,
+    language: 'Spanish',
+    ball: 'Cherish Ball',
   },
   rayquaza: {
     eventName: 'Rayquaza Shiny HOME Gift — Leyendas Z-A (2025)',
@@ -248,8 +282,11 @@ export const EVENT_MOVESETS: Record<string, EventMoveset> = {
     level: 100,
     nature: 'rash',
     ability: 'air-lock',
-    // Moves from client's official .pk9 file
     moves: ['dragon-pulse', 'hex', 'earthquake', 'extreme-speed'],
+    ot: 'HOME',
+    tid: 240001,
+    language: 'Spanish',
+    ball: 'Cherish Ball',
   },
 }
 
