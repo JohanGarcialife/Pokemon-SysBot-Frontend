@@ -119,18 +119,14 @@ const LZA_NOT_AVAILABLE_POKEMON: string[] = [
 // SCARLET & VIOLET — Datos verificados
 // ============================================================
 
-// Pokémon míticos y legendarios shiny-locked en Scarlet/Violet
+// Pokémon míticos y legendarios shiny-locked en Scarlet/Violet (según requerimiento del cliente)
 const SV_SHINY_LOCKED_POKEMON: string[] = [
-  // Starter que recibes al inicio (wild sí pueden ser shiny)
-  // Legendarios de DLC:
-  'ogerpon',       // Story legendary - shiny locked
-  'terapagos',     // Story legendary - shiny locked
-  // Paradox legendarios:
-  'walking-wake', 'iron-leaves', 'gouging-fire', 'raging-bolt', 'iron-boulder', 'iron-crown',
-  // Míticos:
-  'pecharunt',     // Event only, shiny locked
-  // NOTA: Wo-Chien, Chien-Pao, Ting-Lu y Chi-Yu SÍ pueden ser shiny via HOME event distributions.
-  // NO se incluyen aquí para permitir que los usuarios los soliciten shiny.
+  'okidogi',
+  'munkidori',
+  'fezandipiti',
+  'ogerpon',
+  'terapagos',
+  'pecharunt',
 ]
 
 // ============================================================
