@@ -78,6 +78,10 @@ export interface Pokemon {
   height: number
   weight: number
   base_experience: number
+  zaSpecies?: number
+  zaForm?: number
+  svSpecies?: number
+  svForm?: number
 }
 
 export interface PokemonListItem {
@@ -114,6 +118,11 @@ export interface PokemonSearchResult {
   id: number
   name: string
   sprite: string
+  apiName?: string
+  zaSpecies?: number
+  zaForm?: number
+  svSpecies?: number
+  svForm?: number
 }
 
 // Tipos de Pokémon por generación

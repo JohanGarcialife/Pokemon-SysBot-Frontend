@@ -111,7 +111,7 @@ export default function HomeTeambuilder({ user }: HomeTeambuilderProps) {
   // Which slot is currently being edited (for replacing)
   const [editingSlot, setEditingSlot] = useState<number | null>(null)
 
-  const { query, setQuery, results, loading } = usePokemonSearch()
+  const { query, setQuery, results, loading } = usePokemonSearch('', selectedGame)
 
   // Restore pending build saved before login redirect
   useEffect(() => {
@@ -143,7 +143,14 @@ export default function HomeTeambuilder({ user }: HomeTeambuilderProps) {
   const handlePokemonSelect = async (result: PokemonSearchResult | null) => {
     if (!result) { setSelectedPokemon(null); return }
     try {
-      const pokemon = await pokeAPI.getPokemon(result.id)
+      const pokemon = await pokeAPI.getPokemon(result.apiName || result.id)
+      if (selectedGame === 'legends-za') {
+        pokemon.zaSpecies = result.zaSpecies
+        pokemon.zaForm = result.zaForm
+      } else if (selectedGame === 'scarlet' || selectedGame === 'violet') {
+        pokemon.svSpecies = result.svSpecies
+        pokemon.svForm = result.svForm
+      }
       setSelectedPokemon(pokemon)
       // Default: target the first empty slot
       setEditingSlot(getNextEmptySlot())

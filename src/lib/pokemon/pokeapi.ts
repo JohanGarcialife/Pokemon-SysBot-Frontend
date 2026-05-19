@@ -1,5 +1,5 @@
 // Cliente para PokeAPI
-import type { Pokemon, PokemonListResponse, PokemonSearchResult } from './types'
+import type { Pokemon, PokemonListResponse, PokemonSearchResult, GameVersion } from './types'
 
 const POKEAPI_BASE_URL = 'https://pokeapi.co/api/v2'
 const CACHE_KEY_PREFIX = 'pokeapi_'
@@ -91,10 +91,129 @@ class PokeAPIClient {
     )
   }
 
-  async searchPokemon(query: string): Promise<PokemonSearchResult[]> {
-    const list = await this.getPokemonList()
-    
+  async getZAPokemonList(): Promise<any[]> {
+    return this.fetchWithCache(
+      `za_pokemon_list`,
+      async () => {
+        const baseURL = typeof window !== 'undefined' && (window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1')
+          ? 'http://localhost:4000'
+          : (process.env.NEXT_PUBLIC_BACKEND_URL || 'https://pkdex-backend-production.up.railway.app')
+        const response = await fetch(`${baseURL}/api/za/pokemon`)
+        if (!response.ok) throw new Error('Failed to fetch ZA Pokemon list')
+        return response.json()
+      }
+    )
+  }
+
+  async getZAPokemonInfo(name: string) {
+    const list = await this.getZAPokemonList()
+    const normalizedName = name.toLowerCase().trim()
+    const matched = list.find(p => p.name === normalizedName)
+    return matched ? { species: matched.species, form: matched.form } : null
+  }
+
+  async getSVPokemonList(): Promise<any[]> {
+    return this.fetchWithCache(
+      `sv_pokemon_list`,
+      async () => {
+        const baseURL = typeof window !== 'undefined' && (window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1')
+          ? 'http://localhost:4000'
+          : (process.env.NEXT_PUBLIC_BACKEND_URL || 'https://pkdex-backend-production.up.railway.app')
+        const response = await fetch(`${baseURL}/api/sv/pokemon`)
+        if (!response.ok) throw new Error('Failed to fetch SV Pokemon list')
+        return response.json()
+      }
+    )
+  }
+
+  async getSVPokemonInfo(name: string) {
+    const list = await this.getSVPokemonList()
+    const normalizedName = name.toLowerCase().trim()
+    const matched = list.find(p => p.name === normalizedName)
+    return matched ? { species: matched.species, form: matched.form } : null
+  }
+
+  async searchPokemon(query: string, gameVersion?: GameVersion): Promise<PokemonSearchResult[]> {
     const normalizedQuery = query.toLowerCase().trim()
+
+    if (gameVersion === 'legends-za') {
+      const list = await this.getZAPokemonList()
+      const filtered = list.filter(item => {
+        const nameMatch = item.name.toLowerCase().includes(normalizedQuery) || 
+                          item.displayName.toLowerCase().includes(normalizedQuery)
+        const idMatch = item.species.toString() === normalizedQuery ||
+                        item.dexNumber.toString() === normalizedQuery
+        return nameMatch || idMatch
+      }).slice(0, 12)
+
+      return Promise.all(
+        filtered.map(async item => {
+          try {
+            const pokemon = await this.getPokemon(item.name)
+            return {
+              id: pokemon.id,
+              name: item.displayName,
+              sprite: pokemon.sprites.other?.['official-artwork']?.front_default || 
+                      pokemon.sprites.front_default || 
+                      '',
+              apiName: item.name,
+              zaSpecies: item.species,
+              zaForm: item.form
+            }
+          } catch (error) {
+            console.error(`Error fetching sprite for ZA Pokemon ${item.name}:`, error)
+            return {
+              id: 0,
+              name: item.displayName,
+              sprite: '',
+              apiName: item.name,
+              zaSpecies: item.species,
+              zaForm: item.form
+            }
+          }
+        })
+      )
+    }
+
+    if (gameVersion === 'scarlet' || gameVersion === 'violet') {
+      const list = await this.getSVPokemonList()
+      const filtered = list.filter(item => {
+        const nameMatch = item.name.toLowerCase().includes(normalizedQuery) || 
+                          item.displayName.toLowerCase().includes(normalizedQuery)
+        const idMatch = item.species.toString() === normalizedQuery
+        return nameMatch || idMatch
+      }).slice(0, 12)
+
+      return Promise.all(
+        filtered.map(async item => {
+          try {
+            const pokemon = await this.getPokemon(item.name)
+            return {
+              id: pokemon.id,
+              name: item.displayName,
+              sprite: pokemon.sprites.other?.['official-artwork']?.front_default || 
+                      pokemon.sprites.front_default || 
+                      '',
+              apiName: item.name,
+              svSpecies: item.species,
+              svForm: item.form
+            }
+          } catch (error) {
+            console.error(`Error fetching sprite for SV Pokemon ${item.name}:`, error)
+            return {
+              id: 0,
+              name: item.displayName,
+              sprite: '',
+              apiName: item.name,
+              svSpecies: item.species,
+              svForm: item.form
+            }
+          }
+        })
+      )
+    }
+
+    const list = await this.getPokemonList()
     
     // Regional forms from ZA DLC — these are NOT in the standard /pokemon?limit=1010 list
     // because PokeAPI places them at IDs 10000+. We inject them as a static supplement.
@@ -205,14 +324,16 @@ class PokeAPIClient {
             name: item.name,
             sprite: pokemon.sprites.other?.['official-artwork']?.front_default || 
                     pokemon.sprites.front_default || 
-                    ''
+                    '',
+            apiName: item.apiName
           }
         } catch (error) {
           console.error(`Error fetching sprite for ${item.name}:`, error)
           return {
             id: item.id || 0,
             name: item.name,
-            sprite: ''
+            sprite: '',
+            apiName: item.apiName
           }
         }
       })

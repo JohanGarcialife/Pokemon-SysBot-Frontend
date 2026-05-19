@@ -335,7 +335,9 @@ export async function isPokemonInGame(
   // The whitelist (+ DLC) is the single source of truth for ZA availability.
   // notAvailable entries in legalityData may be stale — the whitelist wins.
   if (game === 'legends-za') {
-    return LEGENDS_ZA_WHITELIST.has(normalised)
+    if (LEGENDS_ZA_WHITELIST.has(normalised)) return true
+    const base = normalised.replace(/-(alola|galar|hisui|complete|10%|50%|therian|incarnate|dusk|dawn|ultra|paldea|gmax|mega)$/, '')
+    return LEGENDS_ZA_WHITELIST.has(base)
   }
 
   // For other games: Manual override from GAME_LEGALITY_RULES (explicit notAvailable entries)

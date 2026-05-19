@@ -2,15 +2,15 @@
 
 import { useState, useEffect, useCallback } from 'react'
 import { pokeAPI } from '@/lib/pokemon/pokeapi'
-import type { PokemonSearchResult } from '@/lib/pokemon/types'
+import type { PokemonSearchResult, GameVersion } from '@/lib/pokemon/types'
 
-export function usePokemonSearch(initialQuery: string = '') {
+export function usePokemonSearch(initialQuery: string = '', gameVersion?: GameVersion) {
   const [query, setQuery] = useState(initialQuery)
   const [results, setResults] = useState<PokemonSearchResult[]>([])
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState<string | null>(null)
 
-  const search = useCallback(async (searchQuery: string) => {
+  const search = useCallback(async (searchQuery: string, game?: GameVersion) => {
     if (!searchQuery.trim()) {
       setResults([])
       return
@@ -20,7 +20,7 @@ export function usePokemonSearch(initialQuery: string = '') {
     setError(null)
 
     try {
-      const searchResults = await pokeAPI.searchPokemon(searchQuery)
+      const searchResults = await pokeAPI.searchPokemon(searchQuery, game)
       setResults(searchResults)
     } catch (err) {
       setError(err instanceof Error ? err.message : 'Error al buscar Pokémon')
@@ -33,11 +33,11 @@ export function usePokemonSearch(initialQuery: string = '') {
   // Debounce search
   useEffect(() => {
     const timer = setTimeout(() => {
-      search(query)
+      search(query, gameVersion)
     }, 300)
 
     return () => clearTimeout(timer)
-  }, [query, search])
+  }, [query, gameVersion, search])
 
   return {
     query,

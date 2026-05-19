@@ -86,14 +86,16 @@ export function PokemonEditor({ pokemon, onAddToTeam, gameVersion, availabilityS
   const [heldItem, setHeldItem] = useState<string>('None')
   const [origin, setOrigin] = useState<string>('Wild Encounter')
   
-  const { isShinyDisabled, isAlphaDisabled, isPokemonNotAvailable, forcedBall, minAllowedLevel, disabledFeatures, disabledOrigins } = useEncounterRules(gameVersion, origin, pokemon?.name)
+  const { isShinyDisabled, isAlphaDisabled, isPokemonNotAvailable, forcedBall, minAllowedLevel, maxAllowedLevel, disabledFeatures, disabledOrigins } = useEncounterRules(gameVersion, origin, pokemon?.name)
 
   // Opciones forzadas según reglas de origen
   React.useEffect(() => {
     if (level < minAllowedLevel) {
       setLevel(minAllowedLevel)
+    } else if (level > maxAllowedLevel) {
+      setLevel(maxAllowedLevel)
     }
-  }, [minAllowedLevel, level])
+  }, [minAllowedLevel, maxAllowedLevel, level])
 
   React.useEffect(() => {
     if (isShinyDisabled && shiny) {
@@ -346,14 +348,14 @@ export function PokemonEditor({ pokemon, onAddToTeam, gameVersion, availabilityS
               <input
                 type="number"
                 min={minAllowedLevel}
-                max={100}
+                max={maxAllowedLevel}
                 value={level}
                 onChange={(e) => setLevel(Number(e.target.value))}
                 disabled={isLegendaryPreset}
                 className={`w-full px-3 py-2 border-2 rounded-lg focus:outline-none focus:ring-2 focus:ring-psychic text-gray-900 font-bold ${isLegendaryPreset ? 'bg-gray-100 border-gray-200 text-gray-500 cursor-not-allowed' : 'border-gray-300'}`}
               />
-              {minAllowedLevel > 1 && (
-                <p className="text-xs text-orange-500 font-bold mt-1">Nivel mínimo por origen: {minAllowedLevel}</p>
+              {(minAllowedLevel > 1 || maxAllowedLevel < 100) && (
+                <p className="text-xs text-orange-500 font-bold mt-1">Nivel permitido por origen: {minAllowedLevel} - {maxAllowedLevel}</p>
               )}
             </div>
 

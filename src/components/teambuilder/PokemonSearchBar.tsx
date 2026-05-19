@@ -3,16 +3,17 @@
 import { useState, useRef, useEffect } from 'react'
 import { Search, Loader2 } from 'lucide-react'
 import { usePokemonSearch } from '@/hooks/usePokemonSearch'
-import type { PokemonSearchResult } from '@/lib/pokemon/types'
+import type { PokemonSearchResult, GameVersion } from '@/lib/pokemon/types'
 import Image from 'next/image'
 
 interface PokemonSearchBarProps {
   onSelect: (pokemon: PokemonSearchResult) => void
   placeholder?: string
+  gameVersion?: GameVersion
 }
 
-export default function PokemonSearchBar({ onSelect, placeholder = 'Buscar Pokémon...' }: PokemonSearchBarProps) {
-  const { query, setQuery, results, loading } = usePokemonSearch()
+export default function PokemonSearchBar({ onSelect, placeholder = 'Buscar Pokémon...', gameVersion }: PokemonSearchBarProps) {
+  const { query, setQuery, results, loading } = usePokemonSearch('', gameVersion)
   const [isOpen, setIsOpen] = useState(false)
   const dropdownRef = useRef<HTMLDivElement>(null)
 
