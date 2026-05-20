@@ -1,3 +1,6 @@
+import { readFileSync, existsSync } from 'node:fs';
+import { join } from 'node:path';
+
 export interface StatValues {
   hp: number
   attack: number
@@ -9,6 +12,7 @@ export interface StatValues {
 
 export interface PokemonBuildPayload {
   species: string
+  dexId?: number
   level: number
   nature: string
   ability: string
@@ -22,12 +26,93 @@ export interface PokemonBuildPayload {
   moves: string[]
   ivs: StatValues
   evs: StatValues
+  game?: string
+  encounter?: Record<string, any>
+  isAlphaEncounter?: boolean
 }
 
 const LEGENDS_ZA_GAME = 'legends-za'
 const ZA_GAME_ID = 'za'
 
-// Ball name mappings (Showdown → ALM-accepted names)
+// ─── Showdown Aliases ─────────────────────────────────────────────────────────
+// Load the alias map once (at module init) to convert visual names → Showdown names
+let _aliasMap: Record<string, string> | null = null;
+
+function loadAliasMap(): Record<string, string> {
+  if (_aliasMap) return _aliasMap;
+  try {
+    const aliasPath = join(process.cwd(), 'data', 'showdown_aliases.json');
+    if (existsSync(aliasPath)) {
+      _aliasMap = JSON.parse(readFileSync(aliasPath, 'utf8'));
+    } else {
+      _aliasMap = {};
+    }
+  } catch {
+    _aliasMap = {};
+  }
+  return _aliasMap!;
+}
+
+/**
+ * Convert a visual display name (Spanish or English) to the Showdown-compatible
+ * species name that SysBot / Auto-Legality can parse.
+ * Falls back to formatSpeciesName() for anything not in the alias map.
+ */
+export function getShowdownSpeciesName(order: PokemonBuildPayload): string {
+  const aliases = loadAliasMap();
+  const raw = String(order.species || '').trim();
+  const key = raw.toLowerCase();
+  if (aliases[key]) return aliases[key];
+
+  // Try partial form-suffix detection from dexId + form if alias missed
+  return formatSpeciesName(raw);
+}
+
+// ─── Valid natures ────────────────────────────────────────────────────────────
+const NATURES = [
+  'Hardy','Lonely','Brave','Adamant','Naughty',
+  'Bold','Docile','Relaxed','Impish','Lax',
+  'Timid','Hasty','Serious','Jolly','Naive',
+  'Modest','Mild','Quiet','Bashful','Rash',
+  'Calm','Gentle','Sassy','Careful','Quirky',
+];
+
+/**
+ * If nature is empty or "Random", picks a valid random nature.
+ * This prevents sending "Random Nature" to SysBot which causes parse errors.
+ */
+function normalizeNature(nature: string | undefined): string {
+  if (!nature || String(nature).toLowerCase() === 'random') {
+    return NATURES[Math.floor(Math.random() * NATURES.length)];
+  }
+  return nature;
+}
+
+/**
+ * If gender is empty or "Random", returns null so no Gender line is sent.
+ * Auto-Legality / PKHeX will pick a legal gender for the species automatically.
+ */
+function normalizeGender(gender: string | undefined): string | null {
+  if (!gender || String(gender).toLowerCase() === 'random') return null;
+  if (gender === 'Male' || gender === 'Macho' || gender === 'M') return 'Male';
+  if (gender === 'Female' || gender === 'Hembra' || gender === 'F') return 'Female';
+  return null;
+}
+
+/**
+ * Alpha: Only included in the Showdown set when:
+ *   1. The game is Legends: Z-A
+ *   2. The encounter itself is marked as Alpha (payload.alpha = Boolean(selectedEncounter.isAlpha))
+ * Never sent for Scarlet/Violet.
+ */
+function shouldIncludeAlpha(pokemon: PokemonBuildPayload, isLegendsZA: boolean): boolean {
+  if (!isLegendsZA) return false;
+  // pokemon.alpha is set from Boolean(selectedEncounter.isAlpha) in the frontend payload,
+  // so it already correctly encodes "this encounter is an alpha encounter"
+  return Boolean(pokemon.alpha);
+}
+
+// ─── Ball name mappings (Showdown → ALM-accepted names) ───────────────────────
 const BALL_NAME_MAP: Record<string, string> = {
   'poke ball':     'Poké Ball',
   'pokeball':      'Poké Ball',
@@ -69,40 +154,40 @@ export function buildShowdownText(pokemon: PokemonBuildPayload, gameVersion?: st
   const lines: string[] = []
   const isLegendsZA = gameVersion === LEGENDS_ZA_GAME || gameVersion === ZA_GAME_ID
 
-  // ── Header: Species @ HeldItem ───────────────────────────────────────
+  // ── Header: Species @ HeldItem ───────────────────────────────────────────────
+  const showdownSpecies = getShowdownSpeciesName(pokemon);
   const hasHeldItem = pokemon.heldItem &&
     pokemon.heldItem.trim() !== '' &&
-    pokemon.heldItem.toLowerCase() !== 'none'
+    pokemon.heldItem.toLowerCase() !== 'none' &&
+    pokemon.heldItem.toLowerCase() !== 'sin objeto'
   const speciesLine = hasHeldItem
-    ? `${formatSpeciesName(pokemon.species)} @ ${capitalize(pokemon.heldItem!)}`
-    : formatSpeciesName(pokemon.species)
+    ? `${showdownSpecies} @ ${capitalize(pokemon.heldItem!)}`
+    : showdownSpecies
   lines.push(speciesLine)
 
-  // ── Ability ──────────────────────────────────────────────────────────
-  if (pokemon.ability) {
+  // ── Ability ──────────────────────────────────────────────────────────────────
+  if (pokemon.ability && String(pokemon.ability).toLowerCase() !== 'random') {
     lines.push(`Ability: ${capitalize(pokemon.ability)}`)
   }
 
-  // ── Level ────────────────────────────────────────────────────────────
+  // ── Level ────────────────────────────────────────────────────────────────────
   lines.push(`Level: ${pokemon.level}`)
 
-  // ── Shiny ────────────────────────────────────────────────────────────
+  // ── Shiny ────────────────────────────────────────────────────────────────────
   if (pokemon.shiny) {
     lines.push('Shiny: Yes')
   }
 
-  // ── Alpha (Legends ZA only) ───────────────────────────────────────────
-  if (pokemon.alpha && isLegendsZA) {
+  // ── Alpha (Legends ZA ONLY, and only if encounter is alpha) ──────────────────
+  if (shouldIncludeAlpha(pokemon, isLegendsZA)) {
     lines.push('Alpha: Yes')
   }
 
-  // ── Gender ───────────────────────────────────────────────────────────
-  if (pokemon.gender === 'M' || pokemon.gender === 'Male') lines.push('Gender: Male')
-  else if (pokemon.gender === 'F' || pokemon.gender === 'Female') lines.push('Gender: Female')
+  // ── Gender (skip if Random — let ALM choose) ──────────────────────────────────
+  const gender = normalizeGender(pokemon.gender)
+  if (gender) lines.push(`Gender: ${gender}`)
 
-  // ── Language ─────────────────────────────────────────────────────────
-  // Event Pokémon (Genesect, Groudon HOME, etc.) carry their own language from
-  // the event data payload. For regular Pokémon we default to Spanish.
+  // ── Language ─────────────────────────────────────────────────────────────────
   const eventLanguage = (pokemon as any).eventLanguage
   const language = eventLanguage ?? ((pokemon as any).language ?? 'Spanish')
   const strictEventSpecies = [
@@ -114,40 +199,38 @@ export function buildShowdownText(pokemon: PokemonBuildPayload, gameVersion?: st
     lines.push(`Language: ${language}`)
   }
 
-  // ── Event OT / TID (for Cherish Ball event Pokémon) ──────────────────
+  // ── Event OT / TID (for Cherish Ball event Pokémon) ──────────────────────────
   const eventOT  = (pokemon as any).eventOT
   const eventTID = (pokemon as any).eventTID
   if (eventOT)  lines.push(`OT: ${eventOT}`)
   if (eventTID) lines.push(`TID: ${eventTID}`)
 
-  // ── Tera Type (not applicable for Legends ZA) ────────────────────────
+  // ── Tera Type (not applicable for Legends ZA) ────────────────────────────────
   if (pokemon.teraType && !isLegendsZA) {
     lines.push(`Tera Type: ${capitalize(pokemon.teraType)}`)
   }
 
-  // ── Ball ─────────────────────────────────────────────────────────────
+  // ── Ball ─────────────────────────────────────────────────────────────────────
   if (!isLegendsZA && pokemon.pokeball) {
     lines.push(`Ball: ${normalizeBallName(pokemon.pokeball)}`)
   }
 
-  // ── EVs ───────────────────────────────────────────────────────────────────
+  // ── EVs ───────────────────────────────────────────────────────────────────────
   if (!isLegendsZA && pokemon.evs) {
     const evParts = buildStatLine(pokemon.evs)
     if (evParts) lines.push(`EVs: ${evParts}`)
   }
 
-  // ── Nature ───────────────────────────────────────────────────────────
-  if (pokemon.nature) {
-    lines.push(`${capitalize(pokemon.nature)} Nature`)
-  }
+  // ── Nature (always normalized — never "Random Nature") ────────────────────────
+  lines.push(`${normalizeNature(pokemon.nature)} Nature`)
 
-  // ── IVs (only show non-31 values) ──────────────────────────────────
+  // ── IVs (only show non-31 values) ────────────────────────────────────────────
   if (pokemon.ivs) {
     const ivParts = buildStatLine(pokemon.ivs, 31)
     if (ivParts) lines.push(`IVs: ${ivParts}`)
   }
 
-  // ── Moves ────────────────────────────────────────────────────────────
+  // ── Moves ────────────────────────────────────────────────────────────────────
   if (!isLegendsZA && Array.isArray(pokemon.moves)) {
     const validMoves = pokemon.moves.filter(Boolean)
     for (const move of validMoves) {
@@ -162,7 +245,7 @@ export function teamToShowdownText(team: PokemonBuildPayload[], gameVersion?: st
   return team.map((p) => buildShowdownText(p, gameVersion)).join('\n\n')
 }
 
-// ─── Helpers ─────────────────────────────────────────────────────────────────
+// ─── Helpers ──────────────────────────────────────────────────────────────────
 
 function capitalize(str: string): string {
   if (!str) return str
@@ -202,7 +285,7 @@ const SPECIES_NAME_OVERRIDES: Record<string, string> = {
 
 function formatSpeciesName(slug: string): string {
   if (!slug) return slug
-  const lower = slug.toLowerCase().replace('’', "'")
+  const lower = slug.toLowerCase().replace('\u2019', "'")
 
   if (SPECIES_NAME_OVERRIDES[lower]) {
     return SPECIES_NAME_OVERRIDES[lower]
