@@ -109,7 +109,7 @@ export function buildShowdownText(pokemon: PokemonBuildPayload, gameVersion?: st
     'genesect', 'hoopa', 'volcanion', 'diancie', 'zarude', 'zeraora',
     'marshadow', 'meloetta', 'victini', 'groudon', 'kyogre', 'rayquaza',
   ]
-  const isStrictEvent = strictEventSpecies.includes(pokemon.species.toLowerCase())
+  const isStrictEvent = strictEventSpecies.includes(String(pokemon.species).toLowerCase())
   if (!isStrictEvent || eventLanguage) {
     lines.push(`Language: ${language}`)
   }

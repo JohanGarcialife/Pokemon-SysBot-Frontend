@@ -174,10 +174,14 @@ export function PokemonModal({
 
   const currentPayload = () => {
     if (!selectedEncounter) return null;
+    // species must be a string name for showdownBuilder / discordDispatcher
+    // (the JSON data stores it as a numeric Pokédex ID, so we use the English name instead)
+    const speciesName = pokemon.displayNameEn || pokemon.nameEn || pokemon.displayName || pokemon.name || String(pokemon.species);
     return {
       game,
       gameVersion: game === 'sv' ? gameVersion : undefined,
-      species: pokemon.species,
+      species: speciesName,
+      dexId: pokemon.species,
       form: pokemon.form || 0,
       displayName: pokemon.displayName || pokemon.name,
       encounterId: selectedEncounter.id,

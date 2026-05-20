@@ -51,7 +51,7 @@ export async function dispatchTradeCommand(
 
   const processedPokemonList = pokemonList.map(p => {
     const copy = { ...p };
-    const speciesKey = p.species.toLowerCase();
+    const speciesKey = String(p.species).toLowerCase();
     const eventData = p.shiny ? EVENT_DATA[speciesKey] : undefined;
     if (eventData) {
       (copy as any).eventOT = eventData.ot;
