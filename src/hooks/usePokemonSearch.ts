@@ -1,6 +1,6 @@
 'use client'
 
-import { useState, useEffect, useCallback } from 'react'
+import { useState, useEffect, useCallback, useRef } from 'react'
 import { pokeAPI } from '@/lib/pokemon/pokeapi'
 import type { PokemonSearchResult, GameVersion } from '@/lib/pokemon/types'
 
@@ -11,6 +11,7 @@ export function usePokemonSearch(initialQuery: string = '', gameVersion?: GameVe
   const [availableMethods, setAvailableMethods] = useState<string[]>([])
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState<string | null>(null)
+  const prevGame = useRef<GameVersion | undefined>(gameVersion)
 
   const search = useCallback(async (searchQuery: string, game?: GameVersion, methodFilter?: string) => {
     setLoading(true)
@@ -33,6 +34,16 @@ export function usePokemonSearch(initialQuery: string = '', gameVersion?: GameVe
       setLoading(false)
     }
   }, [])
+
+  // When game changes, reset method filter and clear stale results immediately
+  useEffect(() => {
+    if (prevGame.current !== gameVersion) {
+      prevGame.current = gameVersion
+      setMethod('')
+      setResults([])
+      setAvailableMethods([])
+    }
+  }, [gameVersion])
 
   // Run search when query, method, or gameVersion changes
   useEffect(() => {

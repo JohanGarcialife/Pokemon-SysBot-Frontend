@@ -171,7 +171,8 @@ class PokeAPIClient {
         zaSpecies: item.species,
         zaForm: item.form,
         methods: item.methods || [],
-        encounterCount: item.encounterCount || 0
+        encounterCount: item.encounterCount || 0,
+        uniqueKey: `za-${item.species}-${item.form ?? 0}`
       }))
     }
 
@@ -200,7 +201,8 @@ class PokeAPIClient {
         svSpecies: item.species,
         svForm: item.form,
         methods: item.methods || [],
-        encounterCount: item.encounterCount || 0
+        encounterCount: item.encounterCount || 0,
+        uniqueKey: `sv-${item.species}-${item.form ?? 0}`
       }))
     }
 

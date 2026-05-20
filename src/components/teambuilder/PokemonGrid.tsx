@@ -39,33 +39,43 @@ export function PokemonGrid({ results, loading, onSelect }: PokemonGridProps) {
 
   return (
     <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-4">
-      {results.map((pokemon) => (
-        <button
-          key={pokemon.id}
-          onClick={() => onSelect(pokemon)}
-          className="group flex flex-col items-center bg-white border-2 border-gray-100 rounded-2xl p-4 hover:border-pokemon-blue hover:shadow-xl transition-all hover:-translate-y-1 active:scale-95 text-center"
-        >
-          <div className="w-full h-24 mb-3 relative flex items-center justify-center bg-gray-50 rounded-xl group-hover:bg-blue-50 transition-colors">
-            {pokemon.sprite ? (
-              <Image
-                src={pokemon.sprite}
-                alt={pokemon.name}
-                width={80}
-                height={80}
-                className="w-20 h-20 object-contain drop-shadow-md group-hover:scale-110 transition-transform"
-              />
-            ) : (
-              <span className="text-gray-300 text-xs font-bold w-full uppercase">No Image</span>
+      {results.map((pokemon) => {
+        // Use uniqueKey when available to prevent React key collisions for
+        // Pokémon that share the same species ID but have different forms
+        const reactKey = pokemon.uniqueKey ?? `${pokemon.id}-${pokemon.zaForm ?? pokemon.svForm ?? 0}`
+        return (
+          <button
+            key={reactKey}
+            onClick={() => onSelect(pokemon)}
+            className="group flex flex-col items-center bg-white border-2 border-gray-100 rounded-2xl p-4 hover:border-pokemon-blue hover:shadow-xl transition-all hover:-translate-y-1 active:scale-95 text-center"
+          >
+            <div className="w-full h-24 mb-3 relative flex items-center justify-center bg-gray-50 rounded-xl group-hover:bg-blue-50 transition-colors">
+              {pokemon.sprite ? (
+                <Image
+                  src={pokemon.sprite}
+                  alt={pokemon.name}
+                  width={80}
+                  height={80}
+                  className="w-20 h-20 object-contain drop-shadow-md group-hover:scale-110 transition-transform"
+                />
+              ) : (
+                <span className="text-gray-300 text-xs font-bold w-full uppercase">No Image</span>
+              )}
+            </div>
+            <h3 className="font-black text-gray-900 uppercase tracking-tight w-full truncate text-sm leading-tight">
+              {formatPokemonName(pokemon.name)}
+            </h3>
+            <p className="text-xs text-gray-400 font-black mt-0.5">
+              #{pokemon.id.toString().padStart(4, '0')}
+            </p>
+            {pokemon.methods && pokemon.methods.length > 0 && (
+              <p className="text-[10px] text-gray-400 mt-1 truncate w-full">
+                {pokemon.methods.slice(0, 2).join(' · ')}
+              </p>
             )}
-          </div>
-          <h3 className="font-black text-gray-900 uppercase tracking-tight w-full truncate">
-            {formatPokemonName(pokemon.name)}
-          </h3>
-          <p className="text-xs text-gray-400 font-black mt-1">
-            #{pokemon.id.toString().padStart(4, '0')}
-          </p>
-        </button>
-      ))}
+          </button>
+        )
+      })}
     </div>
   )
 }

@@ -125,6 +125,8 @@ export interface PokemonSearchResult {
   svForm?: number
   methods?: string[]
   encounterCount?: number
+  /** Unique key combining species+form for React lists */
+  uniqueKey?: string
 }
 
 // Tipos de Pokémon por generación
