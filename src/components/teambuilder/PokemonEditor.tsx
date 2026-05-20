@@ -85,8 +85,20 @@ export function PokemonEditor({ pokemon, onAddToTeam, gameVersion, availabilityS
   const [pokeball, setPokeball] = useState<string>('Poké Ball')
   const [heldItem, setHeldItem] = useState<string>('None')
   const [origin, setOrigin] = useState<string>('Wild Encounter')
+  const [selectedEncounterId, setSelectedEncounterId] = useState<string>('')
   
-  const { isShinyDisabled, isAlphaDisabled, isPokemonNotAvailable, forcedBall, minAllowedLevel, maxAllowedLevel, disabledFeatures, disabledOrigins } = useEncounterRules(gameVersion, origin, pokemon?.name)
+  const { 
+    isShinyDisabled, 
+    isAlphaDisabled, 
+    isPokemonNotAvailable, 
+    forcedBall, 
+    minAllowedLevel, 
+    maxAllowedLevel, 
+    disabledFeatures, 
+    disabledOrigins,
+    matchingEncounters,
+    selectedEncounter 
+  } = useEncounterRules(gameVersion, origin, pokemon?.name, selectedEncounterId)
 
   // Opciones forzadas según reglas de origen
   React.useEffect(() => {
@@ -125,6 +137,35 @@ export function PokemonEditor({ pokemon, onAddToTeam, gameVersion, availabilityS
       setOrigin(firstAvailable)
     }
   }, [disabledOrigins, origin])
+
+  // Reset or select first encounter when matchingEncounters changes
+  React.useEffect(() => {
+    if (matchingEncounters.length > 0) {
+      const exists = matchingEncounters.some(e => e.id === selectedEncounterId)
+      if (!exists) {
+        setSelectedEncounterId(matchingEncounters[0].id)
+      }
+    } else {
+      setSelectedEncounterId('')
+    }
+  }, [matchingEncounters, selectedEncounterId])
+
+  // Auto-force shiny if forced by specific encounter profile
+  React.useEffect(() => {
+    if (selectedEncounter?.forceShiny && !shiny) {
+      setShiny(true)
+    }
+  }, [selectedEncounter, shiny])
+
+  // Auto-force gender if forced by specific encounter profile
+  React.useEffect(() => {
+    if (selectedEncounter?.gender && selectedEncounter.gender !== 'Random') {
+      const g = selectedEncounter.gender.toLowerCase() as 'male' | 'female' | 'genderless'
+      if (gender !== g) {
+        setGender(g)
+      }
+    }
+  }, [selectedEncounter, gender])
 
   // ── Legendary dual-state logic ─────────────────────────────────────────
   // Pokémon in LEGENDARY_PRESETS have two states:
@@ -200,8 +241,8 @@ export function PokemonEditor({ pokemon, onAddToTeam, gameVersion, availabilityS
   // ─── Real-time legality validation ───────────────────────
   const currentBuild: PokemonBuild | null = useMemo(() => {
     if (!pokemon) return null
-    return { pokemon, stats, nature, teraType, ability, moves, shiny, alpha, gender, level, pokeball, heldItem, origin }
-  }, [pokemon, stats, nature, teraType, ability, moves, shiny, alpha, gender, level, pokeball, heldItem, origin])
+    return { pokemon, stats, nature, teraType, ability, moves, shiny, alpha, gender, level, pokeball, heldItem, origin, encounterId: selectedEncounterId || undefined }
+  }, [pokemon, stats, nature, teraType, ability, moves, shiny, alpha, gender, level, pokeball, heldItem, origin, selectedEncounterId])
 
   const { results, errors, warnings, isLegal, errorCount, warningCount } = useLegality(currentBuild, gameVersion)
 
@@ -266,7 +307,8 @@ export function PokemonEditor({ pokemon, onAddToTeam, gameVersion, availabilityS
       level,
       pokeball,
       heldItem,
-      origin
+      origin,
+      encounterId: selectedEncounterId || undefined
     }
     onAddToTeam(build)
   }
@@ -404,8 +446,8 @@ export function PokemonEditor({ pokemon, onAddToTeam, gameVersion, availabilityS
               <select
                 value={gender}
                 onChange={(e) => setGender(e.target.value as 'male' | 'female' | 'genderless')}
-                disabled={isGenderless}
-                className={`w-full px-3 py-2 border-2 border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-psychic text-gray-900 font-bold bg-white ${isGenderless ? 'bg-gray-100 text-gray-500 cursor-not-allowed' : ''}`}
+                disabled={isGenderless || (!!selectedEncounter?.gender && selectedEncounter.gender !== 'Random')}
+                className={`w-full px-3 py-2 border-2 border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-psychic text-gray-900 font-bold bg-white ${(isGenderless || (!!selectedEncounter?.gender && selectedEncounter.gender !== 'Random')) ? 'bg-gray-100 text-gray-500 cursor-not-allowed' : ''}`}
               >
                 {isGenderless ? (
                   <option value="genderless">⚪ Sin género</option>
@@ -418,6 +460,11 @@ export function PokemonEditor({ pokemon, onAddToTeam, gameVersion, availabilityS
               </select>
               {isGenderless && (
                 <p className="text-xs text-gray-400 mt-1">Este Pokémon no tiene género.</p>
+              )}
+              {!isGenderless && selectedEncounter?.gender && selectedEncounter.gender !== 'Random' && (
+                <p className="text-xs text-amber-600 font-bold mt-1">
+                  🔒 Género fijo por perfil legal: {selectedEncounter.gender === 'Male' ? 'Macho' : 'Hembra'}.
+                </p>
               )}
             </div>
           </div>
@@ -509,7 +556,7 @@ export function PokemonEditor({ pokemon, onAddToTeam, gameVersion, availabilityS
         )}
 
         {/* Origin */}
-        <div className="bg-white border-2 border-gray-300 rounded-lg p-6">
+        <div className="bg-white border-2 border-gray-300 rounded-lg p-6 space-y-4">
           <OriginSelector
             selectedOrigin={origin}
             onOriginChange={setOrigin}
@@ -520,6 +567,38 @@ export function PokemonEditor({ pokemon, onAddToTeam, gameVersion, availabilityS
           />
           {isLegendaryPreset && (
             <p className="text-xs text-amber-600 font-bold mt-2">🔒 Origen fijo: captura en el juego (necesario para legalidad).</p>
+          )}
+
+          {matchingEncounters.length > 1 && (
+            <div className="pt-2 border-t border-gray-150">
+              <label className="block text-xs font-bold text-gray-500 mb-2 uppercase tracking-wider">
+                Perfil de Origen / Encuentro Legal
+              </label>
+              <select
+                value={selectedEncounterId}
+                onChange={(e) => setSelectedEncounterId(e.target.value)}
+                className="w-full p-3 bg-gray-50 border-2 border-gray-300 rounded-lg font-bold text-gray-800 focus:outline-none focus:border-blue-500 transition-colors text-sm"
+              >
+                {matchingEncounters.map((enc: any) => {
+                  const parts = []
+                  if (enc.locationName) parts.push(enc.locationName)
+                  if (enc.method && !enc.locationName?.includes(enc.method)) parts.push(`(${enc.method})`)
+                  if (enc.isAlpha || enc.alpha) parts.push('Alpha')
+                  if (enc.version) parts.push(`· ${enc.version}`)
+                  return (
+                    <option key={enc.id} value={enc.id}>
+                      {parts.join(' ')}
+                    </option>
+                  )
+                })}
+              </select>
+            </div>
+          )}
+
+          {selectedEncounter?.note && (
+            <div className="p-3 bg-blue-50 border border-blue-200 rounded-lg text-[11px] text-blue-800 font-semibold leading-relaxed">
+              💡 {selectedEncounter.note}
+            </div>
           )}
         </div>
 

@@ -36,6 +36,10 @@ export function TradeCodeModal({ isOpen, onClose, team, gameVersion, pokemonName
   const [orderId, setOrderId] = useState<string | null>(null)
   const [orderError, setOrderError] = useState<string | null>(null)
 
+  const isZA = gameVersion === 'legends-za'
+  const gameName = isZA ? 'Pokémon Legends: Z-A' : 'Pokémon Escarlata/Púrpura'
+  const methodText = isZA ? 'el sistema de intercambio del juego' : 'Poké Portal → Intercambio con Código'
+
   const generateNewCode = useCallback(() => {
     setTradeCode(generateTradeCode())
     setTimeLeft(EXPIRATION_SECONDS)
@@ -263,11 +267,11 @@ export function TradeCodeModal({ isOpen, onClose, team, gameVersion, pokemonName
             <ol className="space-y-2 text-sm text-blue-800">
               <li className="flex gap-2">
                 <span className="font-black text-blue-600 shrink-0">1.</span>
-                <span>Abre <strong>Pokémon Escarlata/Púrpura</strong> en tu Nintendo Switch</span>
+                <span>Abre <strong>{gameName}</strong> en tu Nintendo Switch</span>
               </li>
               <li className="flex gap-2">
                 <span className="font-black text-blue-600 shrink-0">2.</span>
-                <span>Ve al <strong>Poké Portal</strong> → <strong>Intercambio con Código</strong></span>
+                <span>Ve a <strong>{methodText}</strong></span>
               </li>
               <li className="flex gap-2">
                 <span className="font-black text-blue-600 shrink-0">3.</span>

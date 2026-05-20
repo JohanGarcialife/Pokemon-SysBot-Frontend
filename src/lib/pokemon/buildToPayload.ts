@@ -28,6 +28,7 @@ export interface PokemonBuildPayload {
   moves: string[]     // Non-null move names only
   ivs: StatValues
   evs: StatValues
+  encounterId?: string
 }
 
 /**
@@ -72,6 +73,7 @@ export function buildToPayload(build: PokemonBuild): PokemonBuildPayload {
     moves,
     ivs,
     evs,
+    encounterId: build.encounterId,
   }
 }
 

@@ -238,4 +238,5 @@ export const ORIGINS = [
   { name: 'Mass Outbreak', label: 'Aparición Masiva', emoji: '🔥', description: 'Capturado en aparición masiva' },
   { name: 'Starter', label: 'Inicial', emoji: '⭐', description: 'Pokémon inicial del juego' },
   { name: 'In-Game Gift', label: 'Regalo', emoji: '🎀', description: 'Recibido como regalo en el juego' },
+  { name: 'Pokémon HOME', label: 'Pokémon HOME', emoji: '🏠', description: 'Transferencia externa segura' },
 ]

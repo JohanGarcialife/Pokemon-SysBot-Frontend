@@ -13,6 +13,8 @@ export interface EncounterRulesResult {
   disabledFeatures: string[]
   disabledOrigins: string[]
   speciesRules: PokemonSpeciesRules | null
+  matchingEncounters: any[]
+  selectedEncounter: any | null
 }
 
 function mapOriginToMethod(origin?: string): string[] {
@@ -27,6 +29,8 @@ function mapOriginToMethod(origin?: string): string[] {
       return ['Starter']
     case 'Trade':
       return ['Trade']
+    case 'Pokémon HOME':
+      return ['HOME Legal Transfer', 'HOME Event Transfer']
     default:
       return []
   }
@@ -35,7 +39,8 @@ function mapOriginToMethod(origin?: string): string[] {
 export function useEncounterRules(
   gameVersion?: GameVersion,
   origin?: string,
-  pokemonSlug?: string
+  pokemonSlug?: string,
+  selectedEncounterId?: string
 ): EncounterRulesResult {
   const [dbEncounters, setDbEncounters] = useState<any[]>([])
 
@@ -87,7 +92,9 @@ export function useEncounterRules(
       maxAllowedLevel: 100,
       disabledFeatures: [],
       disabledOrigins: [],
-      speciesRules: null
+      speciesRules: null,
+      matchingEncounters: [],
+      selectedEncounter: null
     }
 
     if (!gameVersion || !origin) {
@@ -116,6 +123,8 @@ export function useEncounterRules(
     let maxAllowedLevel = 100
 
     let disabledOrigins = [...(gameRules.disabledOrigins || [])]
+    let matchingEncounters: any[] = []
+    let selectedEncounter: any | null = null
 
     const isZA = gameVersion === 'legends-za'
     const isSV = gameVersion === 'scarlet' || gameVersion === 'violet'
@@ -138,17 +147,29 @@ export function useEncounterRules(
         if (!methodsPresent.has('Trade')) {
           newDisabled.push('Trade')
         }
+        if (!methodsPresent.has('HOME Legal Transfer') && !methodsPresent.has('HOME Event Transfer')) {
+          newDisabled.push('Pokémon HOME')
+        }
         disabledOrigins = [...new Set(newDisabled)]
 
         const methods = mapOriginToMethod(origin)
-        const matchingEnc = dbEncounters.filter(e => methods.includes(e.method))
+        matchingEncounters = dbEncounters.filter(e => methods.includes(e.method))
 
-        if (matchingEnc.length > 0) {
-          isShinyDisabled = matchingEnc.every(e => e.shinyLocked || e.shiny === 'Never')
-          isAlphaDisabled = matchingEnc.every(e => !(e.alpha ?? e.isAlpha))
-          minAllowedLevel = Math.min(...matchingEnc.map(e => e.minLevel ?? e.levelMin ?? 1))
-          maxAllowedLevel = Math.max(...matchingEnc.map(e => e.maxLevel ?? e.levelMax ?? 100))
-          forcedBall = matchingEnc.find(e => e.fixedBall)?.fixedBall || null
+        if (matchingEncounters.length > 0) {
+          if (selectedEncounterId) {
+            selectedEncounter = matchingEncounters.find(e => e.id === selectedEncounterId) || null
+          }
+          if (!selectedEncounter) {
+            selectedEncounter = matchingEncounters[0]
+          }
+
+          if (selectedEncounter) {
+            isShinyDisabled = selectedEncounter.shinyLocked || selectedEncounter.shiny === 'Never'
+            isAlphaDisabled = !(selectedEncounter.alpha ?? selectedEncounter.isAlpha)
+            minAllowedLevel = selectedEncounter.minLevel ?? selectedEncounter.levelMin ?? 1
+            maxAllowedLevel = selectedEncounter.maxLevel ?? selectedEncounter.levelMax ?? 100
+            forcedBall = selectedEncounter.fixedBall || null
+          }
         }
       } else {
         // Fallback when encounters haven't loaded yet
@@ -180,7 +201,9 @@ export function useEncounterRules(
       maxAllowedLevel,
       disabledFeatures: gameRules.disabledFeatures || [],
       disabledOrigins,
-      speciesRules
+      speciesRules,
+      matchingEncounters,
+      selectedEncounter
     }
-  }, [gameVersion, origin, pokemonSlug, dbEncounters])
+  }, [gameVersion, origin, pokemonSlug, dbEncounters, selectedEncounterId])
 }

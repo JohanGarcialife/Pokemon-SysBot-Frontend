@@ -199,6 +199,7 @@ export interface PokemonBuild {
   pokeball: string
   heldItem: string
   origin: string
+  encounterId?: string
 }
 
 

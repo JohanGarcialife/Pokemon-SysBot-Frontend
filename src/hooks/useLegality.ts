@@ -75,7 +75,10 @@ export function useLegality(build: PokemonBuild | null, gameVersion?: string): U
             shiny: build.shiny,
             alpha: build.alpha,
             gender: build.gender === 'male' ? 'Male' : build.gender === 'female' ? 'Female' : 'Genderless',
-            teraType: build.teraType
+            teraType: build.teraType,
+            gameVersion: gameVersion === 'legends-za' ? undefined : (gameVersion === 'scarlet' ? 'Scarlet' : 'Violet'),
+            origin: build.origin,
+            encounterId: (build as any).encounterId
           })
         })
 
