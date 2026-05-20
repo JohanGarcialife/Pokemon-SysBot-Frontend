@@ -1,0 +1,1032 @@
+{
+  "version": "pkdex-home-events-important-v3-2026-05-21",
+  "purpose": "Perfiles HOME/Mystery Gift importantes para generar comandos SysBot/ALM concretos. Solo parche; no sustituye la pagina completa.",
+  "encoding": "UTF-8. Los OT japoneses/coreanos deben guardarse como texto real, no como \\uXXXX.",
+  "important": [
+    "No mandar HOME generico para eventos shiny con nivel/OT/TID/Ball fijos.",
+    "Si el perfil tiene OT/TID, SysBot requiere AllowTrainerDataOverride = true.",
+    "Si el evento no existe en MGDBPath, ALM puede buscar un encuentro nativo y fallar.",
+    "Para eventos no activos en la base ZA/SV, dejar enabled=false o games=[] hasta que la especie exista en el juego destino."
+  ],
+  "profiles": [
+    {
+      "id": "home-ultra-shiny-groudon-jpn",
+      "enabled": true,
+      "species": 383,
+      "speciesName": "Groudon",
+      "games": [
+        "za",
+        "sv"
+      ],
+      "match": {
+        "originType": [
+          "home-event-transfer",
+          "home-legal-transfer",
+          "home-profile",
+          "home"
+        ],
+        "locationIncludes": [
+          "HOME - Evento Ultra Shiny Groudon JPN",
+          "Evento Ultra Shiny Groudon JPN",
+          "Groudon"
+        ],
+        "profileIncludes": [
+          "HOME - Evento Ultra Shiny Groudon JPN",
+          "Evento Ultra Shiny Groudon JPN"
+        ]
+      },
+      "displayLabel": "HOME - Evento Ultra Shiny Groudon JPN",
+      "sysbot": {
+        "speciesLine": "Groudon",
+        "requiredLines": [
+          "Ability: Drought",
+          "Level: 60",
+          "Shiny: Yes",
+          "Language: Japanese",
+          "OT: ウルトラ",
+          "TID: 180113",
+          "Ball: Cherish Ball"
+        ],
+        "natureMode": "selected-or-default",
+        "defaultNature": "Hardy",
+        "omitGenderIfRandom": true,
+        "omitHeldItemIfNone": true,
+        "forceLevel": 60,
+        "forceShiny": true,
+        "forceBall": "Cherish Ball",
+        "notes": "Evento HOME/Mystery Gift concreto. Si SysBot lo rechaza, revisar MGDBPath y AllowTrainerDataOverride."
+      },
+      "eventFacts": {
+        "ot": "ウルトラ",
+        "tid": "180113",
+        "level": 60,
+        "ball": "Cherish Ball",
+        "ability": "Drought",
+        "nature": "Random",
+        "language": "Japanese"
+      },
+      "source": "https://projectpokemon.org/home/files/file/2527-ultras-shiny-groudon/"
+    },
+    {
+      "id": "home-ultra-shiny-groudon-kor",
+      "enabled": true,
+      "species": 383,
+      "speciesName": "Groudon",
+      "games": [
+        "za",
+        "sv"
+      ],
+      "match": {
+        "originType": [
+          "home-event-transfer",
+          "home-legal-transfer",
+          "home-profile",
+          "home"
+        ],
+        "locationIncludes": [
+          "HOME - Evento Ultra Shiny Groudon KOR",
+          "Evento Ultra Shiny Groudon KOR",
+          "Groudon"
+        ],
+        "profileIncludes": [
+          "HOME - Evento Ultra Shiny Groudon KOR",
+          "Evento Ultra Shiny Groudon KOR"
+        ]
+      },
+      "displayLabel": "HOME - Evento Ultra Shiny Groudon KOR",
+      "sysbot": {
+        "speciesLine": "Groudon",
+        "requiredLines": [
+          "Ability: Drought",
+          "Level: 60",
+          "Shiny: Yes",
+          "Language: Korean",
+          "OT: 울트라",
+          "TID: 180127",
+          "Ball: Cherish Ball"
+        ],
+        "natureMode": "selected-or-default",
+        "defaultNature": "Hardy",
+        "omitGenderIfRandom": true,
+        "omitHeldItemIfNone": true,
+        "forceLevel": 60,
+        "forceShiny": true,
+        "forceBall": "Cherish Ball",
+        "notes": "Evento HOME/Mystery Gift concreto. Si SysBot lo rechaza, revisar MGDBPath y AllowTrainerDataOverride."
+      },
+      "eventFacts": {
+        "ot": "울트라",
+        "tid": "180127",
+        "level": 60,
+        "ball": "Cherish Ball",
+        "ability": "Drought",
+        "nature": "Random",
+        "language": "Korean"
+      },
+      "source": "https://projectpokemon.org/home/files/file/2542-ultras-shiny-groudon/"
+    },
+    {
+      "id": "home-ultra-shiny-kyogre-jpn",
+      "enabled": true,
+      "species": 382,
+      "speciesName": "Kyogre",
+      "games": [
+        "za",
+        "sv"
+      ],
+      "match": {
+        "originType": [
+          "home-event-transfer",
+          "home-legal-transfer",
+          "home-profile",
+          "home"
+        ],
+        "locationIncludes": [
+          "HOME - Evento Ultra Shiny Kyogre JPN",
+          "Evento Ultra Shiny Kyogre JPN",
+          "Kyogre"
+        ],
+        "profileIncludes": [
+          "HOME - Evento Ultra Shiny Kyogre JPN",
+          "Evento Ultra Shiny Kyogre JPN"
+        ]
+      },
+      "displayLabel": "HOME - Evento Ultra Shiny Kyogre JPN",
+      "sysbot": {
+        "speciesLine": "Kyogre",
+        "requiredLines": [
+          "Ability: Drizzle",
+          "Level: 60",
+          "Shiny: Yes",
+          "Language: Japanese",
+          "OT: ウルトラ",
+          "TID: 180113",
+          "Ball: Cherish Ball"
+        ],
+        "natureMode": "selected-or-default",
+        "defaultNature": "Hardy",
+        "omitGenderIfRandom": true,
+        "omitHeldItemIfNone": true,
+        "forceLevel": 60,
+        "forceShiny": true,
+        "forceBall": "Cherish Ball",
+        "notes": "Evento HOME/Mystery Gift concreto. Si SysBot lo rechaza, revisar MGDBPath y AllowTrainerDataOverride."
+      },
+      "eventFacts": {
+        "ot": "ウルトラ",
+        "tid": "180113",
+        "level": 60,
+        "ball": "Cherish Ball",
+        "ability": "Drizzle",
+        "nature": "Random",
+        "language": "Japanese"
+      },
+      "source": "https://projectpokemon.org/home/files/file/2528-ultras-shiny-kyogre/"
+    },
+    {
+      "id": "home-ultra-shiny-kyogre-kor",
+      "enabled": true,
+      "species": 382,
+      "speciesName": "Kyogre",
+      "games": [
+        "za",
+        "sv"
+      ],
+      "match": {
+        "originType": [
+          "home-event-transfer",
+          "home-legal-transfer",
+          "home-profile",
+          "home"
+        ],
+        "locationIncludes": [
+          "HOME - Evento Ultra Shiny Kyogre KOR",
+          "Evento Ultra Shiny Kyogre KOR",
+          "Kyogre"
+        ],
+        "profileIncludes": [
+          "HOME - Evento Ultra Shiny Kyogre KOR",
+          "Evento Ultra Shiny Kyogre KOR"
+        ]
+      },
+      "displayLabel": "HOME - Evento Ultra Shiny Kyogre KOR",
+      "sysbot": {
+        "speciesLine": "Kyogre",
+        "requiredLines": [
+          "Ability: Drizzle",
+          "Level: 60",
+          "Shiny: Yes",
+          "Language: Korean",
+          "OT: 울트라",
+          "TID: 180127",
+          "Ball: Cherish Ball"
+        ],
+        "natureMode": "selected-or-default",
+        "defaultNature": "Hardy",
+        "omitGenderIfRandom": true,
+        "omitHeldItemIfNone": true,
+        "forceLevel": 60,
+        "forceShiny": true,
+        "forceBall": "Cherish Ball",
+        "notes": "Evento HOME/Mystery Gift concreto. Si SysBot lo rechaza, revisar MGDBPath y AllowTrainerDataOverride."
+      },
+      "eventFacts": {
+        "ot": "울트라",
+        "tid": "180127",
+        "level": 60,
+        "ball": "Cherish Ball",
+        "ability": "Drizzle",
+        "nature": "Random",
+        "language": "Korean"
+      },
+      "source": "https://projectpokemon.org/home/files/file/2541-ultras-shiny-kyogre/"
+    },
+    {
+      "id": "home-galileo-shiny-rayquaza",
+      "enabled": true,
+      "species": 384,
+      "speciesName": "Rayquaza",
+      "games": [
+        "za",
+        "sv"
+      ],
+      "match": {
+        "originType": [
+          "home-event-transfer",
+          "home-legal-transfer",
+          "home-profile",
+          "home"
+        ],
+        "locationIncludes": [
+          "HOME - Evento Galileo Shiny Rayquaza",
+          "Evento Galileo Shiny Rayquaza",
+          "Rayquaza"
+        ],
+        "profileIncludes": [
+          "HOME - Evento Galileo Shiny Rayquaza",
+          "Evento Galileo Shiny Rayquaza"
+        ]
+      },
+      "displayLabel": "HOME - Evento Galileo Shiny Rayquaza",
+      "sysbot": {
+        "speciesLine": "Rayquaza",
+        "requiredLines": [
+          "Ability: Air Lock",
+          "Level: 70",
+          "Shiny: Yes",
+          "Language: English",
+          "OT: Galileo",
+          "TID: 08055",
+          "Ball: Cherish Ball",
+          "Item: Dragon Fang"
+        ],
+        "natureMode": "selected-or-default",
+        "defaultNature": "Hardy",
+        "omitGenderIfRandom": true,
+        "omitHeldItemIfNone": true,
+        "forceLevel": 70,
+        "forceShiny": true,
+        "forceBall": "Cherish Ball",
+        "notes": "Evento HOME/Mystery Gift concreto. Si SysBot lo rechaza, revisar MGDBPath y AllowTrainerDataOverride."
+      },
+      "eventFacts": {
+        "ot": "Galileo",
+        "tid": "08055",
+        "level": 70,
+        "ball": "Cherish Ball",
+        "ability": "Air Lock",
+        "nature": "Random",
+        "heldItem": "Dragon Fang"
+      },
+      "source": "https://projectpokemon.org/home/files/file/1015-0547-oras-galileo-shiny-rayquaza-spa/"
+    },
+    {
+      "id": "home-movie-2013-shiny-genesect-jpn",
+      "enabled": true,
+      "species": 649,
+      "speciesName": "Genesect",
+      "games": [
+        "za"
+      ],
+      "match": {
+        "originType": [
+          "home-event-transfer",
+          "home-legal-transfer",
+          "home-profile",
+          "home"
+        ],
+        "locationIncludes": [
+          "HOME - Movie 2013 Shiny Genesect JPN",
+          "Movie 2013 Shiny Genesect JPN",
+          "Genesect"
+        ],
+        "profileIncludes": [
+          "HOME - Movie 2013 Shiny Genesect JPN",
+          "Movie 2013 Shiny Genesect JPN"
+        ]
+      },
+      "displayLabel": "HOME - Movie 2013 Shiny Genesect JPN",
+      "sysbot": {
+        "speciesLine": "Genesect",
+        "requiredLines": [
+          "Ability: Download",
+          "Level: 100",
+          "Shiny: Yes",
+          "Language: Japanese",
+          "OT: えいがかん",
+          "TID: 07133",
+          "Ball: Cherish Ball",
+          "Item: Choice Scarf",
+          "- Extreme Speed",
+          "- Techno Blast",
+          "- Blaze Kick",
+          "- Shift Gear"
+        ],
+        "natureMode": "fixed",
+        "defaultNature": "Hasty",
+        "omitGenderIfRandom": true,
+        "omitHeldItemIfNone": true,
+        "forceLevel": 100,
+        "forceShiny": true,
+        "forceBall": "Cherish Ball",
+        "notes": "Evento HOME/Mystery Gift concreto. Si SysBot lo rechaza, revisar MGDBPath y AllowTrainerDataOverride.",
+        "fixedNature": "Hasty"
+      },
+      "eventFacts": {
+        "ot": "えいがかん",
+        "tid": "07133",
+        "level": 100,
+        "ball": "Cherish Ball",
+        "ability": "Download",
+        "nature": "Hasty",
+        "heldItem": "Choice Scarf"
+      },
+      "source": "https://projectpokemon.org/home/files/file/1244-movie-2013-genesect/"
+    },
+    {
+      "id": "home-pokecen-shiny-diancie-jpn",
+      "enabled": true,
+      "species": 719,
+      "speciesName": "Diancie",
+      "games": [
+        "za"
+      ],
+      "match": {
+        "originType": [
+          "home-event-transfer",
+          "home-legal-transfer",
+          "home-profile",
+          "home"
+        ],
+        "locationIncludes": [
+          "HOME - Pokecen Shiny Diancie JPN",
+          "Pokecen Shiny Diancie JPN",
+          "Diancie"
+        ],
+        "profileIncludes": [
+          "HOME - Pokecen Shiny Diancie JPN",
+          "Pokecen Shiny Diancie JPN"
+        ]
+      },
+      "displayLabel": "HOME - Pokecen Shiny Diancie JPN",
+      "sysbot": {
+        "speciesLine": "Diancie",
+        "requiredLines": [
+          "Ability: Clear Body",
+          "Level: 50",
+          "Shiny: Yes",
+          "Language: Japanese",
+          "OT: ポケセン",
+          "TID: 12125",
+          "Ball: Cherish Ball",
+          "Item: Normal Gem",
+          "- Diamond Storm",
+          "- Moonblast",
+          "- Reflect",
+          "- Return"
+        ],
+        "natureMode": "selected-or-default",
+        "defaultNature": "Hardy",
+        "omitGenderIfRandom": true,
+        "omitHeldItemIfNone": true,
+        "forceLevel": 50,
+        "forceShiny": true,
+        "forceBall": "Cherish Ball",
+        "notes": "Evento HOME/Mystery Gift concreto. Si SysBot lo rechaza, revisar MGDBPath y AllowTrainerDataOverride."
+      },
+      "eventFacts": {
+        "ot": "ポケセン",
+        "tid": "12125",
+        "level": 50,
+        "ball": "Cherish Ball",
+        "ability": "Clear Body",
+        "nature": "Random",
+        "heldItem": "Normal Gem"
+      },
+      "source": "https://projectpokemon.org/home/files/file/693-0131-oras-%E3%83%9D%E3%82%B1%E3%82%BB%E3%83%B3-pokecen-shiny-diancie-jpn/"
+    },
+    {
+      "id": "home-xyz-shiny-xerneas",
+      "enabled": true,
+      "species": 716,
+      "speciesName": "Xerneas",
+      "games": [
+        "za"
+      ],
+      "match": {
+        "originType": [
+          "home-event-transfer",
+          "home-legal-transfer",
+          "home-profile",
+          "home"
+        ],
+        "locationIncludes": [
+          "HOME - XYZ Shiny Xerneas",
+          "XYZ Shiny Xerneas",
+          "Xerneas"
+        ],
+        "profileIncludes": [
+          "HOME - XYZ Shiny Xerneas",
+          "XYZ Shiny Xerneas"
+        ]
+      },
+      "displayLabel": "HOME - XYZ Shiny Xerneas",
+      "sysbot": {
+        "speciesLine": "Xerneas",
+        "requiredLines": [
+          "Ability: Fairy Aura",
+          "Level: 100",
+          "Shiny: Yes",
+          "Language: English",
+          "OT: XYZ",
+          "TID: 05116",
+          "Ball: Cherish Ball"
+        ],
+        "natureMode": "selected-or-default",
+        "defaultNature": "Hardy",
+        "omitGenderIfRandom": true,
+        "omitHeldItemIfNone": true,
+        "forceLevel": 100,
+        "forceShiny": true,
+        "forceBall": "Cherish Ball",
+        "notes": "Evento HOME/Mystery Gift concreto. Si SysBot lo rechaza, revisar MGDBPath y AllowTrainerDataOverride."
+      },
+      "eventFacts": {
+        "ot": "XYZ",
+        "tid": "05116",
+        "level": 100,
+        "ball": "Cherish Ball",
+        "ability": "Fairy Aura",
+        "nature": "Random"
+      },
+      "source": "https://projectpokemon.org/home/files/file/464-0576-xyoras-xyz-shiny-xerneas-us-eng/"
+    },
+    {
+      "id": "home-xyz-shiny-yveltal",
+      "enabled": true,
+      "species": 717,
+      "speciesName": "Yveltal",
+      "games": [
+        "za"
+      ],
+      "match": {
+        "originType": [
+          "home-event-transfer",
+          "home-legal-transfer",
+          "home-profile",
+          "home"
+        ],
+        "locationIncludes": [
+          "HOME - XYZ Shiny Yveltal",
+          "XYZ Shiny Yveltal",
+          "Yveltal"
+        ],
+        "profileIncludes": [
+          "HOME - XYZ Shiny Yveltal",
+          "XYZ Shiny Yveltal"
+        ]
+      },
+      "displayLabel": "HOME - XYZ Shiny Yveltal",
+      "sysbot": {
+        "speciesLine": "Yveltal",
+        "requiredLines": [
+          "Ability: Dark Aura",
+          "Level: 100",
+          "Shiny: Yes",
+          "Language: English",
+          "OT: XYZ",
+          "TID: 05206",
+          "Ball: Cherish Ball"
+        ],
+        "natureMode": "selected-or-default",
+        "defaultNature": "Hardy",
+        "omitGenderIfRandom": true,
+        "omitHeldItemIfNone": true,
+        "forceLevel": 100,
+        "forceShiny": true,
+        "forceBall": "Cherish Ball",
+        "notes": "Evento HOME/Mystery Gift concreto. Si SysBot lo rechaza, revisar MGDBPath y AllowTrainerDataOverride."
+      },
+      "eventFacts": {
+        "ot": "XYZ",
+        "tid": "05206",
+        "level": 100,
+        "ball": "Cherish Ball",
+        "ability": "Dark Aura",
+        "nature": "Random"
+      },
+      "source": "https://projectpokemon.org/home/files/file/466-0577-xyoras-xyz-shiny-yveltal-us-eng/"
+    },
+    {
+      "id": "home-2018-legends-shiny-zygarde",
+      "enabled": true,
+      "species": 718,
+      "speciesName": "Zygarde",
+      "games": [
+        "za"
+      ],
+      "match": {
+        "originType": [
+          "home-event-transfer",
+          "home-legal-transfer",
+          "home-profile",
+          "home"
+        ],
+        "locationIncludes": [
+          "HOME - 2018 Legends Shiny Zygarde",
+          "2018 Legends Shiny Zygarde",
+          "Zygarde"
+        ],
+        "profileIncludes": [
+          "HOME - 2018 Legends Shiny Zygarde",
+          "2018 Legends Shiny Zygarde"
+        ]
+      },
+      "displayLabel": "HOME - 2018 Legends Shiny Zygarde",
+      "sysbot": {
+        "speciesLine": "Zygarde",
+        "requiredLines": [
+          "Ability: Aura Break",
+          "Level: 100",
+          "Shiny: Yes",
+          "Language: English",
+          "OT: 2018 Legends",
+          "TID: 060218",
+          "Ball: Cherish Ball",
+          "Item: Gold Bottle Cap",
+          "- Thousand Arrows",
+          "- Outrage",
+          "- Extreme Speed",
+          "- Dragon Dance"
+        ],
+        "natureMode": "selected-or-default",
+        "defaultNature": "Hardy",
+        "omitGenderIfRandom": true,
+        "omitHeldItemIfNone": true,
+        "forceLevel": 100,
+        "forceShiny": true,
+        "forceBall": "Cherish Ball",
+        "notes": "Evento HOME/Mystery Gift concreto. Si SysBot lo rechaza, revisar MGDBPath y AllowTrainerDataOverride."
+      },
+      "eventFacts": {
+        "ot": "2018 Legends",
+        "tid": "060218",
+        "level": 100,
+        "ball": "Cherish Ball",
+        "ability": "Aura Break",
+        "nature": "Random",
+        "heldItem": "Gold Bottle Cap"
+      },
+      "source": "https://projectpokemon.org/home/files/file/2825-2018-legends-shiny-zygarde/"
+    },
+    {
+      "id": "home-shiny-zeraora",
+      "enabled": true,
+      "species": 807,
+      "speciesName": "Zeraora",
+      "games": [
+        "za"
+      ],
+      "match": {
+        "originType": [
+          "home-event-transfer",
+          "home-legal-transfer",
+          "home-profile",
+          "home"
+        ],
+        "locationIncludes": [
+          "HOME - Shiny Zeraora HOME Gift",
+          "Shiny Zeraora HOME Gift",
+          "Zeraora"
+        ],
+        "profileIncludes": [
+          "HOME - Shiny Zeraora HOME Gift",
+          "Shiny Zeraora HOME Gift"
+        ]
+      },
+      "displayLabel": "HOME - Shiny Zeraora HOME Gift",
+      "sysbot": {
+        "speciesLine": "Zeraora",
+        "requiredLines": [
+          "Ability: Volt Absorb",
+          "Level: 100",
+          "Shiny: Yes",
+          "Language: English",
+          "OT: HOME",
+          "TID: 200630",
+          "Ball: Cherish Ball",
+          "- Plasma Fists",
+          "- Close Combat",
+          "- Blaze Kick",
+          "- Outrage"
+        ],
+        "natureMode": "fixed",
+        "defaultNature": "Hasty",
+        "omitGenderIfRandom": true,
+        "omitHeldItemIfNone": true,
+        "forceLevel": 100,
+        "forceShiny": true,
+        "forceBall": "Cherish Ball",
+        "notes": "Evento HOME/Mystery Gift concreto. Si SysBot lo rechaza, revisar MGDBPath y AllowTrainerDataOverride.",
+        "fixedNature": "Hasty"
+      },
+      "eventFacts": {
+        "ot": "HOME",
+        "tid": "200630",
+        "level": 100,
+        "ball": "Cherish Ball",
+        "ability": "Volt Absorb",
+        "nature": "Hasty"
+      },
+      "source": "https://projectpokemon.org/home/files/file/4210-shiny-zeraora/"
+    },
+    {
+      "id": "home-eclipse-shiny-solgaleo",
+      "enabled": true,
+      "species": 791,
+      "speciesName": "Solgaleo",
+      "games": [
+        "sv"
+      ],
+      "match": {
+        "originType": [
+          "home-event-transfer",
+          "home-legal-transfer",
+          "home-profile",
+          "home"
+        ],
+        "locationIncludes": [
+          "HOME - Eclipse Shiny Solgaleo",
+          "Eclipse Shiny Solgaleo",
+          "Solgaleo"
+        ],
+        "profileIncludes": [
+          "HOME - Eclipse Shiny Solgaleo",
+          "Eclipse Shiny Solgaleo"
+        ]
+      },
+      "displayLabel": "HOME - Eclipse Shiny Solgaleo",
+      "sysbot": {
+        "speciesLine": "Solgaleo",
+        "requiredLines": [
+          "Ability: Full Metal Body",
+          "Level: 60",
+          "Shiny: Yes",
+          "Language: English",
+          "OT: Eclipse",
+          "TID: 100419",
+          "Ball: Cherish Ball",
+          "Item: Gold Bottle Cap"
+        ],
+        "natureMode": "selected-or-default",
+        "defaultNature": "Hardy",
+        "omitGenderIfRandom": true,
+        "omitHeldItemIfNone": true,
+        "forceLevel": 60,
+        "forceShiny": true,
+        "forceBall": "Cherish Ball",
+        "notes": "Evento HOME/Mystery Gift concreto. Si SysBot lo rechaza, revisar MGDBPath y AllowTrainerDataOverride."
+      },
+      "eventFacts": {
+        "ot": "Eclipse",
+        "tid": "100419",
+        "level": 60,
+        "ball": "Cherish Ball",
+        "ability": "Full Metal Body",
+        "nature": "Random",
+        "heldItem": "Gold Bottle Cap"
+      },
+      "source": "https://projectpokemon.org/home/files/file/3835-eclipse-shiny-solgaleo/"
+    },
+    {
+      "id": "home-eclipse-shiny-lunala",
+      "enabled": true,
+      "species": 792,
+      "speciesName": "Lunala",
+      "games": [
+        "sv"
+      ],
+      "match": {
+        "originType": [
+          "home-event-transfer",
+          "home-legal-transfer",
+          "home-profile",
+          "home"
+        ],
+        "locationIncludes": [
+          "HOME - Eclipse Shiny Lunala",
+          "Eclipse Shiny Lunala",
+          "Lunala"
+        ],
+        "profileIncludes": [
+          "HOME - Eclipse Shiny Lunala",
+          "Eclipse Shiny Lunala"
+        ]
+      },
+      "displayLabel": "HOME - Eclipse Shiny Lunala",
+      "sysbot": {
+        "speciesLine": "Lunala",
+        "requiredLines": [
+          "Ability: Shadow Shield",
+          "Level: 60",
+          "Shiny: Yes",
+          "Language: English",
+          "OT: Eclipse",
+          "TID: 100419",
+          "Ball: Cherish Ball",
+          "Item: Gold Bottle Cap"
+        ],
+        "natureMode": "selected-or-default",
+        "defaultNature": "Hardy",
+        "omitGenderIfRandom": true,
+        "omitHeldItemIfNone": true,
+        "forceLevel": 60,
+        "forceShiny": true,
+        "forceBall": "Cherish Ball",
+        "notes": "Evento HOME/Mystery Gift concreto. Si SysBot lo rechaza, revisar MGDBPath y AllowTrainerDataOverride."
+      },
+      "eventFacts": {
+        "ot": "Eclipse",
+        "tid": "100419",
+        "level": 60,
+        "ball": "Cherish Ball",
+        "ability": "Shadow Shield",
+        "nature": "Random",
+        "heldItem": "Gold Bottle Cap"
+      },
+      "source": "https://projectpokemon.org/home/files/file/3844-eclipse-shiny-lunala/"
+    },
+    {
+      "id": "home-secret-club-shiny-necrozma-jpn",
+      "enabled": true,
+      "species": 800,
+      "speciesName": "Necrozma",
+      "games": [
+        "sv"
+      ],
+      "match": {
+        "originType": [
+          "home-event-transfer",
+          "home-legal-transfer",
+          "home-profile",
+          "home"
+        ],
+        "locationIncludes": [
+          "HOME - Secret Club Shiny Necrozma JPN",
+          "Secret Club Shiny Necrozma JPN",
+          "Necrozma"
+        ],
+        "profileIncludes": [
+          "HOME - Secret Club Shiny Necrozma JPN",
+          "Secret Club Shiny Necrozma JPN"
+        ]
+      },
+      "displayLabel": "HOME - Secret Club Shiny Necrozma JPN",
+      "sysbot": {
+        "speciesLine": "Necrozma",
+        "requiredLines": [
+          "Ability: Prism Armor",
+          "Level: 75",
+          "Shiny: Yes",
+          "Language: Japanese",
+          "OT: ひみつ",
+          "TID: 000132",
+          "Ball: Cherish Ball",
+          "- Light Screen",
+          "- Substitute",
+          "- Moonlight"
+        ],
+        "natureMode": "selected-or-default",
+        "defaultNature": "Hardy",
+        "omitGenderIfRandom": true,
+        "omitHeldItemIfNone": true,
+        "forceLevel": 75,
+        "forceShiny": true,
+        "forceBall": "Cherish Ball",
+        "notes": "Evento HOME/Mystery Gift concreto. Si SysBot lo rechaza, revisar MGDBPath y AllowTrainerDataOverride."
+      },
+      "eventFacts": {
+        "ot": "ひみつ",
+        "tid": "000132",
+        "level": 75,
+        "ball": "Cherish Ball",
+        "ability": "Prism Armor",
+        "nature": "Random"
+      },
+      "source": "https://projectpokemon.org/home/files/file/3823-secret-club-necrozma/"
+    },
+    {
+      "id": "home-legal-shiny-charizard-line",
+      "enabled": true,
+      "species": 6,
+      "speciesName": "Charizard",
+      "games": [
+        "za",
+        "sv"
+      ],
+      "match": {
+        "originType": [
+          "home-legal-transfer",
+          "home"
+        ],
+        "locationIncludes": [
+          "Charizard shiny legal de juego anterior",
+          "Legal Shiny Charizard"
+        ],
+        "profileIncludes": [
+          "Charizard shiny legal",
+          "Legal Shiny Charizard"
+        ]
+      },
+      "displayLabel": "HOME - Charizard shiny legal de juego anterior",
+      "sysbot": {
+        "speciesLine": "Charizard",
+        "recommendedLines": [
+          "Shiny: Yes",
+          "Level: 36"
+        ],
+        "natureMode": "selected-or-default",
+        "defaultNature": "Hardy",
+        "omitGenderIfRandom": true,
+        "omitHeldItemIfNone": true,
+        "minLevel": 36,
+        "doNotForceOT": true,
+        "doNotForceTID": true,
+        "notes": "No es Mystery Gift concreto. No mandar OT/TID inventado; dejar que ALM escoja un origen legal compatible."
+      },
+      "eventFacts": {
+        "type": "generic-legal-transfer",
+        "minLevel": 36
+      },
+      "source": "PKHeX/ALM debe resolver el origen legal final."
+    },
+    {
+      "id": "home-international-shiny-zacian",
+      "enabled": false,
+      "inactiveReason": "Plantilla de reserva. No activar salvo que la especie exista en la base del juego destino.",
+      "species": 888,
+      "speciesName": "Zacian",
+      "games": [],
+      "displayLabel": "HOME - International Shiny Zacian",
+      "match": {
+        "originType": [
+          "home-event-transfer",
+          "home"
+        ]
+      },
+      "sysbot": {
+        "speciesLine": "Zacian",
+        "requiredLines": [
+          "Ability: Intrepid Sword",
+          "Level: 100",
+          "Shiny: Yes",
+          "Language: English",
+          "OT: Lancer",
+          "TID: 211022",
+          "Ball: Cherish Ball",
+          "Item: Rusted Sword"
+        ],
+        "defaultNature": "Adamant",
+        "omitGenderIfRandom": true,
+        "omitHeldItemIfNone": true,
+        "natureMode": "fixed",
+        "fixedNature": "Adamant"
+      },
+      "source": "https://projectpokemon.org/home/files/file/4612-international-shiny-zacian/"
+    },
+    {
+      "id": "home-international-shiny-zamazenta",
+      "enabled": false,
+      "inactiveReason": "Plantilla de reserva. No activar salvo que la especie exista en la base del juego destino.",
+      "species": 889,
+      "speciesName": "Zamazenta",
+      "games": [],
+      "displayLabel": "HOME - International Shiny Zamazenta",
+      "match": {
+        "originType": [
+          "home-event-transfer",
+          "home"
+        ]
+      },
+      "sysbot": {
+        "speciesLine": "Zamazenta",
+        "requiredLines": [
+          "Ability: Dauntless Shield",
+          "Level: 100",
+          "Shiny: Yes",
+          "Language: English",
+          "OT: Arthur",
+          "TID: 211022",
+          "Ball: Cherish Ball",
+          "Item: Rusted Shield"
+        ],
+        "defaultNature": "Adamant",
+        "omitGenderIfRandom": true,
+        "omitHeldItemIfNone": true,
+        "natureMode": "fixed",
+        "fixedNature": "Adamant"
+      },
+      "source": "https://projectpokemon.org/home/files/file/4613-international-shiny-zamazenta/"
+    },
+    {
+      "id": "home-galar-shiny-eternatus",
+      "enabled": false,
+      "inactiveReason": "Plantilla de reserva. No activar salvo que la especie exista en la base del juego destino.",
+      "species": 890,
+      "speciesName": "Eternatus",
+      "games": [],
+      "displayLabel": "HOME - Galar Shiny Eternatus",
+      "match": {
+        "originType": [
+          "home-event-transfer",
+          "home"
+        ]
+      },
+      "sysbot": {
+        "speciesLine": "Eternatus",
+        "requiredLines": [
+          "Ability: Pressure",
+          "Level: 100",
+          "Shiny: Yes",
+          "Language: English",
+          "OT: Galar",
+          "TID: 221118",
+          "Ball: Cherish Ball",
+          "- Eternabeam",
+          "- Dynamax Cannon",
+          "- Sludge Bomb",
+          "- Flamethrower"
+        ],
+        "defaultNature": "Timid",
+        "omitGenderIfRandom": true,
+        "omitHeldItemIfNone": true,
+        "natureMode": "fixed",
+        "fixedNature": "Timid"
+      },
+      "source": "https://projectpokemon.org/home/files/file/4819-galar-shiny-eternatus/"
+    },
+    {
+      "id": "home-jungle-shiny-celebi",
+      "enabled": false,
+      "inactiveReason": "Plantilla de reserva. No activar salvo que la especie exista en la base del juego destino.",
+      "species": 251,
+      "speciesName": "Celebi",
+      "games": [],
+      "displayLabel": "HOME - Jungle Shiny Celebi",
+      "match": {
+        "originType": [
+          "home-event-transfer",
+          "home"
+        ]
+      },
+      "sysbot": {
+        "speciesLine": "Celebi",
+        "requiredLines": [
+          "Ability: Natural Cure",
+          "Level: 60",
+          "Shiny: Yes",
+          "Language: English",
+          "OT: Jungle",
+          "TID: 211006",
+          "Ball: Cherish Ball",
+          "Item: Lucky Egg"
+        ],
+        "defaultNature": "Quirky",
+        "omitGenderIfRandom": true,
+        "omitHeldItemIfNone": true,
+        "natureMode": "fixed",
+        "fixedNature": "Quirky"
+      },
+      "source": "https://projectpokemon.org/home/files/file/4586-western-release-jungle-celebi/"
+    }
+  ],
+  "genericHomePolicy": {
+    "homeGenericShouldNotForceOT": true,
+    "homeGenericShouldNotForceTID": true,
+    "homeGenericShouldUseAutoLegalOrigin": true,
+    "whenNatureRandom": "usar la naturaleza elegida por el usuario; si es Random, usar el defaultNature del perfil o Hardy. Nunca enviar Random Nature.",
+    "whenGenderRandom": "omitir Gender para que ALM/PKHeX elija uno legal.",
+    "whenBallAuto": "omitir Ball si no es fija. Solo enviar Ball si el evento/perfil la fija o el usuario elige una legal.",
+    "alphaRule": "Alpha: Yes solo en LA/LZA cuando el encuentro/perfil lo permite. No mandar Alpha en SV."
+  }
+}

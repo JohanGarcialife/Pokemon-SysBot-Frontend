@@ -1,0 +1,311 @@
+{
+  "version": "pkdex-home-events-important-v3-2026-05-21",
+  "profilesToMerge": [
+    {
+      "species": 383,
+      "name": "Groudon",
+      "games": [
+        "za",
+        "sv"
+      ],
+      "profile": "HOME - Evento Ultra Shiny Groudon JPN",
+      "method": "HOME Event Transfer",
+      "level": 60,
+      "levelMin": 60,
+      "levelMax": 60,
+      "ball": "Cherish Ball",
+      "shiny": "Always",
+      "forceShiny": true,
+      "ability": "Drought",
+      "nature": "Random",
+      "heldItem": null,
+      "homeProfileId": "home-ultra-shiny-groudon-jpn",
+      "sourceNote": "Perfil HOME/evento importante. Requiere MGDBPath si es Mystery Gift concreto."
+    },
+    {
+      "species": 383,
+      "name": "Groudon",
+      "games": [
+        "za",
+        "sv"
+      ],
+      "profile": "HOME - Evento Ultra Shiny Groudon KOR",
+      "method": "HOME Event Transfer",
+      "level": 60,
+      "levelMin": 60,
+      "levelMax": 60,
+      "ball": "Cherish Ball",
+      "shiny": "Always",
+      "forceShiny": true,
+      "ability": "Drought",
+      "nature": "Random",
+      "heldItem": null,
+      "homeProfileId": "home-ultra-shiny-groudon-kor",
+      "sourceNote": "Perfil HOME/evento importante. Requiere MGDBPath si es Mystery Gift concreto."
+    },
+    {
+      "species": 382,
+      "name": "Kyogre",
+      "games": [
+        "za",
+        "sv"
+      ],
+      "profile": "HOME - Evento Ultra Shiny Kyogre JPN",
+      "method": "HOME Event Transfer",
+      "level": 60,
+      "levelMin": 60,
+      "levelMax": 60,
+      "ball": "Cherish Ball",
+      "shiny": "Always",
+      "forceShiny": true,
+      "ability": "Drizzle",
+      "nature": "Random",
+      "heldItem": null,
+      "homeProfileId": "home-ultra-shiny-kyogre-jpn",
+      "sourceNote": "Perfil HOME/evento importante. Requiere MGDBPath si es Mystery Gift concreto."
+    },
+    {
+      "species": 382,
+      "name": "Kyogre",
+      "games": [
+        "za",
+        "sv"
+      ],
+      "profile": "HOME - Evento Ultra Shiny Kyogre KOR",
+      "method": "HOME Event Transfer",
+      "level": 60,
+      "levelMin": 60,
+      "levelMax": 60,
+      "ball": "Cherish Ball",
+      "shiny": "Always",
+      "forceShiny": true,
+      "ability": "Drizzle",
+      "nature": "Random",
+      "heldItem": null,
+      "homeProfileId": "home-ultra-shiny-kyogre-kor",
+      "sourceNote": "Perfil HOME/evento importante. Requiere MGDBPath si es Mystery Gift concreto."
+    },
+    {
+      "species": 384,
+      "name": "Rayquaza",
+      "games": [
+        "za",
+        "sv"
+      ],
+      "profile": "HOME - Evento Galileo Shiny Rayquaza",
+      "method": "HOME Event Transfer",
+      "level": 70,
+      "levelMin": 70,
+      "levelMax": 70,
+      "ball": "Cherish Ball",
+      "shiny": "Always",
+      "forceShiny": true,
+      "ability": "Air Lock",
+      "nature": "Random",
+      "heldItem": "Dragon Fang",
+      "homeProfileId": "home-galileo-shiny-rayquaza",
+      "sourceNote": "Perfil HOME/evento importante. Requiere MGDBPath si es Mystery Gift concreto."
+    },
+    {
+      "species": 649,
+      "name": "Genesect",
+      "games": [
+        "za"
+      ],
+      "profile": "HOME - Movie 2013 Shiny Genesect JPN",
+      "method": "HOME Event Transfer",
+      "level": 100,
+      "levelMin": 100,
+      "levelMax": 100,
+      "ball": "Cherish Ball",
+      "shiny": "Always",
+      "forceShiny": true,
+      "ability": "Download",
+      "nature": "Hasty",
+      "heldItem": "Choice Scarf",
+      "homeProfileId": "home-movie-2013-shiny-genesect-jpn",
+      "sourceNote": "Perfil HOME/evento importante. Requiere MGDBPath si es Mystery Gift concreto."
+    },
+    {
+      "species": 719,
+      "name": "Diancie",
+      "games": [
+        "za"
+      ],
+      "profile": "HOME - Pokecen Shiny Diancie JPN",
+      "method": "HOME Event Transfer",
+      "level": 50,
+      "levelMin": 50,
+      "levelMax": 50,
+      "ball": "Cherish Ball",
+      "shiny": "Always",
+      "forceShiny": true,
+      "ability": "Clear Body",
+      "nature": "Random",
+      "heldItem": "Normal Gem",
+      "homeProfileId": "home-pokecen-shiny-diancie-jpn",
+      "sourceNote": "Perfil HOME/evento importante. Requiere MGDBPath si es Mystery Gift concreto."
+    },
+    {
+      "species": 716,
+      "name": "Xerneas",
+      "games": [
+        "za"
+      ],
+      "profile": "HOME - XYZ Shiny Xerneas",
+      "method": "HOME Event Transfer",
+      "level": 100,
+      "levelMin": 100,
+      "levelMax": 100,
+      "ball": "Cherish Ball",
+      "shiny": "Always",
+      "forceShiny": true,
+      "ability": "Fairy Aura",
+      "nature": "Random",
+      "heldItem": null,
+      "homeProfileId": "home-xyz-shiny-xerneas",
+      "sourceNote": "Perfil HOME/evento importante. Requiere MGDBPath si es Mystery Gift concreto."
+    },
+    {
+      "species": 717,
+      "name": "Yveltal",
+      "games": [
+        "za"
+      ],
+      "profile": "HOME - XYZ Shiny Yveltal",
+      "method": "HOME Event Transfer",
+      "level": 100,
+      "levelMin": 100,
+      "levelMax": 100,
+      "ball": "Cherish Ball",
+      "shiny": "Always",
+      "forceShiny": true,
+      "ability": "Dark Aura",
+      "nature": "Random",
+      "heldItem": null,
+      "homeProfileId": "home-xyz-shiny-yveltal",
+      "sourceNote": "Perfil HOME/evento importante. Requiere MGDBPath si es Mystery Gift concreto."
+    },
+    {
+      "species": 718,
+      "name": "Zygarde",
+      "games": [
+        "za"
+      ],
+      "profile": "HOME - 2018 Legends Shiny Zygarde",
+      "method": "HOME Event Transfer",
+      "level": 100,
+      "levelMin": 100,
+      "levelMax": 100,
+      "ball": "Cherish Ball",
+      "shiny": "Always",
+      "forceShiny": true,
+      "ability": "Aura Break",
+      "nature": "Random",
+      "heldItem": "Gold Bottle Cap",
+      "homeProfileId": "home-2018-legends-shiny-zygarde",
+      "sourceNote": "Perfil HOME/evento importante. Requiere MGDBPath si es Mystery Gift concreto."
+    },
+    {
+      "species": 807,
+      "name": "Zeraora",
+      "games": [
+        "za"
+      ],
+      "profile": "HOME - Shiny Zeraora HOME Gift",
+      "method": "HOME Event Transfer",
+      "level": 100,
+      "levelMin": 100,
+      "levelMax": 100,
+      "ball": "Cherish Ball",
+      "shiny": "Always",
+      "forceShiny": true,
+      "ability": "Volt Absorb",
+      "nature": "Hasty",
+      "heldItem": null,
+      "homeProfileId": "home-shiny-zeraora",
+      "sourceNote": "Perfil HOME/evento importante. Requiere MGDBPath si es Mystery Gift concreto."
+    },
+    {
+      "species": 791,
+      "name": "Solgaleo",
+      "games": [
+        "sv"
+      ],
+      "profile": "HOME - Eclipse Shiny Solgaleo",
+      "method": "HOME Event Transfer",
+      "level": 60,
+      "levelMin": 60,
+      "levelMax": 60,
+      "ball": "Cherish Ball",
+      "shiny": "Always",
+      "forceShiny": true,
+      "ability": "Full Metal Body",
+      "nature": "Random",
+      "heldItem": "Gold Bottle Cap",
+      "homeProfileId": "home-eclipse-shiny-solgaleo",
+      "sourceNote": "Perfil HOME/evento importante. Requiere MGDBPath si es Mystery Gift concreto."
+    },
+    {
+      "species": 792,
+      "name": "Lunala",
+      "games": [
+        "sv"
+      ],
+      "profile": "HOME - Eclipse Shiny Lunala",
+      "method": "HOME Event Transfer",
+      "level": 60,
+      "levelMin": 60,
+      "levelMax": 60,
+      "ball": "Cherish Ball",
+      "shiny": "Always",
+      "forceShiny": true,
+      "ability": "Shadow Shield",
+      "nature": "Random",
+      "heldItem": "Gold Bottle Cap",
+      "homeProfileId": "home-eclipse-shiny-lunala",
+      "sourceNote": "Perfil HOME/evento importante. Requiere MGDBPath si es Mystery Gift concreto."
+    },
+    {
+      "species": 800,
+      "name": "Necrozma",
+      "games": [
+        "sv"
+      ],
+      "profile": "HOME - Secret Club Shiny Necrozma JPN",
+      "method": "HOME Event Transfer",
+      "level": 75,
+      "levelMin": 75,
+      "levelMax": 75,
+      "ball": "Cherish Ball",
+      "shiny": "Always",
+      "forceShiny": true,
+      "ability": "Prism Armor",
+      "nature": "Random",
+      "heldItem": null,
+      "homeProfileId": "home-secret-club-shiny-necrozma-jpn",
+      "sourceNote": "Perfil HOME/evento importante. Requiere MGDBPath si es Mystery Gift concreto."
+    },
+    {
+      "species": 6,
+      "name": "Charizard",
+      "games": [
+        "za",
+        "sv"
+      ],
+      "profile": "HOME - Charizard shiny legal de juego anterior",
+      "method": "HOME Event Transfer",
+      "level": 36,
+      "levelMin": 36,
+      "levelMax": 100,
+      "ball": "AutoLegal",
+      "shiny": "Allowed",
+      "forceShiny": false,
+      "ability": null,
+      "nature": "Hardy",
+      "heldItem": null,
+      "homeProfileId": "home-legal-shiny-charizard-line",
+      "sourceNote": "Perfil HOME/evento importante. Requiere MGDBPath si es Mystery Gift concreto."
+    }
+  ]
+}

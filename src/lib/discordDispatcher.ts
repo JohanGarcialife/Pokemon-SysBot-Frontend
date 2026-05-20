@@ -1,4 +1,5 @@
 import { buildShowdownText, PokemonBuildPayload } from './showdownBuilder';
+import { formatHomeEventSysbotCommand } from './homeEventPatch';
 
 export interface DispatchResult {
   sent: boolean;
@@ -61,8 +62,16 @@ export async function dispatchTradeCommand(
     return copy;
   });
 
-  // 3. Format Showdown strings
-  const showdownTexts = processedPokemonList.map(p => buildShowdownText(p, game));
+  // 3. Build Showdown text for each Pokémon
+  // Priority: HOME/event profile → normal showdown builder
+  const showdownTexts = processedPokemonList.map(p => {
+    const eventBody = formatHomeEventSysbotCommand(p);
+    if (eventBody) {
+      console.log(`[DiscordDispatcher] Using HOME event profile command for ${p.species}`);
+      return eventBody; // already the full body without the %trade prefix
+    }
+    return buildShowdownText(p, game);
+  });
   
   // Format the commands
   const commandLines = showdownTexts.map(text => `${commandPrefix}trade ${formattedCode}\n${text}`);
