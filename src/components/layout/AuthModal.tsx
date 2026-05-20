@@ -75,8 +75,8 @@ export function AuthModal({ onClose }: AuthModalProps) {
     }
     try {
       const redirectUrl = typeof window !== 'undefined' 
-        ? `${window.location.origin}/#creator` 
-        : 'https://prueba-propia.onrender.com/#creator';
+        ? `${window.location.origin}/` 
+        : 'https://prueba-propia.onrender.com/';
 
       const { error } = await supabase.auth.signInWithOAuth({
         provider: 'google',

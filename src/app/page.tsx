@@ -46,6 +46,12 @@ export default function HomePage() {
         setUser(session.user, session.user.user_metadata, localPlan);
         setAuthOpen(false);
 
+        if (event === 'SIGNED_IN' && typeof window !== 'undefined') {
+          if (window.location.hash.includes('access_token')) {
+            window.location.hash = 'creator';
+          }
+        }
+
         // Fetch official dashboard stats & plan from backend
         try {
           const res = await fetch('/api/user/dashboard', {
