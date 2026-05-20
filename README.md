@@ -1,36 +1,90 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# PKDEX Trade Final Dark ZA/SV
 
-## Getting Started
+Versión final oscura y responsive del creador de Pokémon legales para intercambio.
 
-First, run the development server:
+## Incluye
+
+- Selector de juego con logos PNG: Legends: Z-A y Scarlet/Violet.
+- Bases separadas para ZA y SV.
+- Buscador y filtro por método.
+- Modal compacto de configuración legal por Pokémon.
+- Teratipo solo en Scarlet/Violet.
+- Held items separados por juego.
+- Pedido individual con código aleatorio de intercambio.
+- Pedido masivo preparado, máximo 3 y solo dentro del mismo juego.
+- Dashboard mock preparado para login/suscripción.
+- Endpoints preparados para que el programador conecte Discord/SysBot.
+
+## Ejecutar local
 
 ```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+npm install
+npm start
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+## Deploy
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+Render/Railway:
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+- Build Command: `npm install`
+- Start Command: `npm start`
 
-## Learn More
+## Integración Discord/SysBot
 
-To learn more about Next.js, take a look at the following resources:
+Editar en `src/server.js`:
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+- `formatSysbotCommand(order, tradeCode)` para adaptar el comando.
+- variables de entorno:
+  - `DISCORD_WEBHOOK_ZA`
+  - `DISCORD_WEBHOOK_SV`
+  - o `DISCORD_WEBHOOK_URL` común.
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+## Activar pedido masivo premium
 
-## Deploy on Vercel
+Editar `public/app.js`:
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+```js
+CONFIG.enableBulkOrders = true
+```
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+Actualmente está bloqueado como función Premium.
+
+## Actualización v2.1 - Formas, deduplicación y HOME
+
+- Añadidas formas/cortes de Furfrou en Legends: Z-A como variantes seleccionables.
+- Dedupe automático de encuentros antes de enviarlos al frontend para reducir opciones repetidas en el selector.
+- Añadida capa práctica de `Pokémon HOME` para Scarlet/Violet en especies de generaciones anteriores disponibles en SV. Esto permite casos como Charizard shiny por transferencia HOME aunque el 7-Star Raid directo esté shiny locked.
+- La validación final del archivo concreto debe seguir haciéndola SysBot/PKHeX cuando se conecte el bot real.
+
+## Capa HOME / Transferencia legal
+
+Esta versión añade `Pokémon HOME / Transferencia` como **origen separado** para ZA y SV.
+
+- No desbloquea shiny en eventos o encuentros nativos shiny locked.
+- Si el usuario elige un origen nativo shiny locked, el botón Shiny sigue bloqueado.
+- Si el usuario elige `Pokémon HOME / Transferencia`, el shiny se permite solo cuando la especie no está en la lista `HOME_SHINY_NEVER_SPECIES`.
+- Casos como Groudon en Z-A o Charizard en SV quedan cubiertos: el encuentro nativo puede estar locked, pero HOME permite shiny si el Pokémon procede de una ruta legal anterior.
+- La validación final del archivo concreto debe hacerla SysBot/PKHeX cuando se conecte el bot real.
+
+Archivos relevantes:
+
+- `src/server.js`: funciones `canUseHomeTransfer`, `canBeShinyViaHome` y `makeHomeTransferEncounter`.
+- `data/transfer_rules.json`: documentación editable de reglas HOME.
+- `GET /api/transfer-rules`: endpoint de diagnóstico de reglas.
+
+
+## v4 HOME Origin Profiles
+
+Esta versión corrige la capa HOME: ya no se muestra como una transferencia genérica de nivel 1 a 100 para todos los casos. El backend añade perfiles HOME separados por origen:
+
+- Perfiles específicos cuando hay un evento claro, por ejemplo **HOME - Evento Ultra Shiny Groudon**, Nv. 60, Cherish Ball, shiny obligatorio.
+- Perfil de **HOME - Origen legal anterior validable por PKHeX** para el resto, con mínimo de nivel seguro para evoluciones y legendarios.
+- Los encuentros nativos shiny locked siguen bloqueados. HOME no desbloquea un raid/evento shiny locked; aparece como origen diferente.
+
+Archivos relevantes:
+
+- `data/home_origin_profiles.json`
+- `data/transfer_rules.json`
+- `src/server.js` → `HOME_SPECIFIC_PROFILES`, `HOME_MIN_LEVEL_BY_SPECIES`, `formatSysbotCommand()`
+
+Para producción, el SysBot/PKHeX debe validar el archivo final con met data/origin game/PID/ball/moves. La web prepara opciones seguras y evita combinaciones obvias ilegales como Groudon shiny HOME Nv. 1.

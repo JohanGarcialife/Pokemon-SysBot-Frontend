@@ -1,38 +1,18 @@
-import type { Metadata } from "next";
-import { Geist, Geist_Mono } from "next/font/google";
-import "./globals.css";
-
-const geistSans = Geist({
-  variable: "--font-geist-sans",
-  subsets: ["latin"],
-});
-
-const geistMono = Geist_Mono({
-  variable: "--font-geist-mono",
-  subsets: ["latin"],
-});
+import type { Metadata } from 'next';
+import './globals.css';
 
 export const metadata: Metadata = {
-  title: "PKDeX - Diseña y Obtén tu Pokémon Ideal",
-  description: "Personaliza tu Pokémon perfecto y recíbelo directamente en tu consola Nintendo Switch. Elige stats, movimientos, habilidades y más.",
+  title: 'PKDEX · Crea tu Pokémon',
+  description:
+    'Crea, configura y solicita Pokémon legales para intercambio usando bases separadas de Legends: Z-A y Scarlet/Violet.',
 };
 
-import Navbar from '@/components/Navbar'
-
-export default function RootLayout({
-  children,
-}: Readonly<{
-  children: React.ReactNode;
-}>) {
+export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
     <html lang="es">
-      <body
-        className={`${geistSans.variable} ${geistMono.variable} antialiased`}
-      >
-        <Navbar />
+      <body>
         {children}
       </body>
     </html>
   );
 }
-
