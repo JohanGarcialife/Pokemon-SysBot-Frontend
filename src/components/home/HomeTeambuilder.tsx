@@ -436,7 +436,7 @@ export default function HomeTeambuilder({ user }: HomeTeambuilderProps) {
                 </div>
                 <div>
                   <h4 className="font-bold text-gray-900 mb-1">¿Los Pokémon son legales para jugar online?</h4>
-                  <p className="text-gray-600 text-sm leading-relaxed">Sí. Todos los Pokémon son generados siguiendo el mismo estándar de validación que <strong>Pokémon Showdown</strong>, garantizando movimientos, estadísticas y habilidades 100% legales.</p>
+                  <p className="text-gray-600 text-sm leading-relaxed">Sí. Todos los Pokémon son generados siguiendo las mismas reglas de legalidad que aplica el propio juego, garantizando movimientos, estadísticas y habilidades 100% legales para jugar online.</p>
                 </div>
               </div>
             </div>

@@ -555,24 +555,30 @@ export function PokemonEditor({ pokemon, onAddToTeam, gameVersion, availabilityS
           </div>
         )}
 
-        {/* Origin */}
+        {/* Origin / Encounter — hide manual Origin selector when backend encounters are available */}
         <div className="bg-white border-2 border-gray-300 rounded-lg p-6 space-y-4">
-          <OriginSelector
-            selectedOrigin={origin}
-            onOriginChange={setOrigin}
-            disabledOrigins={isLegendaryPreset
-              ? ['Wild Encounter', 'Tera Raid', 'Egg', 'Mass Outbreak', 'Trade', 'In-Game Gift', 'Starter', 'Event'].filter(o => o !== legendaryPreset?.forcedOrigin)
-              : disabledOrigins
-            }
-          />
-          {isLegendaryPreset && (
-            <p className="text-xs text-amber-600 font-bold mt-2">🔒 Origen fijo: captura en el juego (necesario para legalidad).</p>
+          {/* Only show OriginSelector as fallback when no backend encounters loaded */}
+          {matchingEncounters.length === 0 && (
+            <>
+              <OriginSelector
+                selectedOrigin={origin}
+                onOriginChange={setOrigin}
+                disabledOrigins={isLegendaryPreset
+                  ? ['Wild Encounter', 'Tera Raid', 'Egg', 'Mass Outbreak', 'Trade', 'In-Game Gift', 'Starter', 'Event'].filter(o => o !== legendaryPreset?.forcedOrigin)
+                  : disabledOrigins
+                }
+              />
+              {isLegendaryPreset && (
+                <p className="text-xs text-amber-600 font-bold mt-2">🔒 Origen fijo: captura en el juego (necesario para legalidad).</p>
+              )}
+            </>
           )}
 
-          {matchingEncounters.length > 1 && (
-            <div className="pt-2 border-t border-gray-150">
-              <label className="block text-xs font-bold text-gray-500 mb-2 uppercase tracking-wider">
-                Perfil de Origen / Encuentro Legal
+          {/* Encounter profile dropdown — primary selector when backend encounters exist */}
+          {matchingEncounters.length > 0 && (
+            <div>
+              <label className="block text-sm font-black text-gray-800 mb-2 uppercase tracking-wider">
+                Encuentro / Localización Legal
               </label>
               <select
                 value={selectedEncounterId}
@@ -601,6 +607,7 @@ export function PokemonEditor({ pokemon, onAddToTeam, gameVersion, availabilityS
             </div>
           )}
         </div>
+
 
         {/* Moves */}
         <div className={`border-2 rounded-lg p-6 ${movesLocked ? 'bg-amber-50 border-amber-300' : 'bg-white border-gray-300'}`}>
