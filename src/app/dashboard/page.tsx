@@ -102,13 +102,22 @@ export default async function DashboardPage() {
                     <Crown className="w-8 h-8 text-white" />
                   </div>
                   <div className="text-right">
-                    <p className="text-3xl font-black text-green-400">GRATIS</p>
+                    {user.app_metadata?.plan === 'premium' ? (
+                      <p className="text-3xl font-black text-amber-500 animate-pulse">PREMIUM</p>
+                    ) : (
+                      <p className="text-3xl font-black text-green-500">GRATIS</p>
+                    )}
                   </div>
                 </div>
                 <h3 className="text-xl text-gray-900 font-black mb-2 text-water uppercase">Suscripción</h3>
-                <p className="text-gray-600 text-sm font-medium">Actualiza para más beneficios</p>
+                <p className="text-gray-600 text-sm font-medium">
+                  {user.app_metadata?.plan === 'premium' 
+                    ? 'Disfrutas de acceso ilimitado a todos los bots' 
+                    : 'Actualiza para obtener más ventajas y bots exclusivos'}
+                </p>
               </div>
             </div>
+
 
             {/* Card 3 - Grass Theme */}
             <div className="border-grass bg-white rounded-xl overflow-hidden hover:shadow-2xl transition-shadow">
