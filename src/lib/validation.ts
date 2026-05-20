@@ -316,7 +316,7 @@ export function options(gameId: string, e: any) {
 export function validate(gameId: string, payload: any): any {
   const g = games[gameId];
   if (!g) return { legal: false, errors: ['Juego no soportado.'] };
-  const species = Number(payload.species ?? payload.speciesId);
+  const species = Number(payload.dexId ?? payload.speciesId ?? payload.species);
   const form = Number(payload.form || 0);
   let candidates = loadEncounters(gameId, species, form);
   if (payload.encounterId) candidates = candidates.filter(e => e.id === payload.encounterId);
