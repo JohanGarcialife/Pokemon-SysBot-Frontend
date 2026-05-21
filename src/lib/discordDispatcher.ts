@@ -82,28 +82,10 @@ export async function dispatchTradeCommand(
     return copy;
   });
 
-  // 3. Build Showdown text and gather physical attachments
+  // 3. Build Showdown text for each Pokémon (no Wonder Card attachment needed for trade commands)
   const attachments: { buffer: Buffer; filename: string }[] = [];
 
   const commandLines = processedPokemonList.map(p => {
-    const profile = findHomeEventProfile(p);
-    if (profile) {
-      const cardFilename = PROFILE_WONDER_CARD_MAP[profile.id];
-      if (cardFilename) {
-        const filePath = join(process.cwd(), 'mgdb', cardFilename);
-        if (existsSync(filePath)) {
-          console.log(`[DiscordDispatcher] Found Wonder Card file for profile ${profile.id}: ${cardFilename}`);
-          attachments.push({
-            buffer: readFileSync(filePath),
-            filename: cardFilename
-          });
-          // Exactly prefix + trade + tradeCode, no Showdown body
-          return `${commandPrefix}trade ${formattedCode}`;
-        }
-      }
-    }
-
-    // Fallback: standard command with Showdown body
     const eventBody = formatHomeEventSysbotCommand(p);
     const showdownText = eventBody || buildShowdownText(p, game);
     return `${commandPrefix}trade ${formattedCode}\n${showdownText}`;
