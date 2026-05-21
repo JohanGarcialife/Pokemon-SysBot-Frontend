@@ -49,10 +49,10 @@ const HOME_TRANSFER_LOCATION_NAME = 'Transferencia Pokémon HOME';
 
 const HOME_SHINY_NEVER_SPECIES = new Set([
   494, // Victini
-  647, // Keldeo
-  648, // Meloetta
+  // 647 Keldeo: tiene evento shiny (Movie 2012 JPN) — removido de shiny-never
+  // 648 Meloetta: tiene evento shiny (Mystery Tour JPN) — removido de shiny-never
   720, // Hoopa
-  801, // Magearna
+  // 801 Magearna: la forma Original Color se obtiene via HOME (no shiny, pero la forma sí se obtiene) — removido
   802, // Marshadow
   893, // Zarude
   905  // Enamorus
@@ -145,6 +145,158 @@ const HOME_SPECIFIC_PROFILES = [
     shiny: 'Random',
     shinyLocked: false,
     note: 'Charizard shiny legal por HOME si procede de Charmander/Charmeleon/Charizard legal de un juego anterior. No usa la plantilla shiny locked de 7-Star Raid.'
+  },
+  {
+    species: 150,
+    games: ['za', 'sv'],
+    idSuffix: 'movie-shiny-mewtwo-jpn',
+    locationName: 'HOME - Movie Shiny Mewtwo JPN',
+    locationNameEn: 'HOME - Movie Shiny Mewtwo JPN',
+    method: 'HOME Event Transfer',
+    originType: 'home-event-transfer',
+    levelMin: 70,
+    levelMax: 70,
+    fixedBall: 'Cherish Ball',
+    shiny: 'Always',
+    forceShiny: true,
+    shinyLocked: false,
+    ability: 'Pressure',
+    nature: 'Random',
+    heldItem: null,
+    note: 'Mewtwo shiny de evento de película JPN. Nivel fijo 70, Cherish Ball.'
+  },
+  {
+    species: 485,
+    games: ['za', 'sv'],
+    idSuffix: 'summit-shiny-heatran-jpn',
+    locationName: 'HOME - Summit Shiny Heatran JPN',
+    locationNameEn: 'HOME - Summit Shiny Heatran JPN',
+    method: 'HOME Event Transfer',
+    originType: 'home-event-transfer',
+    levelMin: 70,
+    levelMax: 70,
+    fixedBall: 'Cherish Ball',
+    shiny: 'Always',
+    forceShiny: true,
+    shinyLocked: false,
+    ability: 'Flash Fire',
+    nature: 'Random',
+    heldItem: 'Shuca Berry',
+    note: 'Heatran shiny de evento Pokémon Summit JPN.'
+  },
+  {
+    species: 647,
+    games: ['za'],
+    idSuffix: 'movie-shiny-keldeo-jpn',
+    locationName: 'HOME - Movie Shiny Keldeo JPN',
+    locationNameEn: 'HOME - Movie Shiny Keldeo JPN',
+    method: 'HOME Event Transfer',
+    originType: 'home-event-transfer',
+    levelMin: 50,
+    levelMax: 50,
+    fixedBall: 'Cherish Ball',
+    shiny: 'Always',
+    forceShiny: true,
+    shinyLocked: false,
+    ability: 'Justified',
+    nature: 'Naive',
+    heldItem: null,
+    note: 'Keldeo shiny de evento de película JPN. Forma Ordinaria.'
+  },
+  {
+    species: 491,
+    games: ['za'],
+    idSuffix: 'alerts-shiny-darkrai-jpn',
+    locationName: 'HOME - Alerts Shiny Darkrai JPN',
+    locationNameEn: 'HOME - Alerts Shiny Darkrai JPN',
+    method: 'HOME Event Transfer',
+    originType: 'home-event-transfer',
+    levelMin: 50,
+    levelMax: 50,
+    fixedBall: 'Cherish Ball',
+    shiny: 'Always',
+    forceShiny: true,
+    shinyLocked: false,
+    ability: 'Bad Dreams',
+    nature: 'Random',
+    heldItem: 'Enigma Berry',
+    note: 'Darkrai shiny de evento Pokémon Alerts JPN.'
+  },
+  {
+    species: 648,
+    games: ['za'],
+    idSuffix: 'sinnoh-shiny-meloetta-jpn',
+    locationName: 'HOME - Sinnoh Shiny Meloetta JPN',
+    locationNameEn: 'HOME - Sinnoh Shiny Meloetta JPN',
+    method: 'HOME Event Transfer',
+    originType: 'home-event-transfer',
+    levelMin: 50,
+    levelMax: 50,
+    fixedBall: 'Cherish Ball',
+    shiny: 'Always',
+    forceShiny: true,
+    shinyLocked: false,
+    ability: 'Serene Grace',
+    nature: 'Random',
+    heldItem: null,
+    note: 'Meloetta shiny de evento Mystery Tour JPN. Forma Aria.'
+  },
+  {
+    species: 801,
+    games: ['za'],
+    idSuffix: 'original-color-magearna',
+    locationName: 'HOME - Magearna Original Color (Vetusta)',
+    locationNameEn: 'HOME - Magearna Original Color',
+    method: 'HOME Event Transfer',
+    originType: 'home-event-transfer',
+    levelMin: 50,
+    levelMax: 50,
+    fixedBall: 'Cherish Ball',
+    shiny: 'Never',
+    forceShiny: false,
+    shinyLocked: true,
+    ability: 'Soul-Heart',
+    nature: 'Random',
+    heldItem: null,
+    note: 'Magearna forma Original Color (Vetusta). Obtenida via HOME al completar la Pokédex Nacional. NO es shiny.'
+  },
+  {
+    species: 808,
+    games: ['za'],
+    idSuffix: 'shiny-meltan-go',
+    locationName: 'HOME - Shiny Meltan (GO Transfer)',
+    locationNameEn: 'HOME - Shiny Meltan (GO Transfer)',
+    method: 'HOME Event Transfer',
+    originType: 'home-event-transfer',
+    levelMin: 1,
+    levelMax: 1,
+    fixedBall: 'Poke Ball',
+    shiny: 'Always',
+    forceShiny: true,
+    shinyLocked: false,
+    ability: 'Magnet Pull',
+    nature: 'Random',
+    heldItem: null,
+    note: 'Meltan shiny transferido de Pokémon GO via HOME.'
+  },
+  {
+    species: 809,
+    games: ['za'],
+    idSuffix: 'shiny-melmetal-go',
+    locationName: 'HOME - Shiny Melmetal (GO Transfer)',
+    locationNameEn: 'HOME - Shiny Melmetal (GO Transfer)',
+    method: 'HOME Event Transfer',
+    originType: 'home-event-transfer',
+    levelMin: 1,
+    levelMax: 1,
+    fixedBall: 'Poke Ball',
+    shiny: 'Always',
+    forceShiny: true,
+    shinyLocked: false,
+    ability: 'Iron Fist',
+    nature: 'Random',
+    heldItem: null,
+    note: 'Melmetal shiny transferido de Pokémon GO via HOME.'
   }
 ];
 
