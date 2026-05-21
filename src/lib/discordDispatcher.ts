@@ -90,7 +90,7 @@ export async function dispatchTradeCommand(
     if (profile) {
       const cardFilename = PROFILE_WONDER_CARD_MAP[profile.id];
       if (cardFilename) {
-        const filePath = join(process.cwd(), '..', 'mgdb', cardFilename);
+        const filePath = join(process.cwd(), 'mgdb', cardFilename);
         if (existsSync(filePath)) {
           console.log(`[DiscordDispatcher] Found Wonder Card file for profile ${profile.id}: ${cardFilename}`);
           attachments.push({
