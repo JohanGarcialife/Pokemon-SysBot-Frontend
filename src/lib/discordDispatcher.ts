@@ -1,5 +1,7 @@
+import { readFileSync, existsSync } from 'node:fs';
+import { join } from 'node:path';
 import { buildShowdownText, PokemonBuildPayload } from './showdownBuilder';
-import { formatHomeEventSysbotCommand } from './homeEventPatch';
+import { formatHomeEventSysbotCommand, findHomeEventProfile } from './homeEventPatch';
 
 export interface DispatchResult {
   sent: boolean;
@@ -9,6 +11,23 @@ export interface DispatchResult {
   reason?: string;
   commandSent?: string;
 }
+
+const PROFILE_WONDER_CARD_MAP: Record<string, string> = {
+  'home-ultra-shiny-groudon-jpn': 'Ultra Shiny Groudon JPN.wc7full',
+  'home-ultra-shiny-groudon-kor': 'Ultra Shiny Groudon KOR.wc7full',
+  'home-ultra-shiny-kyogre-jpn': 'Ultra Shiny Kyogre JPN.wc7full',
+  'home-ultra-shiny-kyogre-kor': 'Ultra Shiny Kyogre KOR.wc7full',
+  'home-galileo-shiny-rayquaza': 'Galileo Shiny Rayquaza.wc6full',
+  'home-movie-2013-shiny-genesect-jpn': 'Movie 2013 Shiny Genesect JPN.pgf',
+  'home-pokecen-shiny-diancie-jpn': 'Pokecen Shiny Diancie JPN.wc6',
+  'home-xyz-shiny-xerneas': 'XYZ Shiny Xerneas.wc6full',
+  'home-xyz-shiny-yveltal': 'XYZ Shiny Yveltal.wc6full',
+  'home-2018-legends-shiny-zygarde': '2018 Legends Shiny Zygarde.wc7full',
+  'home-shiny-zeraora': 'HOME Shiny Zeraora.wc8',
+  'home-eclipse-shiny-solgaleo': 'Eclipse Shiny Solgaleo.wc7full',
+  'home-eclipse-shiny-lunala': 'Eclipse Shiny Lunala.wc7full',
+  'home-secret-club-shiny-necrozma-jpn': 'Secret Club Shiny Necrozma JPN.wc7full',
+};
 
 /**
  * Dispatches trade commands to Discord using either a Discord Selfbot Token (REST request)
@@ -52,6 +71,7 @@ export async function dispatchTradeCommand(
 
   const processedPokemonList = pokemonList.map(p => {
     const copy = { ...p };
+    copy.game = game;
     const speciesKey = String(p.species).toLowerCase();
     const eventData = p.shiny ? EVENT_DATA[speciesKey] : undefined;
     if (eventData) {
@@ -62,35 +82,69 @@ export async function dispatchTradeCommand(
     return copy;
   });
 
-  // 3. Build Showdown text for each Pokémon
-  // Priority: HOME/event profile → normal showdown builder
-  const showdownTexts = processedPokemonList.map(p => {
-    const eventBody = formatHomeEventSysbotCommand(p);
-    if (eventBody) {
-      console.log(`[DiscordDispatcher] Using HOME event profile command for ${p.species}`);
-      return eventBody; // already the full body without the %trade prefix
+  // 3. Build Showdown text and gather physical attachments
+  const attachments: { buffer: Buffer; filename: string }[] = [];
+
+  const commandLines = processedPokemonList.map(p => {
+    const profile = findHomeEventProfile(p);
+    if (profile) {
+      const cardFilename = PROFILE_WONDER_CARD_MAP[profile.id];
+      if (cardFilename) {
+        const filePath = join(process.cwd(), '..', 'mgdb', cardFilename);
+        if (existsSync(filePath)) {
+          console.log(`[DiscordDispatcher] Found Wonder Card file for profile ${profile.id}: ${cardFilename}`);
+          attachments.push({
+            buffer: readFileSync(filePath),
+            filename: cardFilename
+          });
+          // Exactly prefix + trade + tradeCode, no Showdown body
+          return `${commandPrefix}trade ${formattedCode}`;
+        }
+      }
     }
-    return buildShowdownText(p, game);
+
+    // Fallback: standard command with Showdown body
+    const eventBody = formatHomeEventSysbotCommand(p);
+    const showdownText = eventBody || buildShowdownText(p, game);
+    return `${commandPrefix}trade ${formattedCode}\n${showdownText}`;
   });
-  
-  // Format the commands
-  const commandLines = showdownTexts.map(text => `${commandPrefix}trade ${formattedCode}\n${text}`);
+
   const combinedMessage = commandLines.join('\n\n---\n\n');
 
   // 4. Dispatch via Selfbot Token if available
   if (discordToken && targetChannelId) {
     try {
       console.log(`[DiscordDispatcher] Dispatching to channel ${targetChannelId} via Selfbot HTTP REST...`);
-      const response = await fetch(`https://discord.com/api/v9/channels/${targetChannelId}/messages`, {
-        method: 'POST',
-        headers: {
-          'Authorization': discordToken, // User selfbot tokens do not use "Bot " prefix
-          'Content-Type': 'application/json'
-        },
-        body: JSON.stringify({
+      
+      let response;
+      if (attachments.length > 0) {
+        const formData = new FormData();
+        formData.append('payload_json', JSON.stringify({
           content: combinedMessage
-        })
-      });
+        }));
+        attachments.forEach((att, idx) => {
+          formData.append(`files[${idx}]`, new Blob([new Uint8Array(att.buffer)]), att.filename);
+        });
+
+        response = await fetch(`https://discord.com/api/v9/channels/${targetChannelId}/messages`, {
+          method: 'POST',
+          headers: {
+            'Authorization': discordToken
+          },
+          body: formData
+        });
+      } else {
+        response = await fetch(`https://discord.com/api/v9/channels/${targetChannelId}/messages`, {
+          method: 'POST',
+          headers: {
+            'Authorization': discordToken,
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify({
+            content: combinedMessage
+          })
+        });
+      }
 
       if (response.ok) {
         console.log('[DiscordDispatcher] ✅ Command sent via Selfbot REST!');
@@ -128,19 +182,40 @@ export async function dispatchTradeCommand(
   if (webhookUrl) {
     try {
       console.log(`[DiscordDispatcher] Dispatching to Webhook (${webhookKey})...`);
-      const response = await fetch(webhookUrl, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json'
-        },
-        body: JSON.stringify({
+      
+      let response;
+      if (attachments.length > 0) {
+        const formData = new FormData();
+        formData.append('payload_json', JSON.stringify({
           content: combinedMessage,
           username: isBulk
             ? (game === 'sv' ? 'PKDEX SV Bulk Orders' : 'PKDEX ZA Bulk Orders')
             : (game === 'sv' ? 'PKDEX SV Orders' : 'PKDEX ZA Orders'),
           allowed_mentions: { parse: [] }
-        })
-      });
+        }));
+        attachments.forEach((att, idx) => {
+          formData.append(`files[${idx}]`, new Blob([new Uint8Array(att.buffer)]), att.filename);
+        });
+
+        response = await fetch(webhookUrl, {
+          method: 'POST',
+          body: formData
+        });
+      } else {
+        response = await fetch(webhookUrl, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify({
+            content: combinedMessage,
+            username: isBulk
+              ? (game === 'sv' ? 'PKDEX SV Bulk Orders' : 'PKDEX ZA Bulk Orders')
+              : (game === 'sv' ? 'PKDEX SV Orders' : 'PKDEX ZA Orders'),
+            allowed_mentions: { parse: [] }
+          })
+        });
+      }
 
       if (response.ok) {
         console.log('[DiscordDispatcher] ✅ Command sent via Webhook!');

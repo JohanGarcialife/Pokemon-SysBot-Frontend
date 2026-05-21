@@ -1,5 +1,6 @@
 import { readFileSync, existsSync } from 'node:fs';
 import { join } from 'node:path';
+import { getShowdownSpeciesName } from './showdownBuilder';
 
 // ─── Types ────────────────────────────────────────────────────────────────────
 
@@ -141,6 +142,22 @@ export function findHomeEventProfile(order: any): HomeEventProfile | undefined {
   });
 }
 
+/**
+ * Checks if there is any active/enabled HOME event profile in sysbot_home_event_profiles.json
+ * for the given species ID and game ID.
+ */
+export function hasEnabledHomeEventProfile(gameId: string, speciesId: number): boolean {
+  const profiles = loadHomeEventProfiles();
+  const game = normalizeGame(gameId);
+  const sp = Number(speciesId);
+  return profiles.some(profile => {
+    if (profile.enabled === false) return false;
+    if (Number(profile.species) !== sp) return false;
+    if (profile.games && profile.games.length > 0 && !profile.games.includes(game)) return false;
+    return true;
+  });
+}
+
 // ─── Command builder ──────────────────────────────────────────────────────────
 
 /**
@@ -177,7 +194,7 @@ export function formatHomeEventSysbotCommand(order: any): string | null {
   }
 
   // Species line (with optional held item)
-  const speciesRaw = cfg.speciesLine ?? order.displayName ?? order.species ?? 'Pokemon';
+  const speciesRaw = cfg.speciesLine ?? getShowdownSpeciesName(order);
   const speciesLine = (heldItem && !isNoneItem(heldItem))
     ? `${speciesRaw} @ ${heldItem}`
     : speciesRaw;

@@ -2,6 +2,8 @@ import { readFileSync, existsSync } from 'node:fs';
 import { join } from 'node:path';
 import { dispatchTradeCommand } from './discordDispatcher';
 import { supabase, AuthenticatedUser } from './supabaseServer';
+import { getShowdownSpeciesName } from './showdownBuilder';
+import { hasEnabledHomeEventProfile } from './homeEventPatch';
 
 // En Next.js, process.cwd() apunta a la raíz del proyecto
 const dataDir = join(process.cwd(), 'data');
@@ -50,7 +52,6 @@ const HOME_SHINY_NEVER_SPECIES = new Set([
   647, // Keldeo
   648, // Meloetta
   720, // Hoopa
-  721, // Volcanion
   801, // Magearna
   802, // Marshadow
   893, // Zarude
@@ -95,9 +96,9 @@ const HOME_SPECIFIC_PROFILES = [
   {
     species: 383,
     games: ['za','sv'],
-    idSuffix: 'event-ultra-shiny-groudon',
-    locationName: 'HOME - Evento Ultra Shiny Groudon',
-    locationNameEn: 'HOME - Ultra Shiny Groudon Event',
+    idSuffix: 'event-ultra-shiny-groudon-jpn',
+    locationName: 'HOME - Evento Ultra Shiny Groudon JPN',
+    locationNameEn: 'HOME - Ultra Shiny Groudon Event JPN',
     method: 'HOME Event Transfer',
     originType: 'home-event-transfer',
     levelMin: 60,
@@ -109,7 +110,26 @@ const HOME_SPECIFIC_PROFILES = [
     ability: 'Drought',
     nature: 'Random',
     heldItem: null,
-    note: 'Perfil HOME específico: evento Ultra Shiny Groudon, Nv. 60, Cherish Ball, naturaleza aleatoria.'
+    note: 'Perfil HOME específico: evento Ultra Shiny Groudon JPN, Nv. 60, Cherish Ball, naturaleza aleatoria.'
+  },
+  {
+    species: 721,
+    games: ['za'],
+    idSuffix: 'home-dex-completion-shiny-volcanion-za',
+    locationName: 'HOME - Recompensa Pokédex Z-A Shiny Volcanion',
+    locationNameEn: 'HOME - Z-A Pokédex Completion Shiny Volcanion',
+    method: 'HOME Event Transfer',
+    originType: 'home-event-transfer',
+    levelMin: 50,
+    levelMax: 50,
+    fixedBall: 'Cherish Ball',
+    shiny: 'Always',
+    forceShiny: true,
+    shinyLocked: false,
+    ability: 'Water Absorb',
+    nature: 'Modest',
+    heldItem: null,
+    note: 'Perfil HOME específico: recompensa de Pokémon HOME por completar las Pokédex de Legends: Z-A.'
   },
   {
     species: 6,
@@ -144,13 +164,25 @@ export function homeGenericProfileLabel(species: number): string {
 const encounterCache = new Map<string, any[]>();
 const MAX_CACHE = 80;
 
-export function canUseHomeTransfer(gameId: string, species: number): boolean {
+export function canUseHomeTransfer(gameId: string, species: number, hasNoNativeEncounters = false): boolean {
   const g = games[gameId];
   const sp = Number(species);
   if (!g || !Number.isFinite(sp) || sp <= 0) return false;
   const existsInGame = g.pokemon.some((p: any) => Number(p.species) === sp);
   if (!existsInGame) return false;
-  return gameId === 'za' || gameId === 'sv';
+  
+  if (gameId !== 'za' && gameId !== 'sv') return false;
+
+  // 1. If it has an active/enabled HOME event profile
+  if (hasEnabledHomeEventProfile(gameId, sp)) return true;
+
+  // 2. If it is a legendary or mythical species
+  if (HOME_LEGENDARY_SPECIES.has(sp)) return true;
+
+  // 3. If there are no native encounters in the game
+  if (hasNoNativeEncounters) return true;
+
+  return false;
 }
 
 export function canBeShinyViaHome(species: number): boolean {
@@ -199,34 +231,36 @@ export function makeHomeTransferEncounters(gameId: string, species: number, form
       note: profile.note
     });
   }
-  base.push({
-    id: `home-legal-origin-${gameId}-${sp}-${Number(form||0)}`,
-    game: gameId.toUpperCase(),
-    version: isSV ? 'Scarlet/Violet' : 'Legends: Z-A',
-    source: 'Generic HOME legal origin profile layered over PKHeX species availability',
-    method: 'HOME Legal Transfer',
-    originType: 'home-legal-transfer',
-    requiresLegalOrigin: true,
-    species: sp,
-    form: Number(form || 0),
-    levelMin: homeMinLevelForSpecies(sp),
-    levelMax: 100,
-    location: `${HOME_TRANSFER_LOCATION}-legal-origin`,
-    locationName: homeGenericProfileLabel(sp),
-    locationNameEn: 'HOME - Legal previous-game origin',
-    gender: 'Random',
-    shiny: shinyAllowed ? 'Random' : 'Never',
-    shinyLocked: !shinyAllowed,
-    canBeShinyViaHome: shinyAllowed,
-    fixedBall: null,
-    allowedBalls: 'AnyLegalTransferBall',
-    availableScarlet: true,
-    availableViolet: true,
-    teraType: isSV ? 'Any' : undefined,
-    note: shinyAllowed
-      ? `Origen HOME: shiny permitido solo si procede de una fuente legal previa. Nivel mínimo aplicado: ${homeMinLevelForSpecies(sp)}. La validación final del origen/met data debe hacerla PKHeX/SysBot.`
-      : 'Origen HOME: shiny bloqueado porque no se conoce ruta shiny legal para esta especie.'
-  });
+  if (base.length === 0) {
+    base.push({
+      id: `home-legal-origin-${gameId}-${sp}-${Number(form||0)}`,
+      game: gameId.toUpperCase(),
+      version: isSV ? 'Scarlet/Violet' : 'Legends: Z-A',
+      source: 'Generic HOME legal origin profile layered over PKHeX species availability',
+      method: 'HOME Legal Transfer',
+      originType: 'home-legal-transfer',
+      requiresLegalOrigin: true,
+      species: sp,
+      form: Number(form || 0),
+      levelMin: homeMinLevelForSpecies(sp),
+      levelMax: 100,
+      location: `${HOME_TRANSFER_LOCATION}-legal-origin`,
+      locationName: homeGenericProfileLabel(sp),
+      locationNameEn: 'HOME - Legal previous-game origin',
+      gender: 'Random',
+      shiny: shinyAllowed ? 'Random' : 'Never',
+      shinyLocked: !shinyAllowed,
+      canBeShinyViaHome: shinyAllowed,
+      fixedBall: null,
+      allowedBalls: 'AnyLegalTransferBall',
+      availableScarlet: true,
+      availableViolet: true,
+      teraType: isSV ? 'Any' : undefined,
+      note: shinyAllowed
+        ? `Origen HOME: shiny permitido solo si procede de una fuente legal previa. Nivel mínimo aplicado: ${homeMinLevelForSpecies(sp)}. La validación final del origen/met data debe hacerla PKHeX/SysBot.`
+        : 'Origen HOME: shiny bloqueado porque no se conoce ruta shiny legal para esta especie.'
+    });
+  }
   return base;
 }
 
@@ -261,7 +295,7 @@ export function loadEncounters(gameId: string, species: number, form = 0): any[]
   const file = encounterFile(gameId, species, form);
   let list = existsSync(file) ? JSON.parse(readFileSync(file,'utf8')) : [];
   list = dedupeEncounters(list);
-  if (canUseHomeTransfer(gameId, species)) {
+  if (canUseHomeTransfer(gameId, species, list.length === 0)) {
     const homes = makeHomeTransferEncounters(gameId, species, form);
     const existing = new Set(list.map((e: any) => e.id));
     for (const home of homes) {
@@ -373,8 +407,18 @@ function yesNo(v: any): string {
 export function formatSysbotCommand(order: any, tradeCode: string): string {
   const lines = [];
   lines.push(`%trade ${tradeCode}`);
-  lines.push(order.displayName || `Species ${order.species}`);
-  if (order.heldItem) lines.push(`@ ${order.heldItem}`);
+  
+  const showdownSpecies = getShowdownSpeciesName(order);
+  const hasHeldItem = order.heldItem &&
+    String(order.heldItem).trim() !== '' &&
+    String(order.heldItem).toLowerCase() !== 'none' &&
+    String(order.heldItem).toLowerCase() !== 'sin objeto';
+  
+  const speciesLine = hasHeldItem
+    ? `${showdownSpecies} @ ${order.heldItem}`
+    : showdownSpecies;
+    
+  lines.push(speciesLine);
   if (order.ability) lines.push(`Ability: ${order.ability}`);
   if (order.level) lines.push(`Level: ${order.level}`);
   lines.push(`Shiny: ${yesNo(order.shiny)}`);

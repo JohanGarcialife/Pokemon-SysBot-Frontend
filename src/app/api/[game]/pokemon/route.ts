@@ -1,6 +1,14 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { games } from '@/lib/validation';
 
+function sanitizePokemonForClient(p: any) {
+  const homeWords = ['home', 'pokémon home', 'pokemon home', 'transferencia pokémon home', 'transferencia pokemon home'];
+  const methods = Array.isArray(p.methods)
+    ? p.methods.filter((m: any) => !homeWords.some(w => String(m || '').toLowerCase().includes(w)))
+    : p.methods;
+  return { ...p, methods };
+}
+
 export async function GET(
   req: NextRequest,
   { params }: { params: { game: string } }
@@ -29,5 +37,5 @@ export async function GET(
     );
   }
 
-  return NextResponse.json({ count: list.length, results: list });
+  return NextResponse.json({ count: list.length, results: list.map(sanitizePokemonForClient) });
 }

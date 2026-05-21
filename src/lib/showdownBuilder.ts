@@ -13,6 +13,7 @@ export interface StatValues {
 export interface PokemonBuildPayload {
   species: string
   dexId?: number
+  form?: number
   level: number
   nature: string
   ability: string
@@ -29,6 +30,7 @@ export interface PokemonBuildPayload {
   game?: string
   encounter?: Record<string, any>
   isAlphaEncounter?: boolean
+  homeProfileId?: string | null
 }
 
 const LEGENDS_ZA_GAME = 'legends-za'
@@ -60,11 +62,93 @@ function loadAliasMap(): Record<string, string> {
  */
 export function getShowdownSpeciesName(order: PokemonBuildPayload): string {
   const aliases = loadAliasMap();
-  const raw = String(order.species || '').trim();
-  const key = raw.toLowerCase();
-  if (aliases[key]) return aliases[key];
+  
+  // 1. Try species ID + form mapping first (extremely accurate)
+  const dexId = order.dexId ?? (typeof order.species === 'number' ? order.species : (!isNaN(Number(order.species)) ? Number(order.species) : undefined));
+  const form = order.form ?? 0;
 
-  // Try partial form-suffix detection from dexId + form if alias missed
+  if (dexId !== undefined) {
+    if (dexId === 676) { // Furfrou
+      const furfrouForms: Record<number, string> = {
+        0: 'Furfrou',
+        1: 'Furfrou-Heart',
+        2: 'Furfrou-Star',
+        3: 'Furfrou-Diamond',
+        4: 'Furfrou-Debutante',
+        5: 'Furfrou-Matron',
+        6: 'Furfrou-Dandy',
+        7: 'Furfrou-La-Reine',
+        8: 'Furfrou-Kabuki',
+        9: 'Furfrou-Pharaoh'
+      };
+      if (furfrouForms[form] !== undefined) return furfrouForms[form];
+    }
+    if (dexId === 718) { // Zygarde
+      if (form === 1) return 'Zygarde-10%';
+      if (form === 2) return 'Zygarde-Complete';
+      return 'Zygarde';
+    }
+    if (dexId === 670) { // Floette
+      const floetteForms: Record<number, string> = {
+        0: 'Floette',
+        1: 'Floette-Yellow',
+        2: 'Floette-Orange',
+        3: 'Floette-Blue',
+        4: 'Floette-White',
+        5: 'Floette-Eternal'
+      };
+      if (floetteForms[form] !== undefined) return floetteForms[form];
+    }
+    if (dexId === 671) { // Florges
+      const florgesForms: Record<number, string> = {
+        0: 'Florges',
+        1: 'Florges-Yellow',
+        2: 'Florges-Orange',
+        3: 'Florges-Blue',
+        4: 'Florges-White'
+      };
+      if (florgesForms[form] !== undefined) return florgesForms[form];
+    }
+    if (dexId === 710) { // Pumpkaboo
+      const pumpkabooForms: Record<number, string> = {
+        0: 'Pumpkaboo',
+        1: 'Pumpkaboo-Small',
+        2: 'Pumpkaboo-Large',
+        3: 'Pumpkaboo-Super'
+      };
+      if (pumpkabooForms[form] !== undefined) return pumpkabooForms[form];
+    }
+    if (dexId === 711) { // Gourgeist
+      const gourgeistForms: Record<number, string> = {
+        0: 'Gourgeist',
+        1: 'Gourgeist-Small',
+        2: 'Gourgeist-Large',
+        3: 'Gourgeist-Super'
+      };
+      if (gourgeistForms[form] !== undefined) return gourgeistForms[form];
+    }
+  }
+
+  // 2. Try various name keys against our alias map
+  const nameKeys = [
+    (order as any).displayNameEn,
+    (order as any).displayName,
+    order.species,
+    (order as any).pokemonName,
+    (order as any).nameEn,
+    (order as any).name,
+    (order as any).speciesName
+  ];
+
+  for (const nameKey of nameKeys) {
+    if (nameKey) {
+      const key = String(nameKey).trim().toLowerCase();
+      if (aliases[key]) return aliases[key];
+    }
+  }
+
+  // 3. Fallback to formatSpeciesName()
+  const raw = String(order.species || '').trim();
   return formatSpeciesName(raw);
 }
 
