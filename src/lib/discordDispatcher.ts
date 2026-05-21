@@ -12,22 +12,52 @@ export interface DispatchResult {
   commandSent?: string;
 }
 
-const PROFILE_WONDER_CARD_MAP: Record<string, string> = {
-  'home-ultra-shiny-groudon-jpn': 'Ultra Shiny Groudon JPN.wc7full',
-  'home-ultra-shiny-groudon-kor': 'Ultra Shiny Groudon KOR.wc7full',
-  'home-ultra-shiny-kyogre-jpn': 'Ultra Shiny Kyogre JPN.wc7full',
-  'home-ultra-shiny-kyogre-kor': 'Ultra Shiny Kyogre KOR.wc7full',
-  'home-galileo-shiny-rayquaza': 'Galileo Shiny Rayquaza.wc6full',
-  'home-movie-2013-shiny-genesect-jpn': 'Movie 2013 Shiny Genesect JPN.pgf',
-  'home-pokecen-shiny-diancie-jpn': 'Pokecen Shiny Diancie JPN.wc6',
-  'home-xyz-shiny-xerneas': 'XYZ Shiny Xerneas.wc6full',
-  'home-xyz-shiny-yveltal': 'XYZ Shiny Yveltal.wc6full',
-  'home-2018-legends-shiny-zygarde': '2018 Legends Shiny Zygarde.wc7full',
-  'home-shiny-zeraora': 'HOME Shiny Zeraora.wc8',
-  'home-eclipse-shiny-solgaleo': 'Eclipse Shiny Solgaleo.wc7full',
-  'home-eclipse-shiny-lunala': 'Eclipse Shiny Lunala.wc7full',
-  'home-secret-club-shiny-necrozma-jpn': 'Secret Club Shiny Necrozma JPN.wc7full',
+// Map of HOME event profile IDs → .pa9 filename in mgdb/ (ZA only)
+// When a .pa9 exists, we attach it directly — SysBot reads the file instead of Showdown text.
+// Groudon uses Showdown text (no .pa9 needed since it already works perfectly).
+const PROFILE_PA9_MAP: Record<string, string> = {
+  // Legendarios Shinys de Otras Ediciones (HOME transfer ZA)
+  'home-shiny-zeraora':                'HOME Shiny Zeraora ZA.pa9',
+  'home-movie-2013-shiny-genesect-jpn':'HOME Shiny Genesect ZA.pa9',
+  'home-pokecen-shiny-diancie-jpn':    'HOME Shiny Diancie ZA.pa9',
+  'home-xyz-shiny-xerneas':            'HOME Shiny Xerneas ZA.pa9',
+  'home-xyz-shiny-yveltal':            'HOME Shiny Yveltal ZA.pa9',
+  'home-2018-legends-shiny-zygarde':   'HOME Shiny Zygarde ZA.pa9',
+  'home-ultra-shiny-kyogre-jpn':       'HOME Shiny Kyogre ZA.pa9',
+  'home-ultra-shiny-kyogre-kor':       'HOME Shiny Kyogre ZA.pa9',
+  'home-galileo-shiny-rayquaza':       'HOME Shiny Rayquaza ZA.pa9',
+  // New ZA HOME profiles (added 2026-05-21)
+  'home-movie-shiny-mewtwo-jpn':       'HOME Shiny Mewtwo ZA.pa9',
+  'home-summit-shiny-heatran-jpn':     'HOME Shiny Heatran ZA.pa9',
+  'home-movie-shiny-keldeo-jpn':       'HOME Shiny Keldeo ZA.pa9',
+  'home-alerts-shiny-darkrai-jpn':     'HOME Shiny Darkrai ZA.pa9',
+  'home-sinnoh-shiny-meloetta-jpn':    'HOME Shiny Meloetta ZA.pa9',
+  'home-original-color-magearna':      'HOME Magearna Original Color ZA.pa9',
+  'home-shiny-meltan':                 'HOME Shiny Meltan ZA.pa9',
+  'home-shiny-melmetal':               'HOME Shiny Melmetal ZA.pa9',
+  'home-dex-completion-shiny-volcanion-za': 'HOME Shiny Volcanion ZA.pa9',
 };
+
+/**
+ * Looks up the mgdb .pa9 file for a given HOME event profile ID.
+ * Returns { buffer, filename } if found and readable, or null otherwise.
+ */
+function loadPa9Attachment(profileId: string): { buffer: Buffer; filename: string } | null {
+  const filename = PROFILE_PA9_MAP[profileId];
+  if (!filename) return null;
+  const pa9Path = join(process.cwd(), 'mgdb', filename);
+  if (!existsSync(pa9Path)) {
+    console.warn(`[DiscordDispatcher] .pa9 file not found: ${pa9Path}`);
+    return null;
+  }
+  try {
+    const buffer = readFileSync(pa9Path);
+    return { buffer, filename };
+  } catch (err: any) {
+    console.warn(`[DiscordDispatcher] Could not read .pa9 file ${filename}:`, err.message);
+    return null;
+  }
+}
 
 /**
  * Dispatches trade commands to Discord using either a Discord Selfbot Token (REST request)
@@ -82,10 +112,29 @@ export async function dispatchTradeCommand(
     return copy;
   });
 
-  // 3. Build Showdown text for each Pokémon (no Wonder Card attachment needed for trade commands)
+  // 3. Build command for each Pokémon.
+  //    Strategy:
+  //      a) If the game is ZA AND there is a .pa9 file for this HOME profile → attach the .pa9
+  //         and send only the trade code as message content (SysBot reads the file).
+  //      b) Otherwise → Showdown text command (works for Groudon, SV, etc.)
   const attachments: { buffer: Buffer; filename: string }[] = [];
 
   const commandLines = processedPokemonList.map(p => {
+    // Try to find a HOME event profile with a pa9 attachment (ZA only)
+    if (game === 'za') {
+      const eventProfile = findHomeEventProfile(p);
+      if (eventProfile?.id) {
+        const pa9 = loadPa9Attachment(eventProfile.id);
+        if (pa9) {
+          attachments.push(pa9);
+          console.log(`[DiscordDispatcher] Using .pa9 attachment: ${pa9.filename} for profile ${eventProfile.id}`);
+          // When sending a .pa9, the message content is just the trade command line.
+          // SysBot ZA reads the attached file directly.
+          return `${commandPrefix}trade ${formattedCode}`;
+        }
+      }
+    }
+    // Fallback: Showdown text (Groudon, SV Pokémon, anything without a .pa9)
     const eventBody = formatHomeEventSysbotCommand(p);
     const showdownText = eventBody || buildShowdownText(p, game);
     return `${commandPrefix}trade ${formattedCode}\n${showdownText}`;
