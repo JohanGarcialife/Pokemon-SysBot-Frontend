@@ -125,67 +125,7 @@
       },
       "source": "https://projectpokemon.org/home/files/file/2542-ultras-shiny-groudon/"
     },
-    {
-      "id": "home-dex-completion-shiny-volcanion-za",
-      "enabled": true,
-      "species": 721,
-      "speciesName": "Volcanion",
-      "games": [
-        "za"
-      ],
-      "match": {
-        "originType": [
-          "home-event-transfer",
-          "home"
-        ],
-        "locationIncludes": [
-          "HOME - Recompensa Pokédex Z-A Shiny Volcanion",
-          "Recompensa Pokédex Z-A Shiny Volcanion",
-          "Volcanion"
-        ],
-        "profileIncludes": [
-          "HOME - Recompensa Pokédex Z-A Shiny Volcanion",
-          "Recompensa Pokédex Z-A Shiny Volcanion"
-        ]
-      },
-      "displayLabel": "HOME - Recompensa Pokédex Z-A Shiny Volcanion",
-      "sysbot": {
-        "speciesLine": "Volcanion",
-        "requiredLines": [
-          "Ability: Water Absorb",
-          "Level: 50",
-          "Shiny: Yes",
-          "Language: Spanish",
-          "OT: HOME",
-          "TID: 260427",
-          "Ball: Cherish Ball",
-          "- Steam Eruption",
-          "- Flare Blitz",
-          "- Hydro Pump",
-          "- Heavy Slam"
-        ],
-        "natureMode": "fixed",
-        "fixedNature": "Modest",
-        "omitGenderIfRandom": true,
-        "omitHeldItemIfNone": true,
-        "forceLevel": 50,
-        "forceShiny": true,
-        "forceBall": "Cherish Ball",
-        "notes": "Perfil HOME específico: recompensa de Pokémon HOME por completar las Pokédex de Legends: Z-A."
-      },
-      "eventFacts": {
-        "ot": "HOME",
-        "tid": "260427",
-        "level": 50,
-        "ball": "Cherish Ball",
-        "ability": "Water Absorb",
-        "nature": "Modest",
-        "language": "Spanish",
-        "ivs": { "hp": 20, "atk": 31, "def": 20, "spa": 31, "spd": 20, "spe": 31 },
-        "moves": ["Steam Eruption", "Flare Blitz", "Hydro Pump", "Heavy Slam"]
-      },
-      "source": "https://projectpokemon.org/home/files/file/5858-legends-z-a-dex-completion-shiny-volcanion/"
-    },
+
     {
       "id": "home-ultra-shiny-kyogre-jpn",
       "enabled": true,

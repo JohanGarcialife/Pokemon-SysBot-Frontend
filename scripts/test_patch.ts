@@ -156,6 +156,60 @@ async function runTests() {
     }
     console.log('✅ Test 4 Passed!');
 
+    // Test 5: dispatchTradeCommand .pa9 file attachment (ZA)
+    console.log('Running Test 5 (.pa9 file attachments for ZA)...');
+    process.env.DISCORD_WEBHOOK_ZA = mockWebhookUrl;
+
+    const res5 = await dispatchTradeCommand('za', [
+      {
+        species: 'Meltan',
+        dexId: 808,
+        form: 0,
+        level: 1,
+        nature: 'Hardy',
+        ability: 'Magnet Pull',
+        shiny: true,
+        alpha: false,
+        gender: 'Random',
+        heldItem: 'None',
+        teraType: 'Normal',
+        pokeball: 'Poke Ball',
+        origin: 'Paldea',
+        moves: [],
+        ivs: { hp: 31, attack: 31, defense: 31, spAttack: 31, spDefense: 31, speed: 31 },
+        evs: { hp: 0, attack: 0, defense: 0, spAttack: 0, spDefense: 0, speed: 0 },
+        homeProfileId: 'home-shiny-meltan'
+      }
+    ], '87654321', 'free');
+
+    console.log('Dispatch result Test 5:', res5);
+    console.log('Fetch URL Test 5:', lastFetchUrl);
+    console.log('Has body FormData Test 5?', lastFetchOptions?.body instanceof FormData);
+
+    if (lastFetchOptions?.body instanceof FormData) {
+      const payloadJsonStr = lastFetchOptions.body.get('payload_json');
+      console.log('payload_json Test 5:', payloadJsonStr);
+      const payload = JSON.parse(payloadJsonStr);
+      console.log('Command Content Test 5:', payload.content);
+
+      if (payload.content !== '%trade 87654321') {
+        console.error('❌ Test 5 Failed! Message content is not exactly prefix + trade + code');
+        process.exit(1);
+      }
+
+      // Check if file is attached
+      const attachedFile = lastFetchOptions.body.get('files[0]');
+      console.log('files[0] present Test 5?', attachedFile !== null);
+      if (!attachedFile) {
+        console.error('❌ Test 5 Failed! .pa9 file not attached in files[0]');
+        process.exit(1);
+      }
+    } else {
+      console.error('❌ Test 5 Failed! Fetch body is not FormData');
+      process.exit(1);
+    }
+    console.log('✅ Test 5 Passed!');
+
   } finally {
     globalThis.fetch = originalFetch;
   }
