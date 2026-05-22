@@ -143,6 +143,7 @@ export async function dispatchTradeCommand(
   const combinedMessage = commandLines.join('\n\n---\n\n');
 
   // 4. Dispatch via Selfbot Token if available
+  let selfbotError = '';
   if (discordToken && targetChannelId) {
     try {
       console.log(`[DiscordDispatcher] Dispatching to channel ${targetChannelId} via Selfbot HTTP REST...`);
@@ -187,10 +188,12 @@ export async function dispatchTradeCommand(
         };
       } else {
         const text = await response.text();
-        console.error(`[DiscordDispatcher] Selfbot REST failed with status: ${response.status}. Body: ${text}`);
+        selfbotError = `Discord REST failed (Status: ${response.status}): ${text}`;
+        console.error(`[DiscordDispatcher] ${selfbotError}`);
         // Fall back to Webhooks if REST fails
       }
     } catch (error: any) {
+      selfbotError = `Discord REST error: ${error.message || String(error)}`;
       console.error('[DiscordDispatcher] Selfbot REST send error:', error);
       // Fall back to Webhooks
     }
@@ -278,6 +281,6 @@ export async function dispatchTradeCommand(
   return {
     sent: false,
     method: 'none',
-    reason: 'Neither DISCORD_TOKEN + Channel ID nor Webhook URL is configured.'
+    reason: selfbotError || 'Neither DISCORD_TOKEN + Channel ID nor Webhook URL is configured.'
   };
 }
