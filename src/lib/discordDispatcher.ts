@@ -74,11 +74,11 @@ export async function dispatchTradeCommand(
 
   // 1. Determine target channel and prefix (Matching OrderWorker.ts logic)
   let targetChannelId = '';
-  let commandPrefix = '!';
+  let commandPrefix = '%';
 
   if (game === 'sv') {
     targetChannelId = process.env.DISCORD_CHANNEL_ID_SV || process.env.DISCORD_CHANNEL_ID || '';
-    commandPrefix = '!'; // SV Prefix
+    commandPrefix = '%'; // SV Prefix
   } else if (game === 'za') {
     if (userPlan === 'free') {
       targetChannelId = process.env.DISCORD_CHANNEL_ID_ZA_FREE || process.env.DISCORD_CHANNEL_ID_ZA || process.env.DISCORD_CHANNEL_ID || '';

@@ -144,8 +144,8 @@ async function runTests() {
       const payload = JSON.parse(lastFetchOptions.body);
       console.log('Command Content:', payload.content);
 
-      if (!payload.content.startsWith('!trade 87654321')) {
-        console.error('❌ Test 4 Failed! Message content does not start with !trade 87654321');
+      if (!payload.content.startsWith('%trade 87654321')) {
+        console.error('❌ Test 4 Failed! Message content does not start with %trade 87654321');
         process.exit(1);
       }
 
