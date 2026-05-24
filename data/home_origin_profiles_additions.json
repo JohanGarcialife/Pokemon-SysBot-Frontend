@@ -59,7 +59,7 @@
       "shiny": "Always",
       "forceShiny": true,
       "ability": "Drizzle",
-      "nature": "Random",
+      "nature": "Modest",
       "heldItem": null,
       "homeProfileId": "home-ultra-shiny-kyogre-jpn",
       "sourceNote": "Perfil HOME/evento importante. Requiere MGDBPath si es Mystery Gift concreto."
@@ -194,15 +194,15 @@
       ],
       "profile": "HOME - 2018 Legends Shiny Zygarde",
       "method": "HOME Event Transfer",
-      "level": 100,
-      "levelMin": 100,
-      "levelMax": 100,
+      "level": 60,
+      "levelMin": 60,
+      "levelMax": 60,
       "ball": "Cherish Ball",
       "shiny": "Always",
       "forceShiny": true,
       "ability": "Aura Break",
-      "nature": "Random",
-      "heldItem": "Gold Bottle Cap",
+      "nature": "Hardy",
+      "heldItem": null,
       "homeProfileId": "home-2018-legends-shiny-zygarde",
       "sourceNote": "Perfil HOME/evento importante. Requiere MGDBPath si es Mystery Gift concreto."
     },
@@ -468,6 +468,26 @@
       "heldItem": null,
       "homeProfileId": "home-event-shiny-gimmighoul-sv-raid",
       "sourceNote": "Gimmighoul shiny Chest Form de evento de Tera Incursión de SV (Spotlight Returns)."
+    },
+    {
+      "species": 384,
+      "name": "Rayquaza",
+      "games": [
+        "za"
+      ],
+      "profile": "HOME - Shiny Rayquaza",
+      "method": "HOME Legal Transfer",
+      "level": 70,
+      "levelMin": 70,
+      "levelMax": 70,
+      "ball": "Poke Ball",
+      "shiny": "Always",
+      "forceShiny": true,
+      "ability": "Air Lock",
+      "nature": "Jolly",
+      "heldItem": null,
+      "homeProfileId": "home-shiny-rayquaza-za",
+      "sourceNote": "Rayquaza shiny de transferencia HOME Nv. 70, naturaleza Jolly."
     }
   ]
 }

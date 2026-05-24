@@ -78,7 +78,7 @@ const HOME_LEGENDARY_SPECIES = new Set([
   144,145,146,150,151,243,244,245,249,250,251,377,378,379,380,381,382,383,384,385,386,
   480,481,482,483,484,485,486,487,488,491,492,493,494,638,639,640,641,642,643,644,645,646,647,648,649,
   716,717,718,719,720,721,772,773,785,786,787,788,789,790,791,792,800,801,802,807,808,809,
-  888,889,890,891,892,893,894,895,896,897,898,905,1001,1002,1003,1004,1007,1008,1009,1010,1020,1021,1022,1023,1024,1025
+  888,889,890,891,892,893,894,895,896,897,898,905,1001,1002,1003,1004,1007,1008,1009,1010,1020,1021,1022,1023,1025
 ]);
 
 const HOME_MIN_LEVEL_BY_SPECIES = new Map<number, number>(Object.entries({
@@ -93,6 +93,66 @@ const HOME_MIN_LEVEL_BY_SPECIES = new Map<number, number>(Object.entries({
 }).map(([k,v]) => [Number(k), v]) as any);
 
 const HOME_SPECIFIC_PROFILES = [
+  {
+    species: 718,
+    games: ['za'],
+    idSuffix: '2018-legends-shiny-zygarde-za',
+    homeProfileId: 'home-2018-legends-shiny-zygarde',
+    locationName: 'HOME - 2018 Legends Shiny Zygarde',
+    locationNameEn: 'HOME - 2018 Legends Shiny Zygarde',
+    method: 'HOME Event Transfer',
+    originType: 'home-event-transfer',
+    levelMin: 60,
+    levelMax: 60,
+    fixedBall: 'Cherish Ball',
+    shiny: 'Always',
+    forceShiny: true,
+    shinyLocked: false,
+    ability: 'Aura Break',
+    nature: 'Hardy',
+    heldItem: null,
+    note: 'Zygarde shiny de evento 2018 Legends Nv. 60, Cherish Ball.'
+  },
+  {
+    species: 382,
+    games: ['za', 'sv'],
+    idSuffix: 'ultra-shiny-kyogre-jpn',
+    homeProfileId: 'home-ultra-shiny-kyogre-jpn',
+    locationName: 'HOME - Evento Ultra Shiny Kyogre JPN',
+    locationNameEn: 'HOME - Ultra Shiny Kyogre Event JPN',
+    method: 'HOME Event Transfer',
+    originType: 'home-event-transfer',
+    levelMin: 60,
+    levelMax: 60,
+    fixedBall: 'Cherish Ball',
+    shiny: 'Always',
+    forceShiny: true,
+    shinyLocked: false,
+    ability: 'Drizzle',
+    nature: 'Modest',
+    heldItem: null,
+    note: 'Kyogre shiny de evento JPN, Nv. 60, Cherish Ball, naturaleza Modesta.'
+  },
+  {
+    species: 384,
+    games: ['za'],
+    idSuffix: 'shiny-rayquaza-za',
+    homeProfileId: 'home-shiny-rayquaza-za',
+    locationName: 'HOME - Shiny Rayquaza',
+    locationNameEn: 'HOME - Shiny Rayquaza',
+    method: 'HOME Legal Transfer',
+    originType: 'home-legal-transfer',
+    levelMin: 70,
+    levelMax: 70,
+    fixedBall: null,
+    shiny: 'Always',
+    forceShiny: true,
+    shinyLocked: false,
+    ability: 'Air Lock',
+    nature: 'Jolly',
+    heldItem: null,
+    note: 'Rayquaza shiny de transferencia HOME Nv. 70, naturaleza Jolly.'
+  },
   {
     species: 383,
     games: ['za','sv'],
@@ -717,7 +777,7 @@ export function validate(gameId: string, payload: any): any {
     if (e.forceShiny && !payload.shiny) errors.push('Este perfil HOME/evento requiere Shiny: Sí.');
     if (payload.alpha !== undefined && Boolean(payload.alpha) !== Boolean(e.isAlpha)) errors.push(`Alpha ilegal: este encuentro ${e.isAlpha?'sí':'no'} es Alpha.`);
     if (payload.ball && e.fixedBall && payload.ball !== e.fixedBall) errors.push(`Ball ilegal: este encuentro usa ${e.fixedBall}.`);
-    if (payload.gender && ['Male','Female','Genderless'].includes(e.gender) && payload.gender !== e.gender) errors.push(`Género ilegal: debe ser ${e.gender}.`);
+    if (payload.gender && payload.gender !== 'Random' && ['Male','Female','Genderless'].includes(e.gender) && payload.gender !== e.gender) errors.push(`Género ilegal: debe ser ${e.gender}.`);
     if (payload.gameVersion && !versionAllowed(e, payload.gameVersion)) errors.push(`Encuentro no disponible en ${payload.gameVersion}.`);
     if (payload.evMode && !['none','max'].includes(String(payload.evMode))) errors.push('EVs ilegales: usa none o max.');
     if (gameId === 'sv' && payload.teraType && !teraTypes.has(String(payload.teraType))) errors.push('Teratipo ilegal: selecciona uno de los 18 tipos de Scarlet/Violet.');

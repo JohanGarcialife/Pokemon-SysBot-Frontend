@@ -165,7 +165,7 @@
           "Ball: Cherish Ball"
         ],
         "natureMode": "selected-or-default",
-        "defaultNature": "Hardy",
+        "defaultNature": "Modest",
         "omitGenderIfRandom": true,
         "omitHeldItemIfNone": true,
         "forceLevel": 60,
@@ -179,7 +179,7 @@
         "level": 60,
         "ball": "Cherish Ball",
         "ability": "Drizzle",
-        "nature": "Random",
+        "nature": "Modest",
         "language": "Japanese"
       },
       "source": "https://projectpokemon.org/home/files/file/2528-ultras-shiny-kyogre/"
@@ -568,23 +568,18 @@
         "speciesLine": "Zygarde",
         "requiredLines": [
           "Ability: Aura Break",
-          "Level: 100",
+          "Level: 60",
           "Shiny: Yes",
           "Language: English",
           "OT: 2018 Legends",
           "TID: 060218",
-          "Ball: Cherish Ball",
-          "Item: Gold Bottle Cap",
-          "- Thousand Arrows",
-          "- Outrage",
-          "- Extreme Speed",
-          "- Dragon Dance"
+          "Ball: Cherish Ball"
         ],
         "natureMode": "selected-or-default",
         "defaultNature": "Hardy",
         "omitGenderIfRandom": true,
         "omitHeldItemIfNone": true,
-        "forceLevel": 100,
+        "forceLevel": 60,
         "forceShiny": true,
         "forceBall": "Cherish Ball",
         "notes": "Evento HOME/Mystery Gift concreto. Si SysBot lo rechaza, revisar MGDBPath y AllowTrainerDataOverride."
@@ -592,11 +587,11 @@
       "eventFacts": {
         "ot": "2018 Legends",
         "tid": "060218",
-        "level": 100,
+        "level": 60,
         "ball": "Cherish Ball",
         "ability": "Aura Break",
-        "nature": "Random",
-        "heldItem": "Gold Bottle Cap"
+        "nature": "Hardy",
+        "heldItem": null
       },
       "source": "https://projectpokemon.org/home/files/file/2825-2018-legends-shiny-zygarde/"
     },
@@ -1890,6 +1885,43 @@
         "language": "Spanish"
       },
       "source": "Project Pokemon - Gimmighoul Spotlight Returns"
+    },
+    {
+      "id": "home-shiny-rayquaza-za",
+      "enabled": true,
+      "species": 384,
+      "speciesName": "Rayquaza",
+      "games": [
+        "za"
+      ],
+      "match": {
+        "originType": [
+          "home-legal-transfer"
+        ],
+        "locationIncludes": [
+          "HOME - Shiny Rayquaza"
+        ]
+      },
+      "displayLabel": "HOME - Shiny Rayquaza",
+      "sysbot": {
+        "speciesLine": "Rayquaza",
+        "requiredLines": [
+          "Ability: Air Lock",
+          "Level: 70",
+          "Shiny: Yes"
+        ],
+        "natureMode": "selected-or-default",
+        "defaultNature": "Jolly",
+        "omitGenderIfRandom": true,
+        "omitHeldItemIfNone": true,
+        "forceLevel": 70,
+        "forceShiny": true
+      },
+      "eventFacts": {
+        "level": 70,
+        "ability": "Air Lock",
+        "nature": "Jolly"
+      }
     }
   ],
   "genericHomePolicy": {
