@@ -1407,7 +1407,7 @@
           "Shiny: Yes",
           "Language: English",
           "OT: HOME",
-          "TID: 200117",
+          "TID: 260427",
           "Ball: Cherish Ball"
         ],
         "natureMode": "selected-or-default",
@@ -1421,7 +1421,7 @@
       },
       "eventFacts": {
         "ot": "HOME",
-        "tid": "200117",
+        "tid": "260427",
         "level": 50,
         "ball": "Cherish Ball",
         "ability": "Water Absorb",
@@ -1429,6 +1429,467 @@
         "language": "English"
       },
       "source": "9034 ZA - Simulated HOME Shiny Volcanion.wa9"
+    },
+    {
+      "id": "home-event-shiny-koraidon-sv",
+      "enabled": true,
+      "species": 1007,
+      "speciesName": "Koraidon",
+      "games": ["sv"],
+      "match": {
+        "originType": ["home-event-transfer", "home-legal-transfer", "home-profile", "home"],
+        "locationIncludes": [
+          "HOME - Evento Shiny Koraidon",
+          "Koraidon"
+        ],
+        "profileIncludes": [
+          "HOME - Evento Shiny Koraidon",
+          "home-event-shiny-koraidon-sv"
+        ]
+      },
+      "displayLabel": "HOME - Evento Shiny Koraidon (Violet Serial Code)",
+      "sysbot": {
+        "speciesLine": "Koraidon",
+        "requiredLines": [
+          "Ability: Orichalcum Pulse",
+          "Level: 100",
+          "Shiny: Yes",
+          "Language: Spanish",
+          "OT: Paldea",
+          "TID: 250926",
+          "Ball: Cherish Ball",
+          "Tera Type: Fighting",
+          "- Collision Course",
+          "- Close Combat",
+          "- Flare Blitz",
+          "- Giga Impact"
+        ],
+        "natureMode": "fixed",
+        "fixedNature": "Adamant",
+        "omitGenderIfRandom": true,
+        "omitHeldItemIfNone": true,
+        "forceLevel": 100,
+        "forceShiny": true,
+        "forceBall": "Cherish Ball"
+      },
+      "eventFacts": {
+        "ot": "Paldea",
+        "tid": "250926",
+        "level": 100,
+        "ball": "Cherish Ball",
+        "ability": "Orichalcum Pulse",
+        "nature": "Adamant",
+        "language": "Spanish"
+      },
+      "source": "Project Pokemon - WC #1540 Shiny Koraidon"
+    },
+    {
+      "id": "home-event-shiny-miraidon-sv",
+      "enabled": true,
+      "species": 1008,
+      "speciesName": "Miraidon",
+      "games": ["sv"],
+      "match": {
+        "originType": ["home-event-transfer", "home-legal-transfer", "home-profile", "home"],
+        "locationIncludes": [
+          "HOME - Evento Shiny Miraidon",
+          "Miraidon"
+        ],
+        "profileIncludes": [
+          "HOME - Evento Shiny Miraidon",
+          "home-event-shiny-miraidon-sv"
+        ]
+      },
+      "displayLabel": "HOME - Evento Shiny Miraidon (Scarlet Serial Code)",
+      "sysbot": {
+        "speciesLine": "Miraidon",
+        "requiredLines": [
+          "Ability: Hadron Engine",
+          "Level: 100",
+          "Shiny: Yes",
+          "Language: Spanish",
+          "OT: Paldea",
+          "TID: 250926",
+          "Ball: Cherish Ball",
+          "Tera Type: Electric",
+          "- Electro Drift",
+          "- Thunder",
+          "- Overheat",
+          "- Hyper Beam"
+        ],
+        "natureMode": "fixed",
+        "fixedNature": "Modest",
+        "omitGenderIfRandom": true,
+        "omitHeldItemIfNone": true,
+        "forceLevel": 100,
+        "forceShiny": true,
+        "forceBall": "Cherish Ball"
+      },
+      "eventFacts": {
+        "ot": "Paldea",
+        "tid": "250926",
+        "level": 100,
+        "ball": "Cherish Ball",
+        "ability": "Hadron Engine",
+        "nature": "Modest",
+        "language": "Spanish"
+      },
+      "source": "Project Pokemon - WC #1540 Shiny Miraidon"
+    },
+    {
+      "id": "home-event-shiny-wo-chien-sv",
+      "enabled": true,
+      "species": 1001,
+      "speciesName": "Wo-Chien",
+      "games": ["sv"],
+      "match": {
+        "originType": ["home-event-transfer", "home-legal-transfer", "home-profile", "home"],
+        "locationIncludes": [
+          "HOME - Evento Shiny Wo-Chien",
+          "Wo-Chien"
+        ],
+        "profileIncludes": [
+          "HOME - Evento Shiny Wo-Chien",
+          "home-event-shiny-wo-chien-sv"
+        ]
+      },
+      "displayLabel": "HOME - Evento Shiny Wo-Chien (Mystery Gift)",
+      "sysbot": {
+        "speciesLine": "Wo-Chien",
+        "requiredLines": [
+          "Ability: Tablets of Ruin",
+          "Level: 75",
+          "Shiny: Yes",
+          "Language: Spanish",
+          "OT: Paldea",
+          "TID: 250808",
+          "Ball: Cherish Ball",
+          "Tera Type: Grass",
+          "- Giga Drain",
+          "- Dark Pulse",
+          "- Snarl",
+          "- Pollen Puff"
+        ],
+        "natureMode": "fixed",
+        "fixedNature": "Calm",
+        "omitGenderIfRandom": true,
+        "omitHeldItemIfNone": true,
+        "forceLevel": 75,
+        "forceShiny": true,
+        "forceBall": "Cherish Ball"
+      },
+      "eventFacts": {
+        "ot": "Paldea",
+        "tid": "250808",
+        "level": 75,
+        "ball": "Cherish Ball",
+        "ability": "Tablets of Ruin",
+        "nature": "Calm",
+        "language": "Spanish"
+      },
+      "source": "Project Pokemon - WC #1542 Shiny Wo-Chien"
+    },
+    {
+      "id": "home-event-shiny-chien-pao-sv",
+      "enabled": true,
+      "species": 1002,
+      "speciesName": "Chien-Pao",
+      "games": ["sv"],
+      "match": {
+        "originType": ["home-event-transfer", "home-legal-transfer", "home-profile", "home"],
+        "locationIncludes": [
+          "HOME - Evento Shiny Chien-Pao",
+          "Chien-Pao"
+        ],
+        "profileIncludes": [
+          "HOME - Evento Shiny Chien-Pao",
+          "home-event-shiny-chien-pao-sv"
+        ]
+      },
+      "displayLabel": "HOME - Evento Shiny Chien-Pao (Mystery Gift)",
+      "sysbot": {
+        "speciesLine": "Chien-Pao",
+        "requiredLines": [
+          "Ability: Sword of Ruin",
+          "Level: 75",
+          "Shiny: Yes",
+          "Language: Spanish",
+          "OT: Paldea",
+          "TID: 250822",
+          "Ball: Cherish Ball",
+          "Tera Type: Ice",
+          "- Icicle Crash",
+          "- Crunch",
+          "- Sacred Sword",
+          "- Ice Shard"
+        ],
+        "natureMode": "fixed",
+        "fixedNature": "Adamant",
+        "omitGenderIfRandom": true,
+        "omitHeldItemIfNone": true,
+        "forceLevel": 75,
+        "forceShiny": true,
+        "forceBall": "Cherish Ball"
+      },
+      "eventFacts": {
+        "ot": "Paldea",
+        "tid": "250822",
+        "level": 75,
+        "ball": "Cherish Ball",
+        "ability": "Sword of Ruin",
+        "nature": "Adamant",
+        "language": "Spanish"
+      },
+      "source": "Project Pokemon - WC #1544 Shiny Chien-Pao"
+    },
+    {
+      "id": "home-event-shiny-ting-lu-sv",
+      "enabled": true,
+      "species": 1003,
+      "speciesName": "Ting-Lu",
+      "games": ["sv"],
+      "match": {
+        "originType": ["home-event-transfer", "home-legal-transfer", "home-profile", "home"],
+        "locationIncludes": [
+          "HOME - Evento Shiny Ting-Lu",
+          "Ting-Lu"
+        ],
+        "profileIncludes": [
+          "HOME - Evento Shiny Ting-Lu",
+          "home-event-shiny-ting-lu-sv"
+        ]
+      },
+      "displayLabel": "HOME - Evento Shiny Ting-Lu (Mystery Gift)",
+      "sysbot": {
+        "speciesLine": "Ting-Lu",
+        "requiredLines": [
+          "Ability: Vessel of Ruin",
+          "Level: 75",
+          "Shiny: Yes",
+          "Language: Spanish",
+          "OT: Paldea",
+          "TID: 250905",
+          "Ball: Cherish Ball",
+          "Tera Type: Ground",
+          "- Stomping Tantrum",
+          "- Stone Edge",
+          "- Snarl",
+          "- Heavy Slam"
+        ],
+        "natureMode": "fixed",
+        "fixedNature": "Impish",
+        "omitGenderIfRandom": true,
+        "omitHeldItemIfNone": true,
+        "forceLevel": 75,
+        "forceShiny": true,
+        "forceBall": "Cherish Ball"
+      },
+      "eventFacts": {
+        "ot": "Paldea",
+        "tid": "250905",
+        "level": 75,
+        "ball": "Cherish Ball",
+        "ability": "Vessel of Ruin",
+        "nature": "Impish",
+        "language": "Spanish"
+      },
+      "source": "Project Pokemon - WC #1546 Shiny Ting-Lu"
+    },
+    {
+      "id": "home-event-shiny-chi-yu-sv",
+      "enabled": true,
+      "species": 1004,
+      "speciesName": "Chi-Yu",
+      "games": ["sv"],
+      "match": {
+        "originType": ["home-event-transfer", "home-legal-transfer", "home-profile", "home"],
+        "locationIncludes": [
+          "HOME - Evento Shiny Chi-Yu",
+          "Chi-Yu"
+        ],
+        "profileIncludes": [
+          "HOME - Evento Shiny Chi-Yu",
+          "home-event-shiny-chi-yu-sv"
+        ]
+      },
+      "displayLabel": "HOME - Evento Shiny Chi-Yu (Mystery Gift)",
+      "sysbot": {
+        "speciesLine": "Chi-Yu",
+        "requiredLines": [
+          "Ability: Beads of Ruin",
+          "Level: 75",
+          "Shiny: Yes",
+          "Language: Spanish",
+          "OT: Paldea",
+          "TID: 250919",
+          "Ball: Cherish Ball",
+          "Tera Type: Fire",
+          "- Heat Wave",
+          "- Dark Pulse",
+          "- Snarl",
+          "- Flamethrower"
+        ],
+        "natureMode": "fixed",
+        "fixedNature": "Modest",
+        "omitGenderIfRandom": true,
+        "omitHeldItemIfNone": true,
+        "forceLevel": 75,
+        "forceShiny": true,
+        "forceBall": "Cherish Ball"
+      },
+      "eventFacts": {
+        "ot": "Paldea",
+        "tid": "250919",
+        "level": 75,
+        "ball": "Cherish Ball",
+        "ability": "Beads of Ruin",
+        "nature": "Modest",
+        "language": "Spanish"
+      },
+      "source": "Project Pokemon - WC #1548 Shiny Chi-Yu"
+    },
+    {
+      "id": "home-event-shiny-meloetta-sv",
+      "enabled": true,
+      "species": 648,
+      "speciesName": "Meloetta",
+      "games": ["sv"],
+      "match": {
+        "originType": ["home-event-transfer", "home-legal-transfer", "home-profile", "home"],
+        "locationIncludes": [
+          "HOME - Evento Shiny Meloetta",
+          "Meloetta"
+        ],
+        "profileIncludes": [
+          "HOME - Evento Shiny Meloetta",
+          "home-event-shiny-meloetta-sv"
+        ]
+      },
+      "displayLabel": "HOME - Shiny Meloetta (Recompensa Pokédex)",
+      "sysbot": {
+        "speciesLine": "Meloetta",
+        "requiredLines": [
+          "Ability: Serene Grace",
+          "Level: 50",
+          "Shiny: Yes",
+          "Language: Spanish",
+          "OT: HOME",
+          "TID: 241016",
+          "Ball: Cherish Ball",
+          "Tera Type: Normal",
+          "- Relic Song",
+          "- Echoed Voice",
+          "- Psybeam",
+          "- Sing"
+        ],
+        "natureMode": "fixed",
+        "fixedNature": "Modest",
+        "omitGenderIfRandom": true,
+        "omitHeldItemIfNone": true,
+        "forceLevel": 50,
+        "forceShiny": true,
+        "forceBall": "Cherish Ball"
+      },
+      "eventFacts": {
+        "ot": "HOME",
+        "tid": "241016",
+        "level": 50,
+        "ball": "Cherish Ball",
+        "ability": "Serene Grace",
+        "nature": "Modest",
+        "language": "Spanish"
+      },
+      "source": "Project Pokemon - SV Pokedex Completion Shiny Meloetta"
+    },
+    {
+      "id": "home-event-shiny-rayquaza-sv-raid",
+      "enabled": true,
+      "species": 384,
+      "speciesName": "Rayquaza",
+      "games": ["sv"],
+      "match": {
+        "originType": ["home-event-transfer", "home-legal-transfer", "home-profile", "home"],
+        "locationIncludes": [
+          "HOME - Evento Shiny Rayquaza (Tera Raid)",
+          "Rayquaza (Tera Raid)"
+        ],
+        "profileIncludes": [
+          "HOME - Evento Shiny Rayquaza (Tera Raid)",
+          "home-event-shiny-rayquaza-sv-raid"
+        ]
+      },
+      "displayLabel": "HOME - Shiny Rayquaza (Tera Raid SV)",
+      "sysbot": {
+        "speciesLine": "Rayquaza",
+        "requiredLines": [
+          "Ability: Air Lock",
+          "Level: 75",
+          "Shiny: Yes",
+          "Language: Spanish",
+          "Ball: Poké Ball",
+          "Tera Type: Dragon"
+        ],
+        "natureMode": "fixed",
+        "fixedNature": "Hardy",
+        "omitGenderIfRandom": true,
+        "omitHeldItemIfNone": true,
+        "forceLevel": 75,
+        "forceShiny": true,
+        "forceBall": "Poké Ball"
+      },
+      "eventFacts": {
+        "level": 75,
+        "ball": "Poké Ball",
+        "ability": "Air Lock",
+        "nature": "Hardy",
+        "language": "Spanish"
+      },
+      "source": "Project Pokemon - Poke Portal Event #82 Shiny Rayquaza"
+    },
+    {
+      "id": "home-event-shiny-gimmighoul-sv-raid",
+      "enabled": true,
+      "species": 999,
+      "speciesName": "Gimmighoul",
+      "games": ["sv"],
+      "match": {
+        "originType": ["home-event-transfer", "home-legal-transfer", "home-profile", "home"],
+        "locationIncludes": [
+          "HOME - Evento Shiny Gimmighoul (Tera Raid)",
+          "Gimmighoul (Tera Raid)"
+        ],
+        "profileIncludes": [
+          "HOME - Evento Shiny Gimmighoul (Tera Raid)",
+          "home-event-shiny-gimmighoul-sv-raid"
+        ]
+      },
+      "displayLabel": "HOME - Shiny Gimmighoul (Tera Raid SV)",
+      "sysbot": {
+        "speciesLine": "Gimmighoul",
+        "requiredLines": [
+          "Ability: Rattled",
+          "Level: 75",
+          "Shiny: Yes",
+          "Language: Spanish",
+          "Ball: Poké Ball",
+          "Tera Type: Ghost"
+        ],
+        "natureMode": "fixed",
+        "fixedNature": "Hardy",
+        "omitGenderIfRandom": true,
+        "omitHeldItemIfNone": true,
+        "forceLevel": 75,
+        "forceShiny": true,
+        "forceBall": "Poké Ball"
+      },
+      "eventFacts": {
+        "level": 75,
+        "ball": "Poké Ball",
+        "ability": "Rattled",
+        "nature": "Hardy",
+        "language": "Spanish"
+      },
+      "source": "Project Pokemon - Gimmighoul Spotlight Returns"
     }
   ],
   "genericHomePolicy": {

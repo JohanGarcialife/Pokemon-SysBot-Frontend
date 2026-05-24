@@ -156,8 +156,8 @@ async function runTests() {
     }
     console.log('✅ Test 4 Passed!');
 
-    // Test 5: dispatchTradeCommand .pa9 file attachment (ZA)
-    console.log('Running Test 5 (.pa9 file attachments for ZA)...');
+    // Test 5: dispatchTradeCommand .pa9 file attachment (ZA Premium)
+    console.log('Running Test 5 (.pa9 file attachments for ZA Premium)...');
     process.env.DISCORD_WEBHOOK_ZA = mockWebhookUrl;
 
     const res5 = await dispatchTradeCommand('za', [
@@ -180,7 +180,7 @@ async function runTests() {
         evs: { hp: 0, attack: 0, defense: 0, spAttack: 0, spDefense: 0, speed: 0 },
         homeProfileId: 'home-shiny-meltan'
       }
-    ], '87654321', 'free');
+    ], '87654321', 'premium');
 
     console.log('Dispatch result Test 5:', res5);
     console.log('Fetch URL Test 5:', lastFetchUrl);
@@ -192,7 +192,7 @@ async function runTests() {
       const payload = JSON.parse(payloadJsonStr);
       console.log('Command Content Test 5:', payload.content);
 
-      if (payload.content !== '%trade 87654321') {
+      if (payload.content !== '$trade 87654321') {
         console.error('❌ Test 5 Failed! Message content is not exactly prefix + trade + code');
         process.exit(1);
       }
@@ -209,6 +209,54 @@ async function runTests() {
       process.exit(1);
     }
     console.log('✅ Test 5 Passed!');
+
+    // Test 6: dispatchTradeCommand no .pa9 file attachment for ZA Free
+    console.log('Running Test 6 (no .pa9 file attachments for ZA Free)...');
+
+    const res6 = await dispatchTradeCommand('za', [
+      {
+        species: 'Meltan',
+        dexId: 808,
+        form: 0,
+        level: 1,
+        nature: 'Hardy',
+        ability: 'Magnet Pull',
+        shiny: true,
+        alpha: false,
+        gender: 'Random',
+        heldItem: 'None',
+        teraType: 'Normal',
+        pokeball: 'Poke Ball',
+        origin: 'Paldea',
+        moves: [],
+        ivs: { hp: 31, attack: 31, defense: 31, spAttack: 31, spDefense: 31, speed: 31 },
+        evs: { hp: 0, attack: 0, defense: 0, spAttack: 0, spDefense: 0, speed: 0 },
+        homeProfileId: 'home-shiny-meltan'
+      }
+    ], '87654321', 'free');
+
+    console.log('Dispatch result Test 6:', res6);
+    console.log('Fetch URL Test 6:', lastFetchUrl);
+    console.log('Has body FormData Test 6?', lastFetchOptions?.body instanceof FormData);
+
+    if (lastFetchOptions?.body instanceof FormData) {
+      console.error('❌ Test 6 Failed! Fetch body should NOT be FormData for ZA Free');
+      process.exit(1);
+    } else {
+      const payload = JSON.parse(lastFetchOptions.body);
+      console.log('Command Content Test 6:', payload.content);
+
+      if (!payload.content.startsWith('%trade 87654321')) {
+        console.error('❌ Test 6 Failed! Message content does not start with %trade 87654321');
+        process.exit(1);
+      }
+
+      if (!payload.content.includes('Meltan')) {
+        console.error('❌ Test 6 Failed! Message content does not contain Meltan Showdown body');
+        process.exit(1);
+      }
+    }
+    console.log('✅ Test 6 Passed!');
 
   } finally {
     globalThis.fetch = originalFetch;

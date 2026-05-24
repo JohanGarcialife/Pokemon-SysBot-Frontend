@@ -120,8 +120,8 @@ export async function dispatchTradeCommand(
   const attachments: { buffer: Buffer; filename: string }[] = [];
 
   const commandLines = processedPokemonList.map(p => {
-    // Try to find a HOME event profile with a pa9 attachment (ZA only)
-    if (game === 'za') {
+    // Try to find a HOME event profile with a pa9 attachment (ZA only, premium only)
+    if (game === 'za' && userPlan === 'premium') {
       const eventProfile = findHomeEventProfile(p);
       if (eventProfile?.id) {
         const pa9 = loadPa9Attachment(eventProfile.id);
