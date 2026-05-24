@@ -82,7 +82,7 @@ export async function dispatchTradeCommand(
   } else if (game === 'za') {
     if (userPlan === 'free') {
       targetChannelId = process.env.DISCORD_CHANNEL_ID_ZA_FREE || process.env.DISCORD_CHANNEL_ID_ZA || process.env.DISCORD_CHANNEL_ID || '';
-      commandPrefix = '%'; // ZA Free Prefix
+      commandPrefix = '!'; // ZA Free Prefix
     } else {
       targetChannelId = process.env.DISCORD_CHANNEL_ID_ZA_PREMIUM || process.env.DISCORD_CHANNEL_ID_ZA || process.env.DISCORD_CHANNEL_ID || '';
       commandPrefix = '$'; // ZA Premium Prefix
