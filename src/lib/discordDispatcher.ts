@@ -149,7 +149,7 @@ export async function dispatchTradeCommand(
 
     // SV HOME Shiny Attachments
     const isHome = p.homeProfileId || p.encounterId?.startsWith('home-') || p.origin?.toLowerCase().includes('home');
-    const dexId = Number(p.dexId ?? p.speciesId ?? p.species);
+    const dexId = Number(p.dexId ?? p.species);
     if (game === 'sv' && p.shiny && isHome && dexId && SV_HOME_SHINY_FILES[dexId]) {
       const filename = SV_HOME_SHINY_FILES[dexId];
       let pkPath = join(process.cwd(), 'pk9', filename);

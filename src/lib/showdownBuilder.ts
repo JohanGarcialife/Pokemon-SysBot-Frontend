@@ -31,6 +31,7 @@ export interface PokemonBuildPayload {
   encounter?: Record<string, any>
   isAlphaEncounter?: boolean
   homeProfileId?: string | null
+  encounterId?: string
 }
 
 const LEGENDS_ZA_GAME = 'legends-za'
