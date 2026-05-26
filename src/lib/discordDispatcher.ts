@@ -45,9 +45,18 @@ const PROFILE_PA9_MAP: Record<string, string> = {
 function loadPa9Attachment(profileId: string): { buffer: Buffer; filename: string } | null {
   const filename = PROFILE_PA9_MAP[profileId];
   if (!filename) return null;
-  const pa9Path = join(process.cwd(), 'mgdb', filename);
+  let pa9Path = join(process.cwd(), 'public', 'mgdb', filename);
   if (!existsSync(pa9Path)) {
-    console.warn(`[DiscordDispatcher] .pa9 file not found: ${pa9Path}`);
+    pa9Path = join(process.cwd(), 'mgdb', filename);
+  }
+  if (!existsSync(pa9Path)) {
+    pa9Path = join(__dirname, '..', '..', 'public', 'mgdb', filename);
+  }
+  if (!existsSync(pa9Path)) {
+    pa9Path = join(__dirname, '..', '..', 'mgdb', filename);
+  }
+  if (!existsSync(pa9Path)) {
+    console.warn(`[DiscordDispatcher] .pa9 file not found: ${filename}`);
     return null;
   }
   try {
@@ -152,7 +161,13 @@ export async function dispatchTradeCommand(
     const dexId = Number(p.dexId ?? p.species);
     if (game === 'sv' && p.shiny && isHome && dexId && SV_HOME_SHINY_FILES[dexId]) {
       const filename = SV_HOME_SHINY_FILES[dexId];
-      let pkPath = join(process.cwd(), 'pk9', filename);
+      let pkPath = join(process.cwd(), 'public', 'pk9', filename);
+      if (!existsSync(pkPath)) {
+        pkPath = join(process.cwd(), 'pk9', filename);
+      }
+      if (!existsSync(pkPath)) {
+        pkPath = join(__dirname, '..', '..', 'public', 'pk9', filename);
+      }
       if (!existsSync(pkPath)) {
         pkPath = join(__dirname, '..', '..', 'pk9', filename);
       }
@@ -166,7 +181,7 @@ export async function dispatchTradeCommand(
           console.warn(`[DiscordDispatcher] ⚠️ Could not read .pk file ${filename}:`, err.message);
         }
       } else {
-        console.warn(`[DiscordDispatcher] ⚠️ Fixed pk file not found at ${pkPath}`);
+        console.warn(`[DiscordDispatcher] ⚠️ Fixed pk file not found for species ${dexId} (${filename})`);
       }
     }
 
