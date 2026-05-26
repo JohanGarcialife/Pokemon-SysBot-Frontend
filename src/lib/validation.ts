@@ -576,6 +576,21 @@ export function canUseHomeTransfer(gameId: string, species: number, hasNoNativeE
   
   if (gameId !== 'za' && gameId !== 'sv') return false;
 
+  // Block HOME transfer for these specific species in Scarlet/Violet completely
+  if (gameId === 'sv') {
+    const blockedHomeSpecies = new Set([
+      891,  // Kubfu
+      892,  // Urshifu
+      1009, // Walking Wake
+      1010, // Iron Leaves
+      1020, // Gouging Fire
+      1021, // Raging Bolt
+      1022, // Iron Boulder
+      1023  // Iron Crown
+    ]);
+    if (blockedHomeSpecies.has(sp)) return false;
+  }
+
   // 1. If it has an active/enabled HOME event profile
   if (hasEnabledHomeEventProfile(gameId, sp)) return true;
 
@@ -588,8 +603,36 @@ export function canUseHomeTransfer(gameId: string, species: number, hasNoNativeE
   return false;
 }
 
-export function canBeShinyViaHome(species: number): boolean {
+export function canBeShinyViaHome(species: number, gameId?: string): boolean {
   const sp = Number(species);
+  const g = gameId ? String(gameId).toLowerCase() : null;
+  
+  if (g === 'sv') {
+    const svBlockedHomeShiny = new Set([
+      249,  // Lugia
+      380,  // Latias
+      381,  // Latios
+      638,  // Cobalion
+      639,  // Terrakion
+      640,  // Virizion
+      643,  // Reshiram
+      644,  // Zekrom
+      646,  // Kyurem
+      891,  // Kubfu
+      892,  // Urshifu
+      896,  // Glastrier
+      897,  // Spectrier
+      898,  // Calyrex
+      1009, // Walking Wake
+      1010, // Iron Leaves
+      1020, // Gouging Fire
+      1021, // Raging Bolt
+      1022, // Iron Boulder
+      1023  // Iron Crown
+    ]);
+    if (svBlockedHomeShiny.has(sp)) return false;
+  }
+
   if (HOME_SHINY_FORCE_ALLOW.has(sp)) return true;
   if (HOME_SHINY_NEVER_SPECIES.has(sp)) return false;
   return true;
@@ -597,7 +640,7 @@ export function canBeShinyViaHome(species: number): boolean {
 
 export function makeHomeTransferEncounters(gameId: string, species: number, form = 0) {
   const sp = Number(species);
-  const shinyAllowed = canBeShinyViaHome(sp);
+  const shinyAllowed = canBeShinyViaHome(sp, gameId);
   const isSV = gameId === 'sv';
   const base = [];
   for (const profile of HOME_SPECIFIC_PROFILES) {
@@ -699,6 +742,12 @@ export function loadEncounters(gameId: string, species: number, form = 0): any[]
   const file = encounterFile(gameId, species, form);
   let list = existsSync(file) ? JSON.parse(readFileSync(file,'utf8')) : [];
   list = dedupeEncounters(list);
+
+  // Filter out Poco Path / Sendero de Cahíz for Koraidon/Miraidon (species 1007/1008) in SV
+  if (gameId === 'sv' && (species === 1007 || species === 1008)) {
+    list = list.filter((e: any) => e.id !== 'static-staticsl-73' && e.id !== 'static-staticvl-79');
+  }
+
   if (canUseHomeTransfer(gameId, species, list.length === 0)) {
     const homes = makeHomeTransferEncounters(gameId, species, form);
     const existing = new Set(list.map((e: any) => e.id));
