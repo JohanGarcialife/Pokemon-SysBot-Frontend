@@ -63,6 +63,30 @@ function loadPa9Attachment(profileId: string): { buffer: Buffer; filename: strin
  * Dispatches trade commands to Discord using either a Discord Selfbot Token (REST request)
  * or Webhooks, depending on the environment variables defined.
  */
+// Map of SV HOME shiny species ID → pk file name in pk9/ (SV only)
+const SV_HOME_SHINY_FILES: Record<number, string> = {
+  144: '0144-01 ★ - Articuno - F2270DF1E9CC.pk8',
+  145: '0145-01 ★ - Zapdos - B5F817E8AFE3.pk8',
+  146: '0146-01 ★ - Moltres - B6184A160BBA.pk8',
+  150: '0150 ★ - Mewtwo - 97B4B79FA948.pk6',
+  243: '0243 ★ - RAIKOU - 346836D46750.pk4',
+  244: '0244 ★ - ENTEI - 32627D5BB510.pk4',
+  245: '0245 ★ - SUICUNE - 891442FCBC7E.pk4',
+  250: '0250 ★ - Ho-Oh - FB3B64A582E9.pk6',
+  382: '0382 ★ - Kyogre - 41F13FAB7818.pk7',
+  383: '0383 ★ - Groudon - 470D05B9D0DB.pk7',
+  384: '0384 ★ - Rayquaza - 4426B679369F.pk6',
+  483: '0483 ★ - Dialga - BEE9204C004C.pk5',
+  484: '0484 ★ - Palkia - 5BD5236C00E9.pk5',
+  791: '0791 ★ - Solgaleo - AF9DB8E828BA.pk7',
+  792: '0792 ★ - Lunala - 8B8332462948.pk7',
+  800: '0800 ★ - Necrozma - 091B3E0E66BA.pk7',
+};
+
+/**
+ * Dispatches trade commands to Discord using either a Discord Selfbot Token (REST request)
+ * or Webhooks, depending on the environment variables defined.
+ */
 export async function dispatchTradeCommand(
   game: 'za' | 'sv',
   pokemonList: PokemonBuildPayload[],
@@ -82,33 +106,19 @@ export async function dispatchTradeCommand(
   } else if (game === 'za') {
     if (userPlan === 'free') {
       targetChannelId = process.env.DISCORD_CHANNEL_ID_ZA_FREE || process.env.DISCORD_CHANNEL_ID_ZA || process.env.DISCORD_CHANNEL_ID || '';
-      commandPrefix = '!'; // ZA Free Prefix
+      commandPrefix = '%'; // ZA Free Prefix
     } else {
       targetChannelId = process.env.DISCORD_CHANNEL_ID_ZA_PREMIUM || process.env.DISCORD_CHANNEL_ID_ZA || process.env.DISCORD_CHANNEL_ID || '';
-      commandPrefix = '$'; // ZA Premium Prefix
+      commandPrefix = '!'; // ZA Premium Prefix (matches client request "!trade")
     }
   }
 
   targetChannelId = targetChannelId.replace(/[^0-9]/g, '');
 
-  // 2. Event data injection (Gift / Mystery Gift OT/TID/Language mapping from OrderWorker.ts)
-  const EVENT_DATA: Record<string, { ot: string; tid: number; language: string }> = {
-    genesect:  { ot: 'Plasma', tid: 10072, language: 'Japanese' },
-    groudon:   { ot: 'HOME',   tid: 240001, language: 'Spanish'  },
-    kyogre:    { ot: 'HOME',   tid: 240001, language: 'Spanish'  },
-    rayquaza:  { ot: 'HOME',   tid: 240001, language: 'Spanish'  },
-  };
-
+  // 2. Set the game property on each Pokemon copy
   const processedPokemonList = pokemonList.map(p => {
     const copy = { ...p };
     copy.game = game;
-    const speciesKey = String(p.species).toLowerCase();
-    const eventData = p.shiny ? EVENT_DATA[speciesKey] : undefined;
-    if (eventData) {
-      (copy as any).eventOT = eventData.ot;
-      (copy as any).eventTID = eventData.tid;
-      (copy as any).eventLanguage = eventData.language;
-    }
     return copy;
   });
 
@@ -116,7 +126,9 @@ export async function dispatchTradeCommand(
   //    Strategy:
   //      a) If the game is ZA AND there is a .pa9 file for this HOME profile → attach the .pa9
   //         and send only the trade code as message content (SysBot reads the file).
-  //      b) Otherwise → Showdown text command (works for Groudon, SV, etc.)
+  //      b) If the game is SV AND the Pokemon is HOME shiny and has a fixed .pk file → attach the .pk
+  //         and send only the trade code as message content.
+  //      c) Otherwise → Showdown text command (works for Groudon, SV, etc.)
   const attachments: { buffer: Buffer; filename: string }[] = [];
 
   const commandLines = processedPokemonList.map(p => {
@@ -134,7 +146,31 @@ export async function dispatchTradeCommand(
         }
       }
     }
-    // Fallback: Showdown text (Groudon, SV Pokémon, anything without a .pa9)
+
+    // SV HOME Shiny Attachments
+    const isHome = p.homeProfileId || p.encounterId?.startsWith('home-') || p.origin?.toLowerCase().includes('home');
+    const dexId = Number(p.dexId ?? p.speciesId ?? p.species);
+    if (game === 'sv' && p.shiny && isHome && dexId && SV_HOME_SHINY_FILES[dexId]) {
+      const filename = SV_HOME_SHINY_FILES[dexId];
+      let pkPath = join(process.cwd(), 'pk9', filename);
+      if (!existsSync(pkPath)) {
+        pkPath = join(__dirname, '..', '..', 'pk9', filename);
+      }
+      if (existsSync(pkPath)) {
+        try {
+          const buffer = readFileSync(pkPath);
+          attachments.push({ buffer, filename });
+          console.log(`[DiscordDispatcher] ✅ Loaded fixed .pk file: ${filename} for species ${dexId}`);
+          return `${commandPrefix}trade ${formattedCode}`;
+        } catch (err: any) {
+          console.warn(`[DiscordDispatcher] ⚠️ Could not read .pk file ${filename}:`, err.message);
+        }
+      } else {
+        console.warn(`[DiscordDispatcher] ⚠️ Fixed pk file not found at ${pkPath}`);
+      }
+    }
+
+    // Fallback: Showdown text (Groudon, SV Pokémon, anything without a .pa9 or .pk file)
     const eventBody = formatHomeEventSysbotCommand(p);
     const showdownText = eventBody || buildShowdownText(p, game);
     return `${commandPrefix}trade ${formattedCode}\n${showdownText}`;
