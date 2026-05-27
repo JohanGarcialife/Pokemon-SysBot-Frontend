@@ -551,6 +551,119 @@ const HOME_SPECIFIC_PROFILES = [
   }
 ];
 
+export interface StarterEvolutionProfile {
+  finalName: string;
+  baseSpecies: number;
+  baseName: string;
+  minLevel: number;
+}
+
+export const SV_STARTER_FINAL_EVOLUTION_PROFILES = new Map<number, StarterEvolutionProfile>([
+  [3,   { finalName: 'Venusaur',    baseSpecies: 1,   baseName: 'Bulbasaur',  minLevel: 32 }],
+  [6,   { finalName: 'Charizard',   baseSpecies: 4,   baseName: 'Charmander', minLevel: 36 }],
+  [9,   { finalName: 'Blastoise',   baseSpecies: 7,   baseName: 'Squirtle',   minLevel: 36 }],
+  [154, { finalName: 'Meganium',    baseSpecies: 152, baseName: 'Chikorita',  minLevel: 32 }],
+  [157, { finalName: 'Typhlosion',  baseSpecies: 155, baseName: 'Cyndaquil',  minLevel: 36 }],
+  [160, { finalName: 'Feraligatr',  baseSpecies: 158, baseName: 'Totodile',   minLevel: 30 }],
+  [254, { finalName: 'Sceptile',    baseSpecies: 252, baseName: 'Treecko',    minLevel: 36 }],
+  [257, { finalName: 'Blaziken',    baseSpecies: 255, baseName: 'Torchic',    minLevel: 36 }],
+  [260, { finalName: 'Swampert',    baseSpecies: 258, baseName: 'Mudkip',     minLevel: 36 }],
+  [389, { finalName: 'Torterra',    baseSpecies: 387, baseName: 'Turtwig',    minLevel: 32 }],
+  [392, { finalName: 'Infernape',   baseSpecies: 390, baseName: 'Chimchar',   minLevel: 36 }],
+  [395, { finalName: 'Empoleon',    baseSpecies: 393, baseName: 'Piplup',     minLevel: 36 }],
+  [497, { finalName: 'Serperior',   baseSpecies: 495, baseName: 'Snivy',      minLevel: 36 }],
+  [500, { finalName: 'Emboar',      baseSpecies: 498, baseName: 'Tepig',      minLevel: 36 }],
+  [503, { finalName: 'Samurott',    baseSpecies: 501, baseName: 'Oshawott',   minLevel: 36 }],
+  [652, { finalName: 'Chesnaught',  baseSpecies: 650, baseName: 'Chespin',    minLevel: 36 }],
+  [655, { finalName: 'Delphox',     baseSpecies: 653, baseName: 'Fennekin',   minLevel: 36 }],
+  [658, { finalName: 'Greninja',    baseSpecies: 656, baseName: 'Froakie',    minLevel: 36 }],
+  [724, { finalName: 'Decidueye',   baseSpecies: 722, baseName: 'Rowlet',     minLevel: 34 }],
+  [727, { finalName: 'Incineroar',  baseSpecies: 725, baseName: 'Litten',     minLevel: 34 }],
+  [730, { finalName: 'Primarina',   baseSpecies: 728, baseName: 'Popplio',    minLevel: 34 }],
+  [812, { finalName: 'Rillaboom',   baseSpecies: 810, baseName: 'Grookey',    minLevel: 35 }],
+  [815, { finalName: 'Cinderace',   baseSpecies: 813, baseName: 'Scorbunny',  minLevel: 35 }],
+  [818, { finalName: 'Inteleon',    baseSpecies: 816, baseName: 'Sobble',     minLevel: 35 }],
+  [908, { finalName: 'Meowscarada', baseSpecies: 906, baseName: 'Sprigatito', minLevel: 36 }],
+  [911, { finalName: 'Skeledirge',  baseSpecies: 909, baseName: 'Fuecoco',    minLevel: 36 }],
+  [914, { finalName: 'Quaquaval',   baseSpecies: 912, baseName: 'Quaxly',     minLevel: 36 }],
+]);
+
+export function makeSvStarterFinalEvolvedEncounters(species: number, form = 0): any[] {
+  const sp = Number(species);
+  if (Number(form || 0) !== 0) return [];
+  const profile = SV_STARTER_FINAL_EVOLUTION_PROFILES.get(sp);
+  if (!profile) return [];
+
+  const out: any[] = [];
+
+  // 1) Origen huevo: siempre es una ruta segura para iniciales con crianza legal en SV.
+  out.push({
+    id: `sv-starter-final-hatched-${sp}-from-${profile.baseSpecies}`,
+    game: 'SV',
+    version: 'Scarlet/Violet',
+    source: 'PKDEX patch - starter final evolved from legal egg origin',
+    method: 'Evolved',
+    originMethod: 'Hatched',
+    species: sp,
+    speciesName: profile.finalName,
+    speciesNameEn: profile.finalName,
+    form: 0,
+    levelMin: profile.minLevel,
+    levelMax: 100,
+    location: 6,
+    locationName: `South Province (Area One) - evolucionado desde ${profile.baseName}`,
+    locationNameEn: `South Province (Area One) - evolved from ${profile.baseName}`,
+    gender: 'Random',
+    genderCode: 255,
+    shiny: 'Random',
+    shinyLocked: false,
+    isAlpha: false,
+    fixedBall: null,
+    allowedBalls: 'AnyLegalTransferBall',
+    flawlessIVCount: 0,
+    nature: 'Random',
+    evolved: true,
+    evolvedFromSpecies: profile.baseSpecies,
+    evolvedFromForm: 0,
+    evolvedFromName: profile.baseName,
+    note: `${profile.finalName} shiny legal como ${profile.baseName} shiny nacido de huevo y evolucionado. Nivel mínimo forzado: ${profile.minLevel}.`
+  });
+
+  // 2) Origen salvaje del DLC/Terarium: hereda los encuentros Wild shiny-validos de la forma base.
+  const baseFile = encounterFile('sv', profile.baseSpecies, 0);
+  const baseList = existsSync(baseFile) ? JSON.parse(readFileSync(baseFile, 'utf8')) : [];
+  for (const e of baseList) {
+    if (String(e.method || '') !== 'Wild') continue;
+    if (e.shiny === 'Never' || e.shinyLocked) continue;
+    const min = Math.max(profile.minLevel, Number(e.levelMin || profile.minLevel));
+    const max = Math.max(min, Number(e.levelMax || 100));
+    out.push({
+      ...e,
+      id: `sv-starter-final-evolved-${sp}-from-${e.id}`,
+      source: `${e.source || 'SV encounter'} + PKDEX starter-final evolution patch`,
+      method: 'Evolved',
+      originMethod: e.method,
+      species: sp,
+      speciesName: profile.finalName,
+      speciesNameEn: profile.finalName,
+      form: 0,
+      levelMin: min,
+      levelMax: max,
+      shiny: 'Random',
+      shinyLocked: false,
+      evolved: true,
+      evolvedFromSpecies: profile.baseSpecies,
+      evolvedFromForm: 0,
+      evolvedFromName: profile.baseName,
+      locationName: `${e.locationName || 'Origen salvaje'} - evolucionado desde ${profile.baseName}`,
+      locationNameEn: `${e.locationNameEn || e.locationName || 'Wild origin'} - evolved from ${profile.baseName}`,
+      note: `${profile.finalName} shiny legal como ${profile.baseName} shiny capturado en ${e.locationName || 'origen salvaje'} y evolucionado. Nivel mínimo forzado: ${profile.minLevel}.`
+    });
+  }
+  return out;
+}
+
+
 export function homeMinLevelForSpecies(species: number): number {
   const sp = Number(species);
   if (HOME_MIN_LEVEL_BY_SPECIES.has(sp)) return HOME_MIN_LEVEL_BY_SPECIES.get(sp)!;
@@ -748,6 +861,12 @@ export function loadEncounters(gameId: string, species: number, form = 0): any[]
     list = list.filter((e: any) => e.id !== 'static-staticsl-73' && e.id !== 'static-staticvl-79');
   }
 
+  // Load evolved starter encounters in SV
+  if (gameId === 'sv') {
+    list.push(...makeSvStarterFinalEvolvedEncounters(species, form));
+    list = dedupeEncounters(list);
+  }
+
   if (canUseHomeTransfer(gameId, species, list.length === 0)) {
     const homes = makeHomeTransferEncounters(gameId, species, form);
     const existing = new Set(list.map((e: any) => e.id));
@@ -803,6 +922,21 @@ export function options(gameId: string, e: any) {
 export function validate(gameId: string, payload: any): any {
   const g = games[gameId];
   if (!g) return { legal: false, errors: ['Juego no soportado.'] };
+  
+  // Pre-process level for SV starter final evolutions to ensure legal min level
+  payload = { ...payload };
+  if (gameId === 'sv') {
+    const species = Number(payload.dexId ?? payload.speciesId ?? payload.species);
+    const profile = SV_STARTER_FINAL_EVOLUTION_PROFILES.get(species);
+    if (profile) {
+      const currentLevel = Number(payload.level || 0);
+      const minLevel = profile.minLevel;
+      if (!currentLevel || currentLevel < minLevel) {
+        payload.level = minLevel;
+      }
+    }
+  }
+
   const species = Number(payload.dexId ?? payload.speciesId ?? payload.species);
   const form = Number(payload.form || 0);
   let candidates = loadEncounters(gameId, species, form);
@@ -905,6 +1039,7 @@ export async function createSingleOrder(order: any, user?: AuthenticatedUser) {
   const validation = validate(gameId, order);
   if (!validation.legal) return { ok: false, legal: false, errors: validation.errors || ['Pedido no legal.'] };
   
+  const finalOrder = validation.order;
   const tradeCode = randomTradeCode();
   const id = orderId();
   
@@ -912,14 +1047,14 @@ export async function createSingleOrder(order: any, user?: AuthenticatedUser) {
   let orderDbId = null;
   if (supabase && user) {
     try {
-      const dbGameVersion = gameId === 'za' ? 'legends-za' : (order.gameVersion || 'scarlet');
+      const dbGameVersion = gameId === 'za' ? 'legends-za' : (finalOrder.gameVersion || 'scarlet');
       const { data, error } = await supabase
         .from('orders')
         .insert({
           id,
           user_id: user.id,
           trade_code: tradeCode,
-          team_payload: [order],
+          team_payload: [finalOrder],
           game_version: dbGameVersion,
           status: 'pending',
         })
@@ -938,7 +1073,7 @@ export async function createSingleOrder(order: any, user?: AuthenticatedUser) {
 
   // 2. Dispatch to Discord / SysBot using the new dispatchTradeCommand dispatcher
   const userPlan = user?.plan || 'free';
-  const dispatchResult = await dispatchTradeCommand(gameId, [order], tradeCode, userPlan);
+  const dispatchResult = await dispatchTradeCommand(gameId, [finalOrder], tradeCode, userPlan);
 
   // 3. If dispatched successfully, update status to completed in database to update user stats
   if (dispatchResult.sent && supabase && user) {
@@ -962,8 +1097,8 @@ export async function createSingleOrder(order: any, user?: AuthenticatedUser) {
     tradeCode,
     expiresIn: ORDER_TTL_SECONDS,
     expiresAt: new Date(Date.now() + ORDER_TTL_SECONDS * 1000).toISOString(),
-    order,
-    commandPreview: dispatchResult.commandSent || formatSysbotCommand(order, tradeCode),
+    order: finalOrder,
+    commandPreview: dispatchResult.commandSent || formatSysbotCommand(finalOrder, tradeCode),
     discord: dispatchResult,
     discordStatus: dispatchResult.sent 
       ? 'Orden registrada en Discord/SysBot.' 
@@ -985,6 +1120,7 @@ export async function createBulkOrder(orders: any[], user?: AuthenticatedUser) {
   const bad = validations.find(v => !v.legal);
   if (bad) return { ok: false, legal: false, errors: bad.errors || ['Uno de los Pokémon no es legal.'] };
   
+  const finalOrders = validations.map(v => v.order);
   const tradeCode = randomTradeCode();
   const id = orderId();
   
@@ -992,7 +1128,7 @@ export async function createBulkOrder(orders: any[], user?: AuthenticatedUser) {
   let orderDbId = null;
   if (supabase && user) {
     try {
-      const firstOrder = orders[0];
+      const firstOrder = finalOrders[0];
       const dbGameVersion = gameId === 'za' ? 'legends-za' : (firstOrder.gameVersion || 'scarlet');
       const { data, error } = await supabase
         .from('orders')
@@ -1000,7 +1136,7 @@ export async function createBulkOrder(orders: any[], user?: AuthenticatedUser) {
           id,
           user_id: user.id,
           trade_code: tradeCode,
-          team_payload: orders,
+          team_payload: finalOrders,
           game_version: dbGameVersion,
           status: 'pending',
         })
@@ -1019,7 +1155,7 @@ export async function createBulkOrder(orders: any[], user?: AuthenticatedUser) {
 
   // 2. Dispatch to Discord / SysBot using the new dispatchTradeCommand dispatcher
   const userPlan = user?.plan || 'premium';
-  const dispatchResult = await dispatchTradeCommand(gameId, orders, tradeCode, userPlan);
+  const dispatchResult = await dispatchTradeCommand(gameId, finalOrders, tradeCode, userPlan);
 
   // 3. If dispatched successfully, update status to completed in database to update user stats
   if (dispatchResult.sent && supabase && user) {
@@ -1043,8 +1179,8 @@ export async function createBulkOrder(orders: any[], user?: AuthenticatedUser) {
     tradeCode,
     expiresIn: ORDER_TTL_SECONDS,
     expiresAt: new Date(Date.now() + ORDER_TTL_SECONDS * 1000).toISOString(),
-    orders,
-    commandPreview: dispatchResult.commandSent ? dispatchResult.commandSent.split('\n\n---\n\n') : orders.map(o => formatSysbotCommand(o, tradeCode)),
+    orders: finalOrders,
+    commandPreview: dispatchResult.commandSent ? dispatchResult.commandSent.split('\n\n---\n\n') : finalOrders.map(o => formatSysbotCommand(o, tradeCode)),
     discord: dispatchResult,
     discordStatus: dispatchResult.sent 
       ? 'Pedido masivo registrado en Discord/SysBot.' 
