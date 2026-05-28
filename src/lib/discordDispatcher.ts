@@ -72,6 +72,23 @@ function loadPa9Attachment(profileId: string): { buffer: Buffer; filename: strin
  * Dispatches trade commands to Discord using either a Discord Selfbot Token (REST request)
  * or Webhooks, depending on the environment variables defined.
  */
+
+// --- SV HOME EXPANSION PATCH START ---
+const dataDir = join(process.cwd(), 'data');
+let SV_HOME_EXPANSION_FILE_MAP_PATH = join(dataDir, 'sv_home_expansion_file_map.json');
+if (!existsSync(SV_HOME_EXPANSION_FILE_MAP_PATH)) {
+  SV_HOME_EXPANSION_FILE_MAP_PATH = join(__dirname, '..', '..', 'data', 'sv_home_expansion_file_map.json');
+}
+let SV_HOME_EXPANSION_FILE_MAP: Record<string, any> = {};
+if (existsSync(SV_HOME_EXPANSION_FILE_MAP_PATH)) {
+  try {
+    SV_HOME_EXPANSION_FILE_MAP = JSON.parse(readFileSync(SV_HOME_EXPANSION_FILE_MAP_PATH, 'utf8'));
+  } catch (err: any) {
+    console.error('[DiscordDispatcher] Error loading sv_home_expansion_file_map.json:', err.message);
+  }
+}
+// --- SV HOME EXPANSION PATCH END ---
+
 // Map of SV HOME shiny species ID → pk file name in pk9/ (SV only)
 const SV_HOME_SHINY_FILES: Record<number, string> = {
   144: '0144-01 ★ - Articuno - F2270DF1E9CC.pk8',
@@ -153,6 +170,41 @@ export async function dispatchTradeCommand(
           // SysBot ZA reads the attached file directly.
           return `${commandPrefix}trade ${formattedCode}`;
         }
+      }
+    }
+
+    // SV HOME Expansion Fixed File Attachments
+    const expansionKey = `${Number(p.dexId ?? p.species)}-${Number(p.form || 0)}`;
+    const expansion = game === 'sv' ? SV_HOME_EXPANSION_FILE_MAP[expansionKey] : null;
+    if (expansion) {
+      const filename = expansion.fileName;
+      let pkPath = join(process.cwd(), 'public', 'sv_home_expansion_files', filename);
+      if (!existsSync(pkPath)) {
+        pkPath = join(process.cwd(), 'data', 'sv_home_expansion_files', filename);
+      }
+      if (!existsSync(pkPath)) {
+        pkPath = join(__dirname, '..', '..', 'public', 'sv_home_expansion_files', filename);
+      }
+      if (!existsSync(pkPath)) {
+        pkPath = join(__dirname, '..', '..', 'data', 'sv_home_expansion_files', filename);
+      }
+      if (!existsSync(pkPath)) {
+        pkPath = join(__dirname, '..', '..', '..', 'public', 'sv_home_expansion_files', filename);
+      }
+      if (!existsSync(pkPath)) {
+        pkPath = join(__dirname, '..', '..', '..', 'data', 'sv_home_expansion_files', filename);
+      }
+      if (existsSync(pkPath)) {
+        try {
+          const buffer = readFileSync(pkPath);
+          attachments.push({ buffer, filename });
+          console.log(`[DiscordDispatcher] ✅ Loaded expansion fixed .pk/.pb8 file: ${filename} for species ${expansionKey}`);
+          return `${commandPrefix}trade ${formattedCode}`;
+        } catch (err: any) {
+          console.warn(`[DiscordDispatcher] ⚠️ Could not read expansion fixed file ${filename}:`, err.message);
+        }
+      } else {
+        console.warn(`[DiscordDispatcher] ⚠️ Expansion fixed file not found for species ${expansionKey} (${filename})`);
       }
     }
 
