@@ -78,15 +78,36 @@ export function PokedexGrid({
 
   const filtered = pokemon.filter((p: any) => {
     const q = searchQuery.toLowerCase().trim();
+    if (!q) {
+      return !method || (p.methods || []).includes(method);
+    }
+
+    const formMatch = q.match(/\bform(?:a)?\s*(\d+)\b/i);
+    const matchesMethod = !method || (p.methods || []).includes(method);
+
+    if (formMatch) {
+      const targetForm = parseInt(formMatch[1], 10);
+      const pForm = p.form ?? 0;
+      if (pForm !== targetForm) {
+        return false;
+      }
+      const cleanQ = q.replace(/\bform(?:a)?\s*\d+\b/gi, '').replace(/\s+/g, ' ').trim();
+      if (!cleanQ) {
+        return matchesMethod;
+      }
+      const hay = [
+        p.displayName, p.displayNameEn, p.name, p.nameEn, String(p.species),
+        ...(p.searchAliases || [])
+      ].join(' ').toLowerCase();
+      return hay.includes(cleanQ) && matchesMethod;
+    }
+
     const hay = [
       p.displayName, p.displayNameEn, p.name, p.nameEn, p.formLabel, String(p.species),
       ...(p.searchAliases || [])
     ].join(' ').toLowerCase();
     
-    const matchesQuery = !q || hay.includes(q);
-    const matchesMethod = !method || (p.methods || []).includes(method);
-    
-    return matchesQuery && matchesMethod;
+    return hay.includes(q) && matchesMethod;
   });
 
   return (
