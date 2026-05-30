@@ -103,7 +103,7 @@ export function BulkOrderSection({ onOpenAuth, onOrderCreated }: BulkOrderSectio
                   ×
                 </button>
                 <PokemonImage 
-                  species={order.species} 
+                  species={order.dexId || order.species} 
                   form={order.form} 
                   alt={order.displayName} 
                 />
