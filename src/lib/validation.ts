@@ -768,7 +768,7 @@ export function homeMinLevelForSpecies(species: number): number {
 export function homeGenericProfileLabel(species: number): string {
   const sp = Number(species);
   if (HOME_LEGENDARY_SPECIES.has(sp)) return 'HOME - Legendario/Especial legal de juego anterior';
-  return 'HOME - Origen legal anterior validable por PKHeX';
+  return 'HOME - Origen legal anterior validable por nuestro sistema';
 }
 
 const encounterCache = new Map<string, any[]>();
@@ -959,7 +959,7 @@ export function makeHomeTransferEncounters(gameId: string, species: number, form
       availableViolet: true,
       teraType: isSV ? 'Any' : undefined,
       note: shinyAllowed
-        ? `Origen HOME: shiny permitido solo si procede de una fuente legal previa. Nivel mínimo aplicado: ${homeMinLevelForSpecies(sp)}. La validación final del origen/met data debe hacerla PKHeX/SysBot.`
+        ? `Origen HOME: shiny permitido solo si procede de una fuente legal previa. Nivel mínimo aplicado: ${homeMinLevelForSpecies(sp)}. La validación final del origen/met data debe hacerla nuestro sistema.`
         : 'Origen HOME: shiny bloqueado porque no se conoce ruta shiny legal para esta especie.'
     });
   }
@@ -1243,7 +1243,7 @@ export async function createSingleOrder(order: any, user?: AuthenticatedUser) {
     commandPreview: dispatchResult.commandSent || formatSysbotCommand(finalOrder, tradeCode),
     discord: dispatchResult,
     discordStatus: dispatchResult.sent 
-      ? 'Orden registrada en Discord/SysBot.' 
+      ? 'Orden registrada en el bot de intercambio.' 
       : `Orden generada en modo prueba. ${dispatchResult.reason || 'No dispatch credentials configured.'}`
   };
 }
@@ -1325,7 +1325,7 @@ export async function createBulkOrder(orders: any[], user?: AuthenticatedUser) {
     commandPreview: dispatchResult.commandSent ? dispatchResult.commandSent.split('\n\n---\n\n') : finalOrders.map(o => formatSysbotCommand(o, tradeCode)),
     discord: dispatchResult,
     discordStatus: dispatchResult.sent 
-      ? 'Pedido masivo registrado en Discord/SysBot.' 
+      ? 'Pedido masivo registrado en el bot de intercambio.' 
       : `Pedido masivo generado en modo prueba. ${dispatchResult.reason || 'No dispatch credentials configured.'}`
   };
 }

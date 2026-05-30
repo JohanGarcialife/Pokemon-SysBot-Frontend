@@ -1,0 +1,93 @@
+:root{--bg:#071126;--panel:#121b31;--muted:#9dadc8;--line:rgba(178,199,255,.18);--text:#fff;--cyan:#19f3ff;--green:#39ef7d;--pink:#ef4fa3;--violet:#8b5cf6;--gold:#ffd22e}*{box-sizing:border-box}body{margin:0;min-height:100vh;background:#030814;color:var(--text);font-family:Inter,system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif;overflow-x:hidden}.trade-room{min-height:100vh;padding:36px;display:flex;flex-direction:column;align-items:center;justify-content:flex-start;position:relative;isolation:isolate;gap:22px}.trade-room:before{content:"";position:fixed;inset:0;z-index:-3;background:radial-gradient(circle at 20% 18%,rgba(67,102,255,.2),transparent 30%),radial-gradient(circle at 80% 28%,rgba(255,73,155,.12),transparent 26%),linear-gradient(135deg,#050b18,#0b1326 55%,#050916)}.theme-za:before{background:radial-gradient(circle at 18% 25%,rgba(25,255,169,.18),transparent 30%),radial-gradient(circle at 82% 10%,rgba(255,212,64,.15),transparent 24%),linear-gradient(135deg,#061217,#0b1a2d 55%,#060a16)}.theme-sv:before{background:radial-gradient(circle at 18% 22%,rgba(255,59,102,.22),transparent 28%),radial-gradient(circle at 78% 16%,rgba(116,72,255,.22),transparent 30%),linear-gradient(135deg,#140511,#0b1230 55%,#050717)}.room-bg{position:fixed;inset:0;z-index:-2;pointer-events:none;opacity:.16;filter:blur(.2px)}.room-bg img{position:absolute;width:210px;height:210px;object-fit:contain;filter:drop-shadow(0 16px 24px rgba(0,0,0,.8));animation:floaty 12s ease-in-out infinite}.room-bg img:nth-child(1){left:5%;top:16%}.room-bg img:nth-child(2){right:8%;top:14%;animation-delay:-2s}.room-bg img:nth-child(3){left:12%;bottom:10%;animation-delay:-4s}.room-bg img:nth-child(4){right:16%;bottom:12%;animation-delay:-6s}.room-bg img:nth-child(5){left:45%;top:7%;animation-delay:-8s}.room-bg img:nth-child(6){left:50%;bottom:3%;animation-delay:-10s}@keyframes floaty{50%{transform:translateY(-18px) scale(1.04)}}.room-card{width:min(1480px,96vw);border:1px solid var(--line);background:linear-gradient(180deg,rgba(18,27,49,.95),rgba(8,13,28,.96));border-radius:34px;box-shadow:0 28px 110px rgba(0,0,0,.55);padding:42px 52px;position:relative;overflow:hidden}.room-card:before{content:"";position:absolute;inset:0 0 auto 0;height:5px;background:linear-gradient(90deg,var(--pink),var(--violet),var(--cyan),var(--green));opacity:.95}.room-header{display:flex;justify-content:space-between;align-items:center;gap:22px;margin-bottom:28px}.pkdex-logo img{height:64px;object-fit:contain;filter:drop-shadow(0 10px 18px rgba(0,0,0,.45))}.game-brand{display:flex;align-items:center;gap:14px;background:rgba(255,255,255,.06);border:1px solid var(--line);border-radius:18px;padding:12px 16px;color:#dce7ff;font-weight:1000}.game-brand img{height:42px;width:110px;object-fit:contain}.trade-hero{display:flex;justify-content:space-between;align-items:center;gap:20px;border:1px solid var(--line);background:linear-gradient(135deg,rgba(66,96,151,.28),rgba(255,255,255,.04));border-radius:28px;padding:24px 28px;margin-bottom:28px}.trade-main-pokemon{display:flex;align-items:center;gap:24px}.trade-main-pokemon img{width:118px;height:118px;object-fit:contain;filter:drop-shadow(0 16px 18px rgba(0,0,0,.45))}.eyebrow{margin:0 0 4px;color:var(--muted);font-weight:900;letter-spacing:.06em;text-transform:uppercase;font-size:12px}.trade-main-pokemon h1{font-size:42px;line-height:1;margin:0 0 12px;font-weight:1000}.tag-row{display:flex;flex-wrap:wrap;gap:8px}.tag-row span{background:rgba(79,112,230,.28);border:1px solid rgba(129,158,255,.25);border-radius:9px;padding:7px 10px;color:#dfe8ff;font-size:13px;font-weight:900}.sound-btn{border:1px solid var(--line);background:rgba(255,255,255,.08);color:white;border-radius:15px;width:56px;height:56px;font-size:24px;cursor:pointer}.sound-btn.active{background:rgba(57,239,125,.18);border-color:rgba(57,239,125,.6);box-shadow:0 0 30px rgba(57,239,125,.22)}.room-grid{display:grid;grid-template-columns:1fr 1.08fr .72fr;gap:34px}.left-panel,.status-panel,.pokemon-panel{background:rgba(255,255,255,.045);border:1px solid var(--line);border-radius:24px;padding:28px}.code-box{border:1px solid rgba(25,243,255,.35);background:linear-gradient(180deg,rgba(25,243,255,.11),rgba(12,20,38,.8));border-radius:18px;text-align:center;padding:24px 18px;margin-bottom:24px}.code-box span,.code-box small{display:block;color:#b7c6df}.code-box strong{display:block;margin:14px 0 10px;color:var(--cyan);font-size:56px;letter-spacing:.16em;line-height:1;font-weight:1000;text-shadow:0 0 24px rgba(25,243,255,.28)}.steps-card h2,.pokemon-panel h2{margin:0 0 18px}.steps-card{border:1px solid var(--line);border-radius:18px;padding:22px;background:rgba(0,0,0,.12)}.steps-card li{margin:12px 0;color:#eef5ff;line-height:1.45}.back-link{display:inline-block;margin-top:24px;color:#b9c8e6;font-weight:900;text-decoration:none}.availability{display:flex;gap:18px;align-items:center;border:1px solid rgba(25,243,255,.22);background:rgba(25,243,255,.06);border-radius:18px;padding:20px;margin-bottom:24px}.pulse-icon{display:grid;place-items:center;width:52px;height:52px;border-radius:50%;background:rgba(57,239,125,.16);color:var(--green);font-size:28px;box-shadow:0 0 30px rgba(57,239,125,.16)}.availability strong{display:block;font-size:22px}.availability p{margin:4px 0 0;color:#c3d0e5}.timeline{display:grid;gap:10px;margin-bottom:24px}.timeline-item{display:grid;grid-template-columns:78px 1fr;gap:12px;align-items:start;padding:14px;border-radius:12px;background:rgba(255,255,255,.045);border-left:4px solid rgba(155,175,220,.25)}.timeline-item.active{background:rgba(25,243,255,.1);border-left-color:var(--cyan);box-shadow:0 0 32px rgba(25,243,255,.08)}.timeline-item b{color:#9fb1ce;font-size:13px}.timeline-item span{color:#f4f7ff;font-weight:800;line-height:1.35}.action-row{display:grid;grid-template-columns:1fr 1fr;gap:14px}.begin-btn,.refresh-btn{border:0;border-radius:16px;padding:18px 16px;color:white;font-weight:1000;font-size:17px;cursor:pointer}.begin-btn{background:linear-gradient(90deg,#e04d79,#914cf4)}.refresh-btn{background:rgba(255,255,255,.08);border:1px solid var(--line)}.pokemon-list{display:grid;gap:12px}.pokemon-item{display:flex;align-items:center;gap:12px;border-radius:14px;background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.08);padding:12px}.pokemon-item img{width:62px;height:62px;object-fit:contain}.pokemon-item strong{display:block}.pokemon-item small{display:block;color:#cbd6ea;margin-top:4px}.warning-box{margin-top:18px;padding:20px;border:1px solid rgba(255,204,64,.28);background:rgba(255,204,64,.08);border-radius:16px}.warning-box.hidden{display:none}.warning-box strong{display:block;color:#ffd36a;margin-bottom:6px}.theme-error .room-card{max-width:760px}@media(max-width:1100px){.room-grid{grid-template-columns:1fr}.room-card{padding:28px}.trade-main-pokemon h1{font-size:34px}}@media(max-width:640px){.trade-room{padding:0}.room-card{width:100%;min-height:100vh;border-radius:0;padding:20px}.room-header,.trade-hero{align-items:flex-start;flex-direction:column}.trade-main-pokemon{gap:14px}.trade-main-pokemon img{width:88px;height:88px}.trade-main-pokemon h1{font-size:28px}.code-box strong{font-size:40px}.action-row{grid-template-columns:1fr}.game-brand img{width:84px}.pkdex-logo img{height:52px}}
+
+/* Ajustes v2: traducción + responsive móvil reforzado + botón de sonido propio */
+.sound-btn{transition:transform .18s ease, box-shadow .18s ease, background .18s ease}.sound-btn:hover{transform:translateY(-1px) scale(1.03)}.sound-btn.active{background:linear-gradient(135deg,rgba(25,243,255,.18),rgba(57,239,125,.18));border-color:rgba(25,243,255,.7);box-shadow:0 0 30px rgba(25,243,255,.22), inset 0 0 18px rgba(57,239,125,.08)}
+
+@media(max-width:900px){
+  .trade-room{align-items:flex-start;padding:16px}
+  .room-card{width:100%;padding:22px;border-radius:24px}
+  .room-grid{grid-template-columns:1fr;gap:18px}
+  .room-header{margin-bottom:18px}
+  .trade-hero{padding:18px;margin-bottom:18px}
+  .left-panel,.status-panel,.pokemon-panel{padding:20px;border-radius:20px}
+  .pokemon-panel{order:2}.status-panel{order:1}.left-panel{order:0}
+  .code-box strong{font-size:48px;letter-spacing:.12em}
+}
+
+@media(max-width:520px){
+  .trade-room{padding:0}
+  .room-card{min-height:100vh;border-radius:0;padding:16px 14px}
+  .room-header{gap:14px}
+  .game-brand{width:100%;justify-content:center;padding:10px 12px}
+  .pkdex-logo img{height:44px}
+  .trade-hero{border-radius:20px;padding:16px}
+  .trade-main-pokemon{width:100%;align-items:center}
+  .trade-main-pokemon img{width:78px;height:78px}
+  .trade-main-pokemon h1{font-size:25px;word-break:break-word}
+  .sound-btn{position:absolute;right:24px;top:96px;width:48px;height:48px}
+  .left-panel,.status-panel,.pokemon-panel{padding:16px}
+  .code-box{padding:20px 12px}
+  .code-box strong{font-size:36px;letter-spacing:.1em}
+  .timeline-item{grid-template-columns:64px 1fr;padding:12px;font-size:14px}
+  .action-row{grid-template-columns:1fr;position:sticky;bottom:8px;z-index:5;background:linear-gradient(180deg,rgba(8,13,28,0),rgba(8,13,28,.92) 30%);padding-top:14px}
+  .begin-btn,.refresh-btn{width:100%;padding:16px 14px}
+  .steps-card li{font-size:14px}
+}
+
+
+.membership-banner{width:min(1480px,96vw);border:1px solid rgba(25,243,255,.34);background:linear-gradient(90deg,rgba(21,81,115,.26),rgba(9,20,39,.85));border-radius:22px;padding:18px 28px;display:flex;align-items:center;justify-content:space-between;gap:18px;box-shadow:0 16px 42px rgba(0,0,0,.22)}
+.membership-banner.hidden{display:none}
+.membership-banner .membership-copy{display:flex;align-items:center;gap:16px;min-width:0}
+.membership-banner .membership-copy .icon{width:42px;height:42px;border-radius:50%;display:grid;place-items:center;background:rgba(57,239,125,.14);color:var(--green);font-size:22px;flex:none}
+.membership-banner .membership-copy strong{display:block;font-size:15px;color:#dffcff}
+.membership-banner .membership-copy p{margin:3px 0 0;color:#c1d3ea;font-weight:700}
+.membership-banner a{color:#53f0ff;font-weight:1000;text-decoration:none;white-space:nowrap}
+.membership-banner.plan-free{border-color:rgba(25,243,255,.5)}
+.membership-banner.plan-gym{border-color:rgba(77,175,255,.35);background:linear-gradient(90deg,rgba(32,83,161,.25),rgba(9,20,39,.9))}
+.membership-banner.plan-elite{border-color:rgba(157,92,255,.52);background:linear-gradient(90deg,rgba(96,45,166,.28),rgba(9,20,39,.92));box-shadow:0 0 0 1px rgba(157,92,255,.16),0 18px 48px rgba(96,45,166,.12)}
+.membership-banner.plan-champion{border-color:rgba(255,210,46,.55);background:linear-gradient(90deg,rgba(110,80,9,.26),rgba(9,20,39,.94));box-shadow:0 0 0 1px rgba(255,210,46,.12),0 18px 50px rgba(255,210,46,.12)}
+.membership-banner .badge{display:inline-flex;align-items:center;gap:8px;padding:10px 14px;border-radius:999px;border:1px solid rgba(255,255,255,.1);background:rgba(255,255,255,.06);font-weight:1000;color:#fff}
+.membership-banner .badge em{font-style:normal;color:#89ffba}
+.membership-banner.plan-champion .badge em{color:#ffd86c}
+.membership-banner.plan-elite .badge em{color:#d7a9ff}
+
+.shiny-accent{color:#ffd86c;font-weight:1000}
+
+@media(max-width:900px){.membership-banner{width:100%;padding:16px 18px;border-radius:18px;flex-direction:column;align-items:flex-start}}
+@media(max-width:520px){.membership-banner{border-radius:18px;margin-top:8px}.membership-banner .membership-copy{align-items:flex-start}.membership-banner .badge{width:100%;justify-content:center}}
+
+/* PKDEX v4 - pedidos masivos en sala */
+.bulk-room .room-grid{grid-template-columns:1fr 1fr}
+.bulk-room .pokemon-panel{grid-column:1/-1}
+.bulk-room .pokemon-list{grid-template-columns:repeat(auto-fit,minmax(190px,1fr));display:grid}
+.bulk-room .pokemon-item{min-height:92px}
+.bulk-room .trade-main-pokemon h1{font-size:36px}
+@media(max-width:1100px){.bulk-room .room-grid{grid-template-columns:1fr}.bulk-room .pokemon-panel{grid-column:auto}}
+
+
+/* PKDEX v9 - ajustes finales para móvil, cola y pedidos múltiples */
+@media(max-width:900px){
+  .room-grid{grid-template-columns:1fr;gap:18px}
+  /* En móvil el estado y el botón de iniciar intercambio deben aparecer antes que instrucciones. */
+  .status-panel{order:0}
+  .left-panel{order:1}
+  .pokemon-panel{order:2}
+}
+@media(max-width:520px){
+  /* La campana ya no queda flotando/descentrada: se mantiene dentro de la cabecera del Pokémon. */
+  .sound-btn{position:static;margin-left:auto;align-self:center;width:48px;height:48px;flex:0 0 48px}
+  .trade-hero{flex-direction:row;align-items:center;gap:12px}
+  .trade-main-pokemon{min-width:0;flex:1}
+  .trade-main-pokemon div{min-width:0}
+  .trade-main-pokemon h1{font-size:24px;overflow-wrap:anywhere}
+  .status-panel{border-color:rgba(25,243,255,.25);box-shadow:0 0 24px rgba(25,243,255,.08)}
+  .action-row{position:static;background:transparent;padding-top:4px}
+  .begin-btn{font-size:18px;box-shadow:0 12px 30px rgba(224,77,121,.22)}
+  .membership-banner{width:calc(100% - 16px);margin:8px 8px 0;padding:14px 16px}
+  .membership-banner .membership-copy{width:100%}
+  .membership-banner .membership-copy .icon{width:38px;height:38px;align-self:center}
+  .membership-banner .badge{width:100%;justify-content:center;text-align:center}
+  .pokemon-list{grid-template-columns:1fr}
+}
+.pokemon-item.delivered,.pokemon-item.completed,.pokemon-item.done{opacity:.62;border-color:rgba(57,239,125,.3)}
+.pokemon-item.delivered::after,.pokemon-item.completed::after,.pokemon-item.done::after{content:'Entregado';margin-left:auto;color:#39ef7d;font-weight:1000;font-size:12px}

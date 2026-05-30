@@ -1453,3 +1453,14 @@ select:focus,.input:focus,.search-box:focus-within{
   flex-shrink: 0;
 }
 
+@media (max-width:880px){
+.nav-links{display:flex;gap:8px;margin-left:auto}
+.nav-links .nav-link{display:none}
+.nav-links .nav-link[href="/memberships.html"],
+.nav-links .nav-link[href="/memberships"]{display:inline-flex;align-items:center;white-space:nowrap;font-size:13px;padding:9px 11px;background:rgba(255,210,46,.12);border:1px solid rgba(255,210,46,.28);color:#ffd84d}
+}
+@media (max-width:420px){
+.nav-links .nav-link[href="/memberships.html"],
+.nav-links .nav-link[href="/memberships"]{font-size:12px;padding:8px 9px}
+}
+

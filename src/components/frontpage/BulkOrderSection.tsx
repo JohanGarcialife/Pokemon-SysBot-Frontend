@@ -138,7 +138,7 @@ export function BulkOrderSection({ onOpenAuth, onOrderCreated }: BulkOrderSectio
       </button>
       
       <p className="bulk-note">
-        Preparado para que tu programador active planes de pago y conecte Discord/SysBot. Máximo 3 Pokémon por estabilidad del bot.
+        Preparado para que tu programador active planes de pago y conecte el bot de intercambio. Máximo 3 Pokémon por estabilidad del bot.
       </p>
     </section>
   );

@@ -92,8 +92,10 @@ export default function HomePage() {
         onSelectPokemon={(p) => setSelectedPokemon(p)} 
         onOpenAuth={() => setAuthOpen(true)}
         onOrderCreated={(order) => {
-          setActiveOrder(order);
-          triggerToast(order.isBulk ? '¡Pedido masivo creado con éxito!' : '¡Pedido creado con éxito!');
+          triggerToast(order.isBulk ? '¡Pedido masivo creado con éxito! Redirigiendo a la sala...' : '¡Pedido creado con éxito! Redirigiendo a la sala...');
+          setTimeout(() => {
+            window.location.assign(`/trade-room.html?order=${order.id}`);
+          }, 1000);
         }}
       />
 
@@ -104,7 +106,10 @@ export default function HomePage() {
           onOpenAuth={() => setAuthOpen(true)}
           onOrderCreated={(order) => {
             setSelectedPokemon(null);
-            setActiveOrder(order);
+            triggerToast(order.isBulk ? '¡Pedido masivo creado con éxito! Redirigiendo a la sala...' : '¡Pedido creado con éxito! Redirigiendo a la sala...');
+            setTimeout(() => {
+              window.location.assign(`/trade-room.html?order=${order.id}`);
+            }, 1000);
           }}
           onToast={triggerToast}
         />

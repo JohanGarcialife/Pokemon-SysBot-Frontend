@@ -1,0 +1,138 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>PKDEX · Membresías</title>
+  <meta name="description" content="Planes de membresía PKDEX para desbloquear intercambios, colas prioritarias y eventos especiales." />
+  <link rel="stylesheet" href="/memberships.css" />
+</head>
+<body>
+  <header class="site-nav">
+    <a class="brand" href="/" aria-label="PKDEX inicio">
+      <img src="/assets/pkdex-logo.png" alt="PKDEX" />
+    </a>
+    <nav class="nav-links" aria-label="Navegación principal">
+      <a href="/" class="nav-link">🎮 Crear Pokémon</a>
+      <a href="/memberships.html" class="nav-link active">👑 Membresías</a>
+    </nav>
+  </header>
+
+  <main class="memberships-shell">
+    <section class="hero-card">
+      <p class="eyebrow">PKDEX MEMBERSHIPS</p>
+      <h1>Elige tu <span>nivel</span> de entrenador</h1>
+      <p>Inspirado en los sistemas de suscripción del sector, con niveles escalables y beneficios claros. Nuestro diseño mantiene el estilo PKDEX y deja la pasarela de pago lista para conectarse más adelante.</p>
+      <div class="hero-note">El plan <strong>Alto Mando</strong> se destaca visualmente como la opción recomendada.</div>
+    </section>
+
+    <section class="billing-card" aria-label="Selector de facturación">
+      <div>
+        <p class="eyebrow">Facturación</p>
+        <h2>Elige cómo quieres pagar</h2>
+        <p id="billingHelp">Pago mensual seleccionado. Cambia a anual para ver el total con <strong>10% de descuento</strong>.</p>
+      </div>
+      <div class="billing-toggle" role="group" aria-label="Cambiar entre pago mensual y anual">
+        <button type="button" class="billing-btn active" data-billing="monthly">Mensual</button>
+        <button type="button" class="billing-btn" data-billing="annual">Anual <span>-10%</span></button>
+      </div>
+    </section>
+
+    <section class="plans-grid" id="plansGrid">
+      <article class="plan-card tier-free" data-plan="free">
+        <span class="tier-label">Inicio</span>
+        <h2>Aficionado</h2>
+        <div class="price" data-free-price>Gratis</div><div class="annual-note free-note">Sin cambios en anual</div>
+        <p class="desc">Prueba de la plataforma con acceso básico.</p>
+        <ul>
+          <li>3 operaciones al día</li>
+          <li>Incluye todos los shinys normales</li>
+          <li>Eventos y regalos shiny exclusivos bloqueados</li>
+        </ul>
+        <button class="plan-btn" data-select-plan="free">Usar plan gratis</button>
+      </article>
+
+      <article class="plan-card tier-gym" data-plan="gym">
+        <span class="tier-label">Popular</span>
+        <h2>Líder de Gimnasio</h2>
+        <div class="price" data-monthly-price="7">7 €<small>/mes</small></div><div class="annual-note" data-annual-note></div>
+        <p class="desc">Tu salto al modo ilimitado.</p>
+        <ul>
+          <li>Intercambios sin límites</li>
+          <li>Lotes de hasta 3 Pokémon</li>
+          <li>Colas prioritarias</li>
+          <li>Acceso a eventos japoneses y especiales</li>
+        </ul>
+        <button class="plan-btn" data-select-plan="gym">Seleccionar Líder</button>
+      </article>
+
+      <article class="plan-card tier-elite featured" data-plan="elite">
+        <div class="featured-ribbon">RECOMENDADO</div>
+        <span class="tier-label">Mejor equilibrio</span>
+        <h2>Alto Mando</h2>
+        <div class="price" data-monthly-price="11">11 €<small>/mes</small></div><div class="annual-note" data-annual-note></div>
+        <p class="desc">La opción que mejor se debe ver dentro de la web.</p>
+        <ul>
+          <li>Intercambios sin límites</li>
+          <li>Lotes de hasta 3 Pokémon</li>
+          <li>Prioridad en cola</li>
+          <li>Eventos japoneses y especiales</li>
+          <li>Recompensas de HOME</li>
+        </ul>
+        <button class="plan-btn" data-select-plan="elite">Elegir Alto Mando</button>
+      </article>
+
+      <article class="plan-card tier-champion" data-plan="champion">
+        <span class="tier-label">Máximo nivel</span>
+        <h2>Campeón de Liga</h2>
+        <div class="price" data-monthly-price="29.99">29,99 €<small>/mes</small></div><div class="annual-note" data-annual-note></div>
+        <p class="desc">El plan definitivo, pensado para usuarios intensivos.</p>
+        <ul>
+          <li>Intercambios sin límites</li>
+          <li>Lotes de hasta 3 Pokémon</li>
+          <li>Prioridad máxima en cola</li>
+          <li>Eventos japoneses y especiales</li>
+          <li>36 Pokémon de evento HOME por intercambio de otros juegos</li>
+          <li>Evoluciones de iniciales shiny de origen real</li>
+          <li>Recompensas de HOME</li>
+        </ul>
+        <button class="plan-btn" data-select-plan="champion">Ascender a Campeón</button>
+      </article>
+    </section>
+
+    <section class="compare-card">
+      <div class="compare-head">
+        <div>
+          <p class="eyebrow">Comparativa rápida</p>
+          <h2>Qué desbloquea cada plan</h2>
+        </div>
+        <a href="/" class="back-link">← Volver a crear Pokémon</a>
+      </div>
+      <div class="compare-table-wrap">
+        <table class="compare-table">
+          <thead>
+            <tr>
+              <th>Función</th>
+              <th>Aficionado</th>
+              <th>Líder</th>
+              <th>Alto Mando</th>
+              <th>Campeón</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr><td>Operaciones</td><td>3 / día</td><td>Ilimitadas</td><td>Ilimitadas</td><td>Ilimitadas</td></tr>
+            <tr><td>Intercambio masivo</td><td>—</td><td>Hasta 3</td><td>Hasta 3</td><td>Hasta 3</td></tr>
+            <tr><td>Prioridad en cola</td><td>—</td><td>Prioritaria</td><td>Prioritaria</td><td>Máxima</td></tr>
+            <tr><td>Eventos japoneses</td><td>—</td><td>Sí</td><td>Sí</td><td>Sí</td></tr>
+            <tr><td>Especiales / HOME</td><td>Bloqueado</td><td>Especiales</td><td>Especiales + HOME</td><td>HOME completo + 36 eventos</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <p class="small-print">Esta página deja la UX lista. Tu programador solo tendrá que conectar el botón de cada plan con la pasarela de pago real (Stripe, Ko-fi, PayPal, etc.), pasando también si el usuario eligió mensual o anual. El anual debe aplicar un 10% de descuento automático.</p>
+    </section>
+  </main>
+
+  <div id="toast" class="toast hidden"></div>
+  <script src="/memberships.js" type="module"></script>
+</body>
+</html>

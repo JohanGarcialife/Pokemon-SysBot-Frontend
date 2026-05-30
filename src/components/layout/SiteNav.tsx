@@ -57,6 +57,7 @@ export function SiteNav({ onOpenAuth }: SiteNavProps) {
       <nav className="nav-links" aria-label="Navegación principal">
         <a href="#dashboard" className="nav-link">▦ Dashboard</a>
         <a href="#creator" className="nav-link active">🎮 Crea tu Pokémon</a>
+        <a href="/memberships.html" className="nav-link">👑 Membresías</a>
       </nav>
 
       <div className="user-pill-container" ref={dropdownRef}>

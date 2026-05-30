@@ -1,0 +1,87 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>PKDEX · Sala de intercambio</title>
+  <meta name="description" content="Sala de espera y seguimiento de intercambios PKDEX." />
+  <link rel="stylesheet" href="/trade-room.css" />
+</head>
+<body>
+  <main id="room" class="trade-room trade-room--loading">
+    <div class="room-bg" id="spriteBg"></div>
+    <section id="membershipBanner" class="membership-banner"></section>
+    <section class="room-card">
+      <header class="room-header">
+        <a href="/" class="pkdex-logo" aria-label="Volver a PKDEX"><img src="/assets/pkdex-logo.png" alt="PKDEX" /></a>
+        <div class="game-brand">
+          <img id="gameLogo" src="/assets/za-logo.png" alt="Juego" />
+          <span id="gameLabel">Cargando...</span>
+        </div>
+      </header>
+
+      <section class="trade-hero">
+        <div class="trade-main-pokemon">
+          <img id="mainSprite" alt="Pokémon" />
+          <div>
+            <p class="eyebrow">Sala de intercambio PKDEX</p>
+            <h1 id="mainTitle">Preparando pedido...</h1>
+            <div id="tagRow" class="tag-row"></div>
+          </div>
+        </div>
+        <button id="soundBtn" class="sound-btn" type="button" title="Activar avisos sonoros">🔔</button>
+      </section>
+
+      <section class="room-grid">
+        <aside class="left-panel">
+          <div class="code-box">
+            <span>Tu código de intercambio</span>
+            <strong id="tradeCode">0000 0000</strong>
+            <small>Usa este código exacto en el intercambio del juego.</small>
+          </div>
+
+          <div class="steps-card">
+            <h2>Instrucciones</h2>
+            <ol id="instructions">
+              <li>Espera a que la sala indique cuándo buscar intercambio.</li>
+              <li>Introduce el código en tu juego.</li>
+              <li>Acepta el intercambio cuando conecte el bot.</li>
+            </ol>
+          </div>
+
+          <a href="/" class="back-link">← Volver a la Pokédex</a>
+        </aside>
+
+        <section class="status-panel">
+          <div class="availability">
+            <span class="pulse-icon">↔</span>
+            <div>
+              <strong id="statusTitle">Pedido creado</strong>
+              <p id="statusText">Esperando información del bot...</p>
+            </div>
+          </div>
+
+          <div class="timeline" id="timeline"></div>
+
+          <div class="action-row">
+            <button id="beginBtn" class="begin-btn" type="button">Iniciar intercambio</button>
+            <button id="refreshBtn" class="refresh-btn" type="button">Actualizar estado</button>
+          </div>
+
+          <div id="warningBox" class="warning-box hidden">
+            <strong>Algunos Pokémon no llegaron</strong>
+            <p>El intercambio terminó antes de completar el pedido. Podrás continuar solo con los pendientes cuando se conecte el control real del bot.</p>
+          </div>
+        </section>
+
+        <aside class="pokemon-panel">
+          <h2 id="pokemonPanelTitle">Tu Pokémon</h2>
+          <div id="pokemonList" class="pokemon-list"></div>
+        </aside>
+      </section>
+    </section>
+  </main>
+
+  <script src="/trade-room.js" type="module"></script>
+</body>
+</html>
