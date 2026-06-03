@@ -892,7 +892,7 @@ export function makeHomeTransferEncounters(gameId: string, species: number, form
       teraType: 'FixedByFile',
       nature: 'FixedByFile',
       heldItem: null,
-      note: `Este Pokemon se entrega por archivo fijo HOME. La web debe enviar solo %trade CODIGO y adjuntar: ${expansion.fileName}. ${expansion.originNote || ''}`
+      note: 'El Pokémon proviene de un intercambio, evento o regalo'
     });
     return base;
   }

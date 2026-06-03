@@ -37,7 +37,7 @@ const formArtwork: Record<string, number | string> = {
   // Sinistea Antique
   '854-1': 10196,
   // Urshifu Rapid Strike
-  '892-1': 10192,
+  '892-1': 10191,
   // Maushold / Dudunsparce / Poltchageist / Sinistcha segments & masterpieces
   '925-1': 10260, '982-1': 10255, '1012-1': 10276, '1013-1': 10277,
   // Minior cores

@@ -123,6 +123,21 @@ function paintActive(){
   });
 }
 
+function getSupabaseUserId() {
+  for (let i = 0; i < localStorage.length; i++) {
+    const key = localStorage.key(i);
+    if (key && key.startsWith('sb-') && key.endsWith('-auth-token')) {
+      try {
+        const data = JSON.parse(localStorage.getItem(key));
+        return data?.user?.id;
+      } catch (e) {
+        console.error('Error parsing supabase storage token:', e);
+      }
+    }
+  }
+  return null;
+}
+
 $$('.billing-btn').forEach(btn => {
   btn.onclick = () => {
     const billing = normalizeBilling(btn.dataset.billing);
@@ -134,14 +149,84 @@ $$('.billing-btn').forEach(btn => {
 
 $$('[data-select-plan]').forEach(btn => {
   btn.dataset.originalLabel = btn.textContent;
-  btn.onclick = () => {
+  btn.onclick = async () => {
     const planId = btn.dataset.selectPlan;
-    setPlan(planId);
-    paintActive();
-    const billing = currentBilling() === 'annual' ? 'anual con 10% de descuento' : 'mensual';
-    showToast(`Plan cambiado a ${PLAN_NAMES[planId]} · ${billing}.`);
+    
+    // Free plan selection
+    if (planId === 'free') {
+      setPlan(planId);
+      paintActive();
+      showToast('Plan cambiado a Aficionado (Gratis).');
+      return;
+    }
+
+    const userId = getSupabaseUserId();
+    if (!userId) {
+      showToast('Inicia sesión en la página de inicio para suscribirte.');
+      setTimeout(() => {
+        window.location.href = '/?login=true';
+      }, 2000);
+      return;
+    }
+
+    const billing = currentBilling();
+    const billingText = billing === 'annual' ? 'anual con 10% de descuento' : 'mensual';
+
+    try {
+      btn.disabled = true;
+      btn.textContent = 'Procesando...';
+
+      console.log('Requesting checkout session for plan:', planId, 'billing:', billing);
+      const response = await fetch('/api/payments/create-checkout-session', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+          planId: planId,
+          billing: billing,
+          userId: userId,
+          successUrl: window.location.origin + '/memberships.html?success=true&plan=' + planId,
+          cancelUrl: window.location.href
+        })
+      });
+
+      const data = await response.json();
+      
+      if (!response.ok || data.error) {
+        throw new Error(data.error || 'Error al iniciar sesión de pago');
+      }
+
+      if (data.url) {
+        showToast(`Redirigiendo a la pasarela de pago para plan ${PLAN_NAMES[planId]}...`);
+        setTimeout(() => {
+          window.location.href = data.url;
+        }, 800);
+      } else {
+        throw new Error('No se recibió la URL de pago.');
+      }
+    } catch (err) {
+      console.error(err);
+      showToast(`Error: ${err.message}`);
+      btn.disabled = false;
+      btn.textContent = btn.dataset.originalLabel;
+    }
   };
+});
+
+// Check if page loaded from successful purchase redirect
+window.addEventListener('DOMContentLoaded', () => {
+  const params = new URLSearchParams(window.location.search);
+  if (params.get('success') === 'true') {
+    const purchasedPlan = params.get('plan') || 'elite';
+    setPlan(purchasedPlan);
+    paintActive();
+    showToast(`¡Gracias! Tu pago fue procesado. Cuenta actualizada a ${PLAN_NAMES[purchasedPlan] || 'Premium'}.`);
+    // Clean URL query params without reloading page
+    window.history.replaceState({}, document.title, window.location.pathname);
+  }
 });
 
 paintPrices();
 paintActive();
+

@@ -127,7 +127,11 @@ export async function dispatchTradeCommand(
   let commandPrefix = '%';
 
   if (game === 'sv') {
-    targetChannelId = process.env.DISCORD_CHANNEL_ID_SV || process.env.DISCORD_CHANNEL_ID || '';
+    if (userPlan === 'free') {
+      targetChannelId = process.env.DISCORD_CHANNEL_ID_SV_FREE || process.env.DISCORD_CHANNEL_ID_SV || process.env.DISCORD_CHANNEL_ID || '';
+    } else {
+      targetChannelId = process.env.DISCORD_CHANNEL_ID_SV_PREMIUM || process.env.DISCORD_CHANNEL_ID_SV || process.env.DISCORD_CHANNEL_ID || '';
+    }
     commandPrefix = '%'; // SV Prefix
   } else if (game === 'za') {
     if (userPlan === 'free') {
@@ -245,11 +249,13 @@ export async function dispatchTradeCommand(
 
   const combinedMessage = commandLines.join('\n\n---\n\n');
 
-  // 4. Dispatch via Selfbot Token if available
+  // 4. Dispatch via Selfbot/Bot Token if available
   let selfbotError = '';
   if (discordToken && targetChannelId) {
     try {
-      console.log(`[DiscordDispatcher] Dispatching to channel ${targetChannelId} via Selfbot HTTP REST...`);
+      const isBot = process.env.DISCORD_IS_BOT === 'true';
+      const authHeader = isBot ? `Bot ${discordToken}` : discordToken;
+      console.log(`[DiscordDispatcher] Dispatching to channel ${targetChannelId} via HTTP REST (isBot: ${isBot})...`);
       
       let response;
       if (attachments.length > 0) {
@@ -264,7 +270,7 @@ export async function dispatchTradeCommand(
         response = await fetch(`https://discord.com/api/v9/channels/${targetChannelId}/messages`, {
           method: 'POST',
           headers: {
-            'Authorization': discordToken
+            'Authorization': authHeader
           },
           body: formData
         });
@@ -272,7 +278,7 @@ export async function dispatchTradeCommand(
         response = await fetch(`https://discord.com/api/v9/channels/${targetChannelId}/messages`, {
           method: 'POST',
           headers: {
-            'Authorization': discordToken,
+            'Authorization': authHeader,
             'Content-Type': 'application/json'
           },
           body: JSON.stringify({
@@ -304,12 +310,15 @@ export async function dispatchTradeCommand(
 
   // 5. Fallback/Default: Webhook
   const isBulk = pokemonList.length > 1;
-  const webhookKey = isBulk ? `${game}_bulk` : game;
+  const webhookKey = isBulk 
+    ? `${game}_bulk` 
+    : (game === 'sv' && userPlan === 'free' ? 'sv_free' : game);
   
   // Webhook URLs Map
   const SYSBOT_DISCORD_WEBHOOKS: Record<string, string> = {
     za: process.env.DISCORD_WEBHOOK_ZA || process.env.DISCORD_WEBHOOK_URL || '',
     sv: process.env.DISCORD_WEBHOOK_SV || process.env.DISCORD_WEBHOOK_URL || '',
+    sv_free: process.env.DISCORD_WEBHOOK_SV_FREE || process.env.DISCORD_WEBHOOK_SV || process.env.DISCORD_WEBHOOK_URL || '',
     za_bulk: process.env.DISCORD_WEBHOOK_ZA_BULK || process.env.DISCORD_WEBHOOK_ZA || process.env.DISCORD_WEBHOOK_URL || '',
     sv_bulk: process.env.DISCORD_WEBHOOK_SV_BULK || process.env.DISCORD_WEBHOOK_SV || process.env.DISCORD_WEBHOOK_URL || '',
   };
