@@ -15,7 +15,7 @@ async function getRawBody(req: NextRequest): Promise<Buffer> {
 }
 
 export async function POST(req: NextRequest) {
-  const webhookSecret = process.env.STRIPE_WEBHOOK_SECRET;
+  const webhookSecret = process.env.STRIPE_WEBHOOK_SECRET?.trim();
   if (!webhookSecret) {
     console.error('[webhook] STRIPE_WEBHOOK_SECRET not configured');
     return NextResponse.json({ error: 'Webhook secret missing' }, { status: 500 });
