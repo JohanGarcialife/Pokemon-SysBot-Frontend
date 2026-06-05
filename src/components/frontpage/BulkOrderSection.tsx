@@ -10,8 +10,8 @@ interface BulkOrderSectionProps {
 }
 
 const gameLabels: Record<string, string> = {
-  za: 'Legends: Z-A',
-  sv: 'Scarlet / Violet',
+  za: 'Z-A',
+  sv: 'S/V',
 };
 
 const PLAN_DISPLAY_NAMES: Record<string, string> = {
@@ -122,7 +122,7 @@ export function BulkOrderSection({ onOpenAuth, onOrderCreated }: BulkOrderSectio
                 <strong>{order.displayName}</strong>
                 <small>
                   {gameLabels[order.game]} · Nv. {order.level}
-                  {order.shiny ? ' · Shiny' : ''}
+                  {order.shiny ? ' · ✨' : ''}
                 </small>
               </div>
             );
