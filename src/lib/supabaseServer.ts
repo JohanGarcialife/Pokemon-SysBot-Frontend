@@ -20,6 +20,7 @@ export interface AuthenticatedUser {
   id: string;
   email: string;
   plan: 'free' | 'premium';
+  planTier?: string;
 }
 
 export async function getUserFromHeader(authHeader: string | null | undefined): Promise<AuthenticatedUser | null> {
@@ -33,11 +34,13 @@ export async function getUserFromHeader(authHeader: string | null | undefined): 
     if (error || !user) {
       return null;
     }
-    const isPremium = user.app_metadata?.plan === 'premium' || user.user_metadata?.plan === 'premium';
+    const rawPlan = String(user.app_metadata?.plan || user.user_metadata?.plan || 'free').toLowerCase();
+    const isPremium = ['gym', 'elite', 'champion', 'premium'].includes(rawPlan);
     return {
       id: user.id,
       email: user.email ?? '',
-      plan: isPremium ? 'premium' : 'free'
+      plan: isPremium ? 'premium' : 'free',
+      planTier: rawPlan
     };
   } catch (err: any) {
     console.error('[auth] Error al decodificar token de Supabase:', err.message);

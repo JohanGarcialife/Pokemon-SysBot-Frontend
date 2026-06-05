@@ -27,7 +27,7 @@ export async function GET(req: NextRequest) {
   }
 
   return NextResponse.json({
-    user: { email: user.email, plan: user.plan === 'premium' ? 'Premium' : 'Gratis', role: user.plan },
+    user: { email: user.email, plan: user.planTier || user.plan, role: user.planTier || user.plan },
     stats: { 
       tradesCompleted, 
       bulkOrdersEnabled: user.plan === 'premium', 

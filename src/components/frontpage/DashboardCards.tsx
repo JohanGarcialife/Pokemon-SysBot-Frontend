@@ -3,6 +3,14 @@
 import { useState, useEffect } from 'react';
 import { useAppStore } from '@/store/useAppStore';
 
+const PLAN_DISPLAY_NAMES: Record<string, string> = {
+  free: 'Gratis',
+  gym: 'Líder de Gimnasio',
+  elite: 'Alto Mando',
+  champion: 'Campeón de Liga',
+  premium: 'Premium'
+};
+
 export function DashboardCards() {
   const { user, plan, isPremium, supabase } = useAppStore();
   const [tradesCompleted, setTradesCompleted] = useState<number>(0);
@@ -35,6 +43,8 @@ export function DashboardCards() {
     fetchStats();
   }, [user, supabase]);
 
+  const displayPlan = PLAN_DISPLAY_NAMES[plan.toLowerCase()] || plan;
+
   return (
     <section id="dashboard" className="dashboard-section">
       <div className="dashboard-card primary-dash">
@@ -52,7 +62,7 @@ export function DashboardCards() {
           id="planLabel" 
           style={{ color: isPremium ? 'var(--yellow)' : 'var(--green)' }}
         >
-          {user ? plan.toUpperCase() : 'INVITADO'}
+          {user ? displayPlan.toUpperCase() : 'INVITADO'}
         </strong>
         <p>
           {isPremium 

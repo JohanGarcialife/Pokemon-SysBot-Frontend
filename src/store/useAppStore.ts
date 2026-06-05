@@ -37,8 +37,19 @@ export const useAppStore = create<AppState>((set, get) => ({
   setUser: (user, profile, plan) => {
     // Plan can come from Supabase app_metadata (set by Stripe webhook)
     // or from profile table. Paid plans: gym, elite, champion
-    const resolvedPlan = user?.app_metadata?.plan || plan || 'free';
     const PAID_PLANS = ['gym', 'elite', 'champion', 'premium'];
+    
+    let resolvedPlan = 'free';
+    if (plan && PAID_PLANS.includes(String(plan).toLowerCase())) {
+      resolvedPlan = plan;
+    } else if (user?.app_metadata?.plan && PAID_PLANS.includes(String(user.app_metadata.plan).toLowerCase())) {
+      resolvedPlan = user.app_metadata.plan;
+    } else if (user?.app_metadata?.plan && user.app_metadata.plan !== 'free') {
+      resolvedPlan = user.app_metadata.plan;
+    } else if (plan) {
+      resolvedPlan = plan;
+    }
+
     set({
       user,
       profile,

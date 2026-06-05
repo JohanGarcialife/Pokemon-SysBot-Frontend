@@ -14,6 +14,14 @@ const gameLabels: Record<string, string> = {
   sv: 'Scarlet / Violet',
 };
 
+const PLAN_DISPLAY_NAMES: Record<string, string> = {
+  free: 'Gratis',
+  gym: 'Líder de Gimnasio',
+  elite: 'Alto Mando',
+  champion: 'Campeón de Liga',
+  premium: 'Premium'
+};
+
 export function BulkOrderSection({ onOpenAuth, onOrderCreated }: BulkOrderSectionProps) {
   const { user, isPremium, plan, bulk, removeFromBulk, clearBulk, supabase } = useAppStore();
   const [submitting, setSubmitting] = useState(false);
@@ -70,6 +78,8 @@ export function BulkOrderSection({ onOpenAuth, onOrderCreated }: BulkOrderSectio
     slots.push(order);
   }
 
+  const displayPlan = PLAN_DISPLAY_NAMES[plan.toLowerCase()] || plan;
+
   return (
     <section className="bulk-section" id="bulkSection">
       <div className="bulk-head">
@@ -86,7 +96,7 @@ export function BulkOrderSection({ onOpenAuth, onOrderCreated }: BulkOrderSectio
           style={{ cursor: !user ? 'pointer' : 'default' }}
           onClick={() => { if (!user) onOpenAuth(); }}
         >
-          {user ? (isPremium ? `Plan: ${plan.toUpperCase()}` : '🔒 Premium') : '🔒 Premium'}
+          {user ? (isPremium ? `Plan: ${displayPlan.toUpperCase()}` : '🔒 Premium') : '🔒 Premium'}
         </span>
       </div>
 

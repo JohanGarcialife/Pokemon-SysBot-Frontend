@@ -14,8 +14,8 @@ export async function GET(req: NextRequest) {
   }
   return NextResponse.json({
     authenticated: true,
-    user: { id: user.id, email: user.email, plan: user.plan === 'premium' ? 'Premium' : 'Gratis' },
-    plan: user.plan === 'premium' ? 'Premium' : 'Gratis',
+    user: { id: user.id, email: user.email, plan: user.planTier || user.plan },
+    plan: user.planTier || user.plan,
     note: 'Sesión recuperada con éxito desde Supabase.'
   });
 }

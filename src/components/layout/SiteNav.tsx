@@ -7,6 +7,14 @@ interface SiteNavProps {
   onOpenAuth: () => void;
 }
 
+const PLAN_DISPLAY_NAMES: Record<string, string> = {
+  free: 'Gratis',
+  gym: 'Líder de Gimnasio',
+  elite: 'Alto Mando',
+  champion: 'Campeón de Liga',
+  premium: 'Premium'
+};
+
 export function SiteNav({ onOpenAuth }: SiteNavProps) {
   const { user, profile, plan, clearUser, supabase } = useAppStore();
   const [dropdownOpen, setDropdownOpen] = useState(false);
@@ -48,6 +56,8 @@ export function SiteNav({ onOpenAuth }: SiteNavProps) {
     }
   };
 
+  const displayPlan = PLAN_DISPLAY_NAMES[plan.toLowerCase()] || plan;
+
   return (
     <header className="site-nav">
       <a className="brand" href="/" aria-label="PKDEX inicio">
@@ -86,7 +96,7 @@ export function SiteNav({ onOpenAuth }: SiteNavProps) {
           <div className="user-dropdown" style={{ display: 'block' }}>
             <div className="dropdown-header">
               <span className="dropdown-user-email">{user.email || 'invitado@pkdex'}</span>
-              <strong>PLAN: {plan.toUpperCase()}</strong>
+              <strong>PLAN: {displayPlan.toUpperCase()}</strong>
             </div>
             <button 
               onClick={handleLogout} 
