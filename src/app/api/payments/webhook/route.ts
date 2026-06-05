@@ -2,9 +2,6 @@ import { NextRequest, NextResponse } from 'next/server';
 import { stripe, planFromPriceId } from '@/lib/stripe';
 import { supabase } from '@/lib/supabaseServer';
 
-// Stripe requires raw body for signature verification
-export const config = { api: { bodyParser: false } };
-
 async function getRawBody(req: NextRequest): Promise<Buffer> {
   const chunks: Uint8Array[] = [];
   const reader = req.body?.getReader();
