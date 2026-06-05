@@ -84,9 +84,11 @@ export function BulkOrderSection({ onOpenAuth, onOrderCreated }: BulkOrderSectio
     <section className="bulk-section" id="bulkSection">
       <div className="bulk-head">
         <div>
-          <span className="step-badge">3</span>
-          <strong>TU PEDIDO MASIVO</strong>
-          <p>
+          <div style={{ display: 'flex', alignItems: 'center', gap: '12px', marginBottom: '8px' }}>
+            <span className="step-badge">3</span>
+            <strong style={{ fontSize: '18px', letterSpacing: '0.02em' }}>TU PEDIDO MASIVO</strong>
+          </div>
+          <p style={{ margin: 0 }}>
             <span>{bulk.length}</span> / 3 Pokémon — solo dentro del mismo juego.
           </p>
         </div>
@@ -127,10 +129,8 @@ export function BulkOrderSection({ onOpenAuth, onOrderCreated }: BulkOrderSectio
           } else {
             return (
               <div key={i} className="slot">
-                <div>
-                  <b>?</b>
-                  <small>Slot {i + 1}</small>
-                </div>
+                <b>?</b>
+                <small>Slot {i + 1}</small>
               </div>
             );
           }
