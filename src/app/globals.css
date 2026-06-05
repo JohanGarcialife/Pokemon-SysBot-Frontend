@@ -566,7 +566,11 @@ a{
 .creator-shell{
   max-width:1220px;
   margin:36px auto 56px;
-  padding:0 24px
+  padding:0 24px;
+  display: grid;
+  grid-template-columns: 1.55fr 0.8fr;
+  align-items: start;
+  gap: 24px;
 }
 
 .creator-card{
@@ -832,7 +836,9 @@ select:focus,.input:focus,.search-box:focus-within{
 }
 
 .bulk-section{
-  margin-top:42px;
+  position: sticky;
+  top: 96px;
+  margin-top: 0;
   background:linear-gradient(135deg,#0c152c,#101a33);
   color:white;
   border-radius:26px;
@@ -1352,8 +1358,13 @@ select:focus,.input:focus,.search-box:focus-within{
   }
 
   .creator-shell{
+    display: block;
     margin:24px auto;
     padding:0 12px
+  }
+
+  .bulk-section{
+    margin-top: 42px;
   }
 
   .creator-card{
