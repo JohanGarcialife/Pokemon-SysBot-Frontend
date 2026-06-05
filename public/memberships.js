@@ -176,18 +176,36 @@ $$('[data-select-plan]').forEach(btn => {
       btn.disabled = true;
       btn.textContent = 'Procesando...';
 
+      // Get Supabase session token for server-side auth
+      let authToken = null;
+      for (let i = 0; i < localStorage.length; i++) {
+        const key = localStorage.key(i);
+        if (key && key.startsWith('sb-') && key.endsWith('-auth-token')) {
+          try {
+            const data = JSON.parse(localStorage.getItem(key));
+            authToken = data?.access_token;
+          } catch (e) {}
+        }
+      }
+
+      if (!authToken) {
+        showToast('Inicia sesión para suscribirte.');
+        btn.disabled = false;
+        btn.textContent = btn.dataset.originalLabel;
+        setTimeout(() => { window.location.href = '/?login=true'; }, 1500);
+        return;
+      }
+
       console.log('Requesting checkout session for plan:', planId, 'billing:', billing);
       const response = await fetch('/api/payments/create-checkout-session', {
         method: 'POST',
         headers: {
-          'Content-Type': 'application/json'
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${authToken}`
         },
         body: JSON.stringify({
           planId: planId,
           billing: billing,
-          userId: userId,
-          successUrl: window.location.origin + '/memberships.html?success=true&plan=' + planId,
-          cancelUrl: window.location.href
         })
       });
 

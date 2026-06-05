@@ -35,11 +35,15 @@ export const useAppStore = create<AppState>((set, get) => ({
   bulk: [],
 
   setUser: (user, profile, plan) => {
+    // Plan can come from Supabase app_metadata (set by Stripe webhook)
+    // or from profile table. Paid plans: gym, elite, champion
+    const resolvedPlan = user?.app_metadata?.plan || plan || 'free';
+    const PAID_PLANS = ['gym', 'elite', 'champion', 'premium'];
     set({
       user,
       profile,
-      plan: plan || 'free',
-      isPremium: String(plan).toLowerCase() === 'premium',
+      plan: resolvedPlan,
+      isPremium: PAID_PLANS.includes(String(resolvedPlan).toLowerCase()),
     });
   },
 
