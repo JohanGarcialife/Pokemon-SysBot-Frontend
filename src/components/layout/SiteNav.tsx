@@ -70,43 +70,49 @@ export function SiteNav({ onOpenAuth }: SiteNavProps) {
         <a href="/memberships.html" className="nav-link">👑 Membresías</a>
       </nav>
 
-      <div className="user-pill-container" ref={dropdownRef}>
-        <button 
-          className="user-pill" 
-          onClick={handlePillClick}
-          type="button" 
-          aria-haspopup="true" 
-          aria-expanded={dropdownOpen}
-        >
-          <span className="mail">{user ? name : 'Iniciar Sesión'}</span>
-          <span className="avatar">
-            {avatarUrl ? (
-              <img 
-                src={avatarUrl} 
-                alt="Avatar" 
-                style={{ width: '100%', height: '100%', borderRadius: '50%', objectFit: 'cover' }} 
-              />
-            ) : (
-              user ? (name.charAt(0).toUpperCase() || '👤') : '👤'
-            )}
-          </span>
-        </button>
+      <div style={{ display: 'flex', alignItems: 'center' }}>
+        <a href="/memberships.html" className="nav-link-mobile">
+          👑 Membresías
+        </a>
 
-        {dropdownOpen && user && (
-          <div className="user-dropdown" style={{ display: 'block' }}>
-            <div className="dropdown-header">
-              <span className="dropdown-user-email">{user.email || 'invitado@pkdex'}</span>
-              <strong>PLAN: {displayPlan.toUpperCase()}</strong>
+        <div className="user-pill-container" ref={dropdownRef}>
+          <button 
+            className="user-pill" 
+            onClick={handlePillClick}
+            type="button" 
+            aria-haspopup="true" 
+            aria-expanded={dropdownOpen}
+          >
+            <span className="mail">{user ? name : 'Iniciar Sesión'}</span>
+            <span className="avatar">
+              {avatarUrl ? (
+                <img 
+                  src={avatarUrl} 
+                  alt="Avatar" 
+                  style={{ width: '100%', height: '100%', borderRadius: '50%', objectFit: 'cover' }} 
+                />
+              ) : (
+                user ? (name.charAt(0).toUpperCase() || '👤') : '👤'
+              )}
+            </span>
+          </button>
+
+          {dropdownOpen && user && (
+            <div className="user-dropdown" style={{ display: 'block' }}>
+              <div className="dropdown-header">
+                <span className="dropdown-user-email">{user.email || 'invitado@pkdex'}</span>
+                <strong>PLAN: {displayPlan.toUpperCase()}</strong>
+              </div>
+              <button 
+                onClick={handleLogout} 
+                className="dropdown-item" 
+                type="button"
+              >
+                🚪 Cerrar Sesión
+              </button>
             </div>
-            <button 
-              onClick={handleLogout} 
-              className="dropdown-item" 
-              type="button"
-            >
-              🚪 Cerrar Sesión
-            </button>
-          </div>
-        )}
+          )}
+        </div>
       </div>
     </header>
   );

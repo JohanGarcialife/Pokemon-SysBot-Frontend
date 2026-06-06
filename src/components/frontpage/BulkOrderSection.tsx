@@ -81,75 +81,91 @@ export function BulkOrderSection({ onOpenAuth, onOrderCreated }: BulkOrderSectio
   const displayPlan = PLAN_DISPLAY_NAMES[plan.toLowerCase()] || plan;
 
   return (
-    <section className="bulk-section" id="bulkSection">
-      <div className="bulk-head">
-        <div>
-          <div style={{ display: 'flex', alignItems: 'center', gap: '12px', marginBottom: '8px' }}>
-            <span className="step-badge">3</span>
-            <strong style={{ fontSize: '18px', letterSpacing: '0.02em' }}>TU PEDIDO MASIVO</strong>
+    <>
+      <section className="bulk-section" id="bulkSection">
+        <div className="bulk-head">
+          <div>
+            <div style={{ display: 'flex', alignItems: 'center', gap: '12px', marginBottom: '8px' }}>
+              <span className="step-badge">3</span>
+              <strong style={{ fontSize: '18px', letterSpacing: '0.02em' }}>TU PEDIDO MASIVO</strong>
+            </div>
+            <p style={{ margin: 0 }}>
+              <span>{bulk.length}</span> / 3 Pokémon — solo dentro del mismo juego.
+            </p>
           </div>
-          <p style={{ margin: 0 }}>
-            <span>{bulk.length}</span> / 3 Pokémon — solo dentro del mismo juego.
-          </p>
+          <span 
+            className="premium-lock" 
+            id="premiumLock"
+            style={{ cursor: !user ? 'pointer' : 'default' }}
+            onClick={() => { if (!user) onOpenAuth(); }}
+          >
+            {user ? (isPremium ? `Plan: ${displayPlan.toUpperCase()}` : '🔒 Premium') : '🔒 Premium'}
+          </span>
         </div>
-        <span 
-          className="premium-lock" 
-          id="premiumLock"
-          style={{ cursor: !user ? 'pointer' : 'default' }}
-          onClick={() => { if (!user) onOpenAuth(); }}
+
+        <div className="bulk-slots" id="bulkSlots">
+          {slots.map((order, i) => {
+            if (order) {
+              return (
+                <div key={i} className="slot filled">
+                  <button 
+                    type="button" 
+                    aria-label="Eliminar"
+                    onClick={() => removeFromBulk(i)}
+                  >
+                    ×
+                  </button>
+                  <PokemonImage 
+                    species={order.dexId || order.species} 
+                    form={order.form} 
+                    alt={order.displayName} 
+                  />
+                  <strong>{order.displayName}</strong>
+                  <small>
+                    {gameLabels[order.game]} · Nv. {order.level}
+                    {order.shiny ? ' · ✨' : ''}
+                  </small>
+                </div>
+              );
+            } else {
+              return (
+                <div key={i} className="slot">
+                  <b>?</b>
+                  <small>Slot {i + 1}</small>
+                </div>
+              );
+            }
+          })}
+        </div>
+
+        <button 
+          id="bulkSubmit" 
+          className={`bulk-submit ${isPremium && bulk.length > 0 ? 'enabled' : ''}`}
+          type="button" 
+          onClick={handleSubmit}
+          disabled={submitting || !isPremium || bulk.length === 0}
         >
-          {user ? (isPremium ? `Plan: ${displayPlan.toUpperCase()}` : '🔒 Premium') : '🔒 Premium'}
-        </span>
-      </div>
+          {submitting ? 'GENERANDO PEDIDO...' : '↔ SOLICITAR PEDIDO MASIVO'}
+        </button>
+        
+        <p className="bulk-note">
+          Preparado para que tu programador active planes de pago y conecte el bot de intercambio. Máximo 3 Pokémon por estabilidad del bot.
+        </p>
+      </section>
 
-      <div className="bulk-slots" id="bulkSlots">
-        {slots.map((order, i) => {
-          if (order) {
-            return (
-              <div key={i} className="slot filled">
-                <button 
-                  type="button" 
-                  aria-label="Eliminar"
-                  onClick={() => removeFromBulk(i)}
-                >
-                  ×
-                </button>
-                <PokemonImage 
-                  species={order.dexId || order.species} 
-                  form={order.form} 
-                  alt={order.displayName} 
-                />
-                <strong>{order.displayName}</strong>
-                <small>
-                  {gameLabels[order.game]} · Nv. {order.level}
-                  {order.shiny ? ' · ✨' : ''}
-                </small>
-              </div>
-            );
-          } else {
-            return (
-              <div key={i} className="slot">
-                <b>?</b>
-                <small>Slot {i + 1}</small>
-              </div>
-            );
-          }
-        })}
-      </div>
-
-      <button 
-        id="bulkSubmit" 
-        className={`bulk-submit ${isPremium && bulk.length > 0 ? 'enabled' : ''}`}
-        type="button" 
-        onClick={handleSubmit}
-        disabled={submitting || !isPremium || bulk.length === 0}
-      >
-        {submitting ? 'GENERANDO PEDIDO...' : '↔ SOLICITAR PEDIDO MASIVO'}
-      </button>
-      
-      <p className="bulk-note">
-        Preparado para que tu programador active planes de pago y conecte el bot de intercambio. Máximo 3 Pokémon por estabilidad del bot.
-      </p>
-    </section>
+      {isPremium && bulk.length > 0 && (
+        <div className="mobile-bulk-bar">
+          <span>🛒 Pedido Masivo: <strong>{bulk.length}/3</strong> Pokémon</span>
+          <button 
+            type="button" 
+            onClick={() => {
+              document.getElementById('bulkSection')?.scrollIntoView({ behavior: 'smooth' });
+            }}
+          >
+            Ver Pedido
+          </button>
+        </div>
+      )}
+    </>
   );
 }
