@@ -394,21 +394,19 @@ a{
   color:#fff;
   display:flex;
   align-items:center;
-  justify-content:center;
-  gap:42px;
+  justify-content:space-between;
   padding:10px 32px;
   border-bottom:1px solid var(--line)
 }
 
 .brand{
-  position:absolute;
-  left:50%;
-  transform:translateX(-50%);
-  top:5px
+  position:static;
+  display:flex;
+  align-items:center;
 }
 
 .brand img{
-  height:64px;
+  height:46px;
   -o-object-fit:contain;
      object-fit:contain;
   filter:drop-shadow(0 8px 18px rgba(0,0,0,.5))
@@ -416,8 +414,8 @@ a{
 
 .nav-links{
   display:flex;
-  gap:10px;
-  margin-left:120px
+  gap:24px;
+  margin:0;
 }
 
 .nav-link{
