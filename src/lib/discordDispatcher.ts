@@ -121,29 +121,43 @@ export async function dispatchTradeCommand(
 ): Promise<DispatchResult> {
   const discordToken = process.env.DISCORD_TOKEN?.trim();
   const formattedCode = tradeCode.replace(/\s/g, ''); // "1234 5678" -> "12345678"
+  const isBulkOrder = pokemonList.length > 1;
 
   // 1. Determine target channel and prefix (Matching OrderWorker.ts logic)
   let targetChannelId = '';
   let commandPrefix = '%';
 
+  // Allow per-game prefix overrides via env vars (for custom bot configs)
+  const svPrefix = process.env.DISCORD_PREFIX_SV?.trim() || '%';
+  const zaPrefix = process.env.DISCORD_PREFIX_ZA?.trim() || '!';
+
   if (game === 'sv') {
-    if (userPlan === 'free') {
+    if (isBulkOrder) {
+      targetChannelId = process.env.DISCORD_CHANNEL_ID_SV_BULK || (userPlan === 'free'
+        ? process.env.DISCORD_CHANNEL_ID_SV_FREE
+        : process.env.DISCORD_CHANNEL_ID_SV_PREMIUM) || process.env.DISCORD_CHANNEL_ID_SV || process.env.DISCORD_CHANNEL_ID || '';
+    } else if (userPlan === 'free') {
       targetChannelId = process.env.DISCORD_CHANNEL_ID_SV_FREE || process.env.DISCORD_CHANNEL_ID_SV || process.env.DISCORD_CHANNEL_ID || '';
     } else {
       targetChannelId = process.env.DISCORD_CHANNEL_ID_SV_PREMIUM || process.env.DISCORD_CHANNEL_ID_SV || process.env.DISCORD_CHANNEL_ID || '';
     }
-    commandPrefix = '%'; // SV Prefix
+    commandPrefix = svPrefix;
   } else if (game === 'za') {
-    if (userPlan === 'free') {
+    if (isBulkOrder) {
+      targetChannelId = process.env.DISCORD_CHANNEL_ID_ZA_BULK || (userPlan === 'free'
+        ? process.env.DISCORD_CHANNEL_ID_ZA_FREE
+        : process.env.DISCORD_CHANNEL_ID_ZA_PREMIUM) || process.env.DISCORD_CHANNEL_ID_ZA || process.env.DISCORD_CHANNEL_ID || '';
+    } else if (userPlan === 'free') {
       targetChannelId = process.env.DISCORD_CHANNEL_ID_ZA_FREE || process.env.DISCORD_CHANNEL_ID_ZA || process.env.DISCORD_CHANNEL_ID || '';
-      commandPrefix = '!'; // ZA Free Prefix (uses !trade)
     } else {
       targetChannelId = process.env.DISCORD_CHANNEL_ID_ZA_PREMIUM || process.env.DISCORD_CHANNEL_ID_ZA || process.env.DISCORD_CHANNEL_ID || '';
-      commandPrefix = '!'; // ZA Premium Prefix (uses !trade)
     }
+    commandPrefix = zaPrefix;
   }
 
   targetChannelId = targetChannelId.replace(/[^0-9]/g, '');
+
+  console.log(`[DiscordDispatcher] Routing: game=${game} plan=${userPlan} bulk=${isBulkOrder} prefix='${commandPrefix}' channel=${targetChannelId || '(not configured)'} tokenPresent=${Boolean(discordToken)}`);
 
   // 2. Set the game property on each Pokemon copy
   const processedPokemonList = pokemonList.map(p => {
