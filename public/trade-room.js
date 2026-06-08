@@ -232,12 +232,37 @@ function shouldPlaySound(previousStatus, nextStatus){
   if (!nextStatus || previousStatus === nextStatus) return false;
   return ['submitted','queued','position_update','preparing','searching','trading','completed','partial_failed','failed','expired'].includes(nextStatus);
 }
+let countdownInterval = null;
+
+function startSearchingCountdown(startTimeIso) {
+  if (countdownInterval) clearInterval(countdownInterval);
+  
+  const timeoutSeconds = 60; // Standard Sysbot search timeout is 60s
+  const start = new Date(startTimeIso).getTime();
+  
+  const updateCountdown = () => {
+    const elapsed = Math.floor((Date.now() - start) / 1000);
+    const remaining = Math.max(0, timeoutSeconds - elapsed);
+    
+    if (remaining > 0) {
+      $('#statusText').textContent = `Introduce el código en tu Nintendo Switch. Tiempo restante para conectar: ${remaining}s`;
+    } else {
+      $('#statusText').textContent = `Tiempo de espera agotado. Si el bot no conecta, vuelve a intentarlo.`;
+      clearInterval(countdownInterval);
+      countdownInterval = null;
+    }
+  };
+  
+  updateCountdown();
+  countdownInterval = setInterval(updateCountdown, 1000);
+}
+
 function enableSound(){
   soundEnabled = true;
   ensureAudio();
   $('#soundBtn').classList.add('active');
   $('#soundBtn').textContent = '🔔';
-  $('#beginBtn').textContent = 'Avisos activados';
+  $('#beginBtn').textContent = 'Sonido activado';
   $('#beginBtn').disabled = true;
   playStatusSound('enabled');
 }
@@ -294,7 +319,19 @@ function render(order){
 
   const [title, fallback] = statusCopy[order.status] || ['Estado actualizado', 'Esperando información del bot...'];
   $('#statusTitle').textContent = title;
-  $('#statusText').textContent = statusSpanish[order.status] || order.statusLabel || fallback;
+
+  if (order.status === 'searching') {
+    const searchingLog = (order.logs || []).find(l => l.status === 'searching');
+    const startTime = searchingLog ? searchingLog.at : new Date().toISOString();
+    startSearchingCountdown(startTime);
+  } else {
+    if (countdownInterval) {
+      clearInterval(countdownInterval);
+      countdownInterval = null;
+    }
+    $('#statusText').textContent = order.message || statusSpanish[order.status] || order.statusLabel || fallback;
+  }
+
   $('#timeline').innerHTML = (order.logs || []).map(log => {
     const msg = statusSpanish[log.status] || log.message || log.status;
     return `<div class="timeline-item ${log.status === order.status ? 'active' : ''}"><b>${timeLabel(log.at)}</b><span>${escapeHtml(msg)}</span></div>`;
