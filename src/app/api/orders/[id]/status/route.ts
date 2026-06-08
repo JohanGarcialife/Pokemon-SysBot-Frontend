@@ -11,7 +11,30 @@ export async function GET(
     return NextResponse.json({ error: 'Falta ID de orden.' }, { status: 400 });
   }
 
-  // If Supabase is available, fetch from DB
+  // 1. Try to fetch from Railway backend for full rich logs and queuePosition
+  const rawUrl = process.env.NEXT_PUBLIC_BACKEND_URL || process.env.NEXT_PUBLIC_API_URL || 'http://localhost:4000';
+  const backendUrl = rawUrl.replace(/\\n/g, '').replace(/\n/g, '').trim();
+
+  try {
+    const res = await fetch(`${backendUrl}/api/orders/${id}/status`, {
+      method: 'GET',
+      headers: {
+        'content-type': 'application/json',
+      },
+      next: { revalidate: 0 } // disable cache
+    });
+
+    if (res.ok) {
+      const data = await res.json();
+      return NextResponse.json(data);
+    } else {
+      console.warn(`[orders/status] Backend returned status ${res.status}, falling back to Supabase`);
+    }
+  } catch (err: any) {
+    console.warn('[orders/status] Backend fetch failed, falling back to Supabase:', err.message || err);
+  }
+
+  // 2. Fallback to Supabase directly
   if (supabase) {
     try {
       const { data, error } = await supabase
@@ -24,7 +47,6 @@ export async function GET(
         return NextResponse.json({ error: 'Orden no encontrada.' }, { status: 404 });
       }
 
-      // Build the trade-room order object from the DB row
       const payload = (data.team_payload || []) as any[];
       const firstPokemon = payload[0] || {};
 
@@ -62,12 +84,11 @@ export async function GET(
 
       return NextResponse.json({ order });
     } catch (err: any) {
-      console.error('[orders/status] Supabase error:', err);
+      console.error('[orders/status] Supabase fallback error:', err);
       return NextResponse.json({ error: err.message || 'Error de base de datos.' }, { status: 500 });
     }
   }
 
-  // No Supabase: return a mock response so the trade-room page doesn't crash
   return NextResponse.json({
     order: {
       id,

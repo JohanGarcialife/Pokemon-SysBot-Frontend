@@ -5,7 +5,8 @@ export async function POST(
   { params }: { params: { id: string } }
 ) {
   const { id } = params;
-  const backendUrl = process.env.NEXT_PUBLIC_BACKEND_URL || 'http://localhost:4000';
+  const rawUrl = process.env.NEXT_PUBLIC_BACKEND_URL || process.env.NEXT_PUBLIC_API_URL || 'http://localhost:4000';
+  const backendUrl = rawUrl.replace(/\\n/g, '').replace(/\n/g, '').trim();
   
   try {
     const body = await req.json();

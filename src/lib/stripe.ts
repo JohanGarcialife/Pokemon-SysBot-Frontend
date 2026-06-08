@@ -3,11 +3,31 @@ import Stripe from 'stripe';
 // Helper to trim strings safely
 const trimEnv = (val?: string) => (val || '').trim();
 
-const stripeSecretKey = trimEnv(process.env.STRIPE_SECRET_KEY);
+let _stripeInstance: Stripe | null = null;
 
-// Stripe singleton
-export const stripe = new Stripe(stripeSecretKey, {
-  apiVersion: '2026-05-27.dahlia',
+function getStripeInstance(): Stripe {
+  if (!_stripeInstance) {
+    const stripeSecretKey = trimEnv(process.env.STRIPE_SECRET_KEY);
+    if (!stripeSecretKey) {
+      throw new Error('STRIPE_SECRET_KEY is not defined in environment variables.');
+    }
+    _stripeInstance = new Stripe(stripeSecretKey, {
+      apiVersion: '2026-05-27.dahlia',
+    });
+  }
+  return _stripeInstance;
+}
+
+// Export a proxy that acts as the stripe instance
+export const stripe = new Proxy({} as Stripe, {
+  get(target, prop) {
+    const instance = getStripeInstance();
+    const value = Reflect.get(instance, prop);
+    if (typeof value === 'function') {
+      return value.bind(instance);
+    }
+    return value;
+  }
 });
 
 // Map planId + billing → Stripe Price ID

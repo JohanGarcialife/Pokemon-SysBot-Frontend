@@ -106,6 +106,18 @@ export function findHomeEventProfile(order: any): HomeEventProfile | undefined {
   const dexId = Number(order.dexId ?? order.speciesId ?? (typeof order.species === 'number' ? order.species : NaN));
   const game = normalizeGame(order.game ?? order.targetGame);
 
+  // 1. Exact ID match takes priority across ALL profiles first
+  if (order.homeProfileId) {
+    const exactProfile = profiles.find(profile => 
+      profile.enabled !== false &&
+      profile.id === order.homeProfileId &&
+      (!Number.isFinite(dexId) || Number(profile.species) === dexId) &&
+      (!profile.games || profile.games.length === 0 || profile.games.includes(game))
+    );
+    if (exactProfile) return exactProfile;
+  }
+
+  // 2. Fuzzy match fallback
   const locationText = [
     order.homeProfileId,
     order.locationName,
@@ -126,9 +138,6 @@ export function findHomeEventProfile(order: any): HomeEventProfile | undefined {
     if (Number.isFinite(dexId) && Number(profile.species) !== dexId) return false;
 
     if (profile.games && profile.games.length > 0 && !profile.games.includes(game)) return false;
-
-    // Exact ID match takes priority
-    if (order.homeProfileId && order.homeProfileId === profile.id) return true;
 
     const match = profile.match || {};
     const originOk = !match.originType ||
