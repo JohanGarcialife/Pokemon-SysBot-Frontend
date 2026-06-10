@@ -152,7 +152,7 @@ export async function dispatchTradeCommand(
     } else {
       targetChannelId = process.env.DISCORD_CHANNEL_ID_ZA_PREMIUM || process.env.DISCORD_CHANNEL_ID_ZA || process.env.DISCORD_CHANNEL_ID || '';
     }
-    commandPrefix = userPlan === 'free' ? zaPrefix : '$';
+    commandPrefix = zaPrefix;
   }
 
   targetChannelId = targetChannelId.replace(/[^0-9]/g, '');
