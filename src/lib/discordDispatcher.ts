@@ -127,9 +127,11 @@ export async function dispatchTradeCommand(
   let targetChannelId = '';
   let commandPrefix = '%';
 
-  // Allow per-game prefix overrides via env vars (for custom bot configs)
-  const svPrefix = process.env.DISCORD_PREFIX_SV?.trim() || '%';
-  const zaPrefix = process.env.DISCORD_PREFIX_ZA?.trim() || '!';
+  // Allow per-game & per-tier prefix overrides via env vars
+  const svFreePrefix = process.env.DISCORD_PREFIX_SV_FREE?.trim() || process.env.DISCORD_PREFIX_SV?.trim() || '%';
+  const svPremiumPrefix = process.env.DISCORD_PREFIX_SV_PREMIUM?.trim() || process.env.DISCORD_PREFIX_SV?.trim() || '%';
+  const zaFreePrefix = process.env.DISCORD_PREFIX_ZA_FREE?.trim() || process.env.DISCORD_PREFIX_ZA?.trim() || '!';
+  const zaPremiumPrefix = process.env.DISCORD_PREFIX_ZA_PREMIUM?.trim() || process.env.DISCORD_PREFIX_ZA?.trim() || '%';
 
   if (game === 'sv') {
     if (isBulkOrder) {
@@ -141,7 +143,7 @@ export async function dispatchTradeCommand(
     } else {
       targetChannelId = process.env.DISCORD_CHANNEL_ID_SV_PREMIUM || process.env.DISCORD_CHANNEL_ID_SV || process.env.DISCORD_CHANNEL_ID || '';
     }
-    commandPrefix = svPrefix;
+    commandPrefix = userPlan === 'free' ? svFreePrefix : svPremiumPrefix;
   } else if (game === 'za') {
     if (isBulkOrder) {
       targetChannelId = process.env.DISCORD_CHANNEL_ID_ZA_BULK || (userPlan === 'free'
@@ -152,7 +154,7 @@ export async function dispatchTradeCommand(
     } else {
       targetChannelId = process.env.DISCORD_CHANNEL_ID_ZA_PREMIUM || process.env.DISCORD_CHANNEL_ID_ZA || process.env.DISCORD_CHANNEL_ID || '';
     }
-    commandPrefix = zaPrefix;
+    commandPrefix = userPlan === 'free' ? zaFreePrefix : zaPremiumPrefix;
   }
 
   targetChannelId = targetChannelId.replace(/[^0-9]/g, '');
