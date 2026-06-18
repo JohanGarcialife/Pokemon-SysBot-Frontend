@@ -8804,7 +8804,7 @@
     "sprite": "/sprites/0670.png",
     "encounterCount": 1,
     "methods": [
-      "Gift",
+      "Evento Especial",
       "Pokémon HOME"
     ],
     "locations": [
@@ -8812,9 +8812,9 @@
     ],
     "hasAlpha": false,
     "hasShinyLocked": true,
-    "formLabel": "Forma 5",
-    "displayName": "Floette Forma 5",
-    "displayNameEn": "Floette Form 5",
+    "formLabel": "Flor Eterna",
+    "displayName": "Floette Flor Eterna",
+    "displayNameEn": "Floette Eternal Flower",
     "key": "670-5",
     "evolutionOnly": false,
     "searchAliases": [

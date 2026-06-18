@@ -130,13 +130,17 @@ function getFreeUsage(){
     return Number(raw.count || 0);
   } catch { return 0; }
 }
+let serverRemainingFreeTrades = null;
+
 function remainingFreeTrades(){
+  if (serverRemainingFreeTrades !== null) return serverRemainingFreeTrades;
   return Math.max(0, MEMBERSHIP_PLANS.free.dailyTrades - getFreeUsage());
 }
 
 const formArtwork = {
   '19-1': 10091, '20-1': 10092, '26-1': 10100, '27-1': 10101, '28-1': 10102,
   '37-1': 10103, '38-1': 10104, '50-1': 10105, '51-1': 10106, '52-1': 10107,
+  '670-5': 10061,
   '52-2': 10161, '53-1': 10108, '58-1': 10229, '59-1': 10230, '79-1': 10164,
   '80-2': 10165, '83-1': 10166, '88-1': 10112, '89-1': 10113, '100-1': 10231,
   '101-1': 10232, '103-1': 10114, '105-1': 10115, '110-1': 10167, '122-1': 10168,
@@ -354,6 +358,9 @@ function render(order){
 async function loadStatus(){
   if (!orderId) throw new Error('Falta ID de orden.');
   const data = await api(`/api/orders/${encodeURIComponent(orderId)}/status`);
+  if (data.remainingFreeTrades !== undefined) {
+    serverRemainingFreeTrades = data.remainingFreeTrades;
+  }
   render(data.order);
 }
 

@@ -11,6 +11,8 @@ interface AppState {
   pokemonList: Record<'za' | 'sv', any[]>;
   itemsList: Record<'za' | 'sv', string[]>;
   bulk: any[];
+  remainingFreeTradesZA: number;
+  remainingFreeTradesSV: number;
   
   setUser: (user: any, profile: any, plan: string) => void;
   clearUser: () => void;
@@ -21,6 +23,7 @@ interface AppState {
   addToBulk: (item: any) => string | null; // returns error message if any
   removeFromBulk: (index: number) => void;
   clearBulk: () => void;
+  setTradesStats: (completed: number, remainingZA: number, remainingSV: number) => void;
 }
 
 export const useAppStore = create<AppState>((set, get) => ({
@@ -33,6 +36,8 @@ export const useAppStore = create<AppState>((set, get) => ({
   pokemonList: { za: [], sv: [] },
   itemsList: { za: [], sv: [] },
   bulk: [],
+  remainingFreeTradesZA: 3,
+  remainingFreeTradesSV: 3,
 
   setUser: (user, profile, plan) => {
     // Plan can come from Supabase app_metadata (set by Stripe webhook)
@@ -65,6 +70,8 @@ export const useAppStore = create<AppState>((set, get) => ({
       plan: 'free',
       isPremium: false,
       bulk: [],
+      remainingFreeTradesZA: 3,
+      remainingFreeTradesSV: 3,
     });
   },
 
@@ -122,4 +129,8 @@ export const useAppStore = create<AppState>((set, get) => ({
   },
 
   clearBulk: () => set({ bulk: [] }),
+  setTradesStats: (completed, remainingZA, remainingSV) => set({
+    remainingFreeTradesZA: remainingZA,
+    remainingFreeTradesSV: remainingSV,
+  })
 }));

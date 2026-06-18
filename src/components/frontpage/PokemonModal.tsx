@@ -48,7 +48,10 @@ export function PokemonModal({
   onOrderCreated,
   onToast,
 }: PokemonModalProps) {
-  const { game, itemsList, setItems, addToBulk, isPremium, user, supabase } = useAppStore();
+  const { game, itemsList, setItems, addToBulk, isPremium, user, supabase, plan, remainingFreeTradesZA, remainingFreeTradesSV } = useAppStore();
+  const isFreePlan = plan === 'free';
+  const remainingTrades = game === 'za' ? remainingFreeTradesZA : remainingFreeTradesSV;
+  const isLimitReached = isFreePlan && remainingTrades <= 0;
   
   // Local states
   const [encounters, setEncounters] = useState<any[]>([]);
@@ -563,7 +566,7 @@ export function PokemonModal({
                       className="main-action" 
                       type="button" 
                       onClick={handleSingleOrder}
-                      disabled={validating}
+                      disabled={validating || isLimitReached}
                     >
                       📨 Realizar intercambio
                     </button>
@@ -579,7 +582,13 @@ export function PokemonModal({
                     </button>
                   </div>
 
-                  {validationResult && (
+                  {isLimitReached && (
+                    <div id="result" className="notice error" style={{ marginTop: '12px' }}>
+                      🔒 Has alcanzado el límite de 3 intercambios diarios para {game === 'za' ? 'Legends: Z-A' : 'Scarlet / Violet'} hoy. Actualiza tu plan en Membresías para obtener intercambios ilimitados.
+                    </div>
+                  )}
+
+                  {!isLimitReached && validationResult && (
                     <div 
                       id="result" 
                       className={`notice ${validationResult.success ? '' : 'error'}`}
@@ -589,7 +598,7 @@ export function PokemonModal({
                     </div>
                   )}
 
-                  {!validationResult && (
+                  {!isLimitReached && !validationResult && (
                     <div id="result" className="notice" style={{ marginTop: '12px' }}>
                       El pedido se validará contra la base legal antes de generar el código.
                     </div>

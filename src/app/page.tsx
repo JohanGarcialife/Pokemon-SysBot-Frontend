@@ -11,7 +11,7 @@ import { CodeModal } from '@/components/frontpage/CodeModal';
 import { AuthModal } from '@/components/layout/AuthModal';
 
 export default function HomePage() {
-  const { initSupabase, setUser, clearUser } = useAppStore();
+  const { initSupabase, setUser, clearUser, setTradesStats } = useAppStore();
   const [selectedPokemon, setSelectedPokemon] = useState<any>(null);
   const [activeOrder, setActiveOrder] = useState<any>(null);
   const [authOpen, setAuthOpen] = useState(false);
@@ -63,6 +63,11 @@ export default function HomePage() {
             const dashboard = await res.json();
             const plan = dashboard.user?.plan || localPlan;
             setUser(session.user, session.user.user_metadata, plan);
+            setTradesStats(
+              dashboard.stats?.tradesCompleted || 0,
+              dashboard.stats?.remainingFreeTradesZA !== undefined ? dashboard.stats.remainingFreeTradesZA : 3,
+              dashboard.stats?.remainingFreeTradesSV !== undefined ? dashboard.stats.remainingFreeTradesSV : 3
+            );
           }
         } catch (err) {
           console.warn('Could not fetch server profile dashboard:', err);
@@ -126,6 +131,19 @@ export default function HomePage() {
       {authOpen && (
         <AuthModal onClose={() => setAuthOpen(false)} />
       )}
+
+      <footer className="site-footer">
+        <div className="site-footer-links">
+          <a href="/legal/aviso-legal" className="site-footer-link">Aviso Legal</a>
+          <a href="/legal/privacidad" className="site-footer-link">Privacidad</a>
+          <a href="/legal/cookies" className="site-footer-link">Cookies</a>
+          <a href="/legal/terminos" className="site-footer-link">Términos de Uso</a>
+          <a href="/legal/reembolsos" className="site-footer-link">Reembolsos</a>
+          <a href="/legal/contacto" className="site-footer-link">Contacto</a>
+          <a href="/legal/uso-aceptable" className="site-footer-link">Uso Aceptable</a>
+        </div>
+        <p className="site-footer-copy">© {new Date().getFullYear()} PKDEX Trade. Todos los derechos reservados.</p>
+      </footer>
 
       {toastMessage && (
         <div className="toast" style={{ display: 'block' }}>

@@ -9,6 +9,9 @@ export async function GET(req: NextRequest) {
   }
 
   let tradesCompleted = 0;
+  let remainingFreeTradesZA = 3;
+  let remainingFreeTradesSV = 3;
+
   if (supabase) {
     try {
       const { count, error } = await supabase
@@ -21,8 +24,25 @@ export async function GET(req: NextRequest) {
       } else if (error) {
         console.error('[Dashboard] Error fetching order count:', error.message);
       }
+
+      // Count active orders created today
+      const startOfToday = new Date();
+      startOfToday.setUTCHours(0,0,0,0);
+
+      const { data: activeOrdersToday } = await supabase
+        .from('orders')
+        .select('game_version, status')
+        .eq('user_id', user.id)
+        .gte('created_at', startOfToday.toISOString())
+        .not('status', 'in', '("failed","expired","cancelled")');
+
+      const usedZA = (activeOrdersToday || []).filter((o: any) => o.game_version === 'legends-za').length;
+      const usedSV = (activeOrdersToday || []).filter((o: any) => o.game_version === 'scarlet' || o.game_version === 'violet').length;
+
+      remainingFreeTradesZA = Math.max(0, 3 - usedZA);
+      remainingFreeTradesSV = Math.max(0, 3 - usedSV);
     } catch (err: any) {
-      console.error('[Dashboard] Exception fetching order count:', err);
+      console.error('[Dashboard] Exception fetching dashboard stats:', err);
     }
   }
 
@@ -31,7 +51,9 @@ export async function GET(req: NextRequest) {
     stats: { 
       tradesCompleted, 
       bulkOrdersEnabled: user.plan === 'premium', 
-      bulkLimit: 3 
+      bulkLimit: 3,
+      remainingFreeTradesZA,
+      remainingFreeTradesSV,
     },
     cta: { label: 'Crear tu Pokémon', href: '#creator' }
   });
