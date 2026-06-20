@@ -7,6 +7,7 @@ import { PokemonImage } from './PokemonImage';
 interface BulkOrderSectionProps {
   onOpenAuth: () => void;
   onOrderCreated: (order: any) => void;
+  onShowWarning?: (activeOrderId: string, message?: string) => void;
 }
 
 const gameLabels: Record<string, string> = {
@@ -22,7 +23,7 @@ const PLAN_DISPLAY_NAMES: Record<string, string> = {
   premium: 'Premium'
 };
 
-export function BulkOrderSection({ onOpenAuth, onOrderCreated }: BulkOrderSectionProps) {
+export function BulkOrderSection({ onOpenAuth, onOrderCreated, onShowWarning }: BulkOrderSectionProps) {
   const { user, isPremium, plan, bulk, removeFromBulk, clearBulk, supabase } = useAppStore();
   const [submitting, setSubmitting] = useState(false);
 
@@ -59,6 +60,10 @@ export function BulkOrderSection({ onOpenAuth, onOrderCreated }: BulkOrderSectio
 
       const data = await res.json();
       if (!res.ok) {
+        if (data.error === 'active_order_exists' && data.activeOrderId && onShowWarning) {
+          onShowWarning(data.activeOrderId, data.message);
+          return;
+        }
         throw new Error(data.error || 'Error al enviar pedido masivo');
       }
 

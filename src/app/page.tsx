@@ -9,6 +9,7 @@ import { CreatorSection } from '@/components/frontpage/CreatorSection';
 import { PokemonModal } from '@/components/frontpage/PokemonModal';
 import { CodeModal } from '@/components/frontpage/CodeModal';
 import { AuthModal } from '@/components/layout/AuthModal';
+import { WarningModal } from '@/components/frontpage/WarningModal';
 
 export default function HomePage() {
   const { initSupabase, setUser, clearUser, setTradesStats } = useAppStore();
@@ -16,6 +17,7 @@ export default function HomePage() {
   const [activeOrder, setActiveOrder] = useState<any>(null);
   const [authOpen, setAuthOpen] = useState(false);
   const [toastMessage, setToastMessage] = useState('');
+  const [warningOrder, setWarningOrder] = useState<{ activeOrderId: string; message?: string } | null>(null);
 
   // Fetch Supabase configuration and initialize
   useEffect(() => {
@@ -102,6 +104,7 @@ export default function HomePage() {
             window.location.assign(`/trade-room.html?order=${order.id}`);
           }, 1000);
         }}
+        onShowWarning={(activeOrderId, message) => setWarningOrder({ activeOrderId, message })}
       />
 
       {selectedPokemon && (
@@ -117,6 +120,7 @@ export default function HomePage() {
             }, 1000);
           }}
           onToast={triggerToast}
+          onShowWarning={(activeOrderId, message) => setWarningOrder({ activeOrderId, message })}
         />
       )}
 
@@ -125,6 +129,14 @@ export default function HomePage() {
           order={activeOrder} 
           onClose={() => setActiveOrder(null)} 
           onToast={triggerToast}
+        />
+      )}
+
+      {warningOrder && (
+        <WarningModal
+          activeOrderId={warningOrder.activeOrderId}
+          message={warningOrder.message}
+          onClose={() => setWarningOrder(null)}
         />
       )}
 

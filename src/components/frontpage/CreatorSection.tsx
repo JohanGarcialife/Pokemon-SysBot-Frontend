@@ -11,9 +11,10 @@ interface CreatorSectionProps {
   onSelectPokemon: (pokemon: any) => void;
   onOpenAuth: () => void;
   onOrderCreated: (order: any) => void;
+  onShowWarning?: (activeOrderId: string, message?: string) => void;
 }
 
-export function CreatorSection({ onSelectPokemon, onOpenAuth, onOrderCreated }: CreatorSectionProps) {
+export function CreatorSection({ onSelectPokemon, onOpenAuth, onOrderCreated, onShowWarning }: CreatorSectionProps) {
   const [searchQuery, setSearchQuery] = useState('');
   const [method, setMethod] = useState('');
   const [methods, setMethods] = useState<string[]>([]);
@@ -40,7 +41,13 @@ export function CreatorSection({ onSelectPokemon, onOpenAuth, onOrderCreated }: 
         />
       </section>
 
-      {isPremium && <BulkOrderSection onOpenAuth={onOpenAuth} onOrderCreated={onOrderCreated} />}
+      {isPremium && (
+        <BulkOrderSection 
+          onOpenAuth={onOpenAuth} 
+          onOrderCreated={onOrderCreated} 
+          onShowWarning={onShowWarning}
+        />
+      )}
     </main>
   );
 }

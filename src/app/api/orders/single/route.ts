@@ -36,12 +36,11 @@ export async function POST(req: NextRequest) {
 
     if (!res.ok) {
       const errText = await res.text();
-      let errMsg = errText;
       try {
         const parsed = JSON.parse(errText);
-        if (parsed.error) errMsg = parsed.error;
+        return NextResponse.json(parsed, { status: res.status });
       } catch {}
-      return NextResponse.json({ error: errMsg || `Backend returned ${res.status}` }, { status: res.status });
+      return NextResponse.json({ error: errText || `Backend returned ${res.status}` }, { status: res.status });
     }
 
     const backendResult = await res.json();

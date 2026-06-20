@@ -10,6 +10,7 @@ interface PokemonModalProps {
   onOpenAuth: () => void;
   onOrderCreated: (order: any) => void;
   onToast: (msg: string) => void;
+  onShowWarning?: (activeOrderId: string, message?: string) => void;
 }
 
 const statLabels: Record<string, string> = {
@@ -47,6 +48,7 @@ export function PokemonModal({
   onOpenAuth,
   onOrderCreated,
   onToast,
+  onShowWarning,
 }: PokemonModalProps) {
   const { game, itemsList, setItems, addToBulk, isPremium, user, supabase, plan, remainingFreeTradesZA, remainingFreeTradesSV } = useAppStore();
   const isFreePlan = plan === 'free';
@@ -258,6 +260,11 @@ export function PokemonModal({
 
       const orderData = await res.json();
       if (!res.ok) {
+        if (orderData.error === 'active_order_exists' && orderData.activeOrderId && onShowWarning) {
+          onShowWarning(orderData.activeOrderId, orderData.message);
+          onClose();
+          return;
+        }
         throw new Error(orderData.error || 'Error al generar la orden');
       }
 
