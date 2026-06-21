@@ -237,21 +237,28 @@ function shouldPlaySound(previousStatus, nextStatus){
   return ['submitted','queued','position_update','preparing','searching','trading','completed','partial_failed','failed','expired'].includes(nextStatus);
 }
 let countdownInterval = null;
+let lastSearchingLogAt = null;
+let searchingStartedAt = null;
 
 function startSearchingCountdown(startTimeIso) {
   if (countdownInterval) clearInterval(countdownInterval);
   
   const timeoutSeconds = 60; // Standard Sysbot search timeout is 60s
-  const start = new Date(startTimeIso).getTime();
+  const clientNow = Date.now();
+  
+  if (lastSearchingLogAt !== startTimeIso) {
+    lastSearchingLogAt = startTimeIso;
+    searchingStartedAt = clientNow;
+  }
   
   const updateCountdown = () => {
-    const elapsed = Math.floor((Date.now() - start) / 1000);
+    const elapsed = Math.floor((Date.now() - searchingStartedAt) / 1000);
     const remaining = Math.max(0, timeoutSeconds - elapsed);
     
     if (remaining > 0) {
       $('#statusText').textContent = `Introduce el código en tu Nintendo Switch. Tiempo restante para conectar: ${remaining}s`;
     } else {
-      $('#statusText').textContent = `Tiempo de espera agotado. Si el bot no conecta, vuelve a intentarlo.`;
+      $('#statusText').textContent = `Buscando intercambio... Si el bot no conecta, vuelve a intentarlo.`;
       clearInterval(countdownInterval);
       countdownInterval = null;
     }
@@ -333,6 +340,8 @@ function render(order){
       clearInterval(countdownInterval);
       countdownInterval = null;
     }
+    lastSearchingLogAt = null;
+    searchingStartedAt = null;
     $('#statusText').textContent = order.message || statusSpanish[order.status] || order.statusLabel || fallback;
   }
 

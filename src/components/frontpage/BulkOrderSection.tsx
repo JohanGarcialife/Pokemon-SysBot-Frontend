@@ -154,7 +154,7 @@ export function BulkOrderSection({ onOpenAuth, onOrderCreated, onShowWarning }: 
         </button>
         
         <p className="bulk-note">
-          Preparado para que tu programador active planes de pago y conecte el bot de intercambio. Máximo 3 Pokémon por estabilidad del bot.
+          Solicita hasta 3 Pokémon en tu pedido masivo dentro del mismo juego.
         </p>
       </section>
 
