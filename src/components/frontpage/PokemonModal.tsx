@@ -246,9 +246,19 @@ export function PokemonModal({
 
       const headers: Record<string, string> = { 'content-type': 'application/json' };
       if (supabase) {
-        const { data: { session } } = await supabase.auth.getSession();
-        if (session) {
-          headers['Authorization'] = `Bearer ${session.access_token}`;
+        // Refresh session so the token always reflects the current plan from Supabase
+        // (prevents stale JWT from bypassing membership restrictions)
+        try {
+          const { data: refreshed } = await supabase.auth.refreshSession();
+          if (refreshed?.session) {
+            headers['Authorization'] = `Bearer ${refreshed.session.access_token}`;
+          } else {
+            const { data: { session } } = await supabase.auth.getSession();
+            if (session) headers['Authorization'] = `Bearer ${session.access_token}`;
+          }
+        } catch {
+          const { data: { session } } = await supabase.auth.getSession();
+          if (session) headers['Authorization'] = `Bearer ${session.access_token}`;
         }
       }
 
