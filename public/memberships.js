@@ -152,25 +152,14 @@ $$('[data-select-plan]').forEach(btn => {
   btn.onclick = async () => {
     const planId = btn.dataset.selectPlan;
     
-    // Free plan selection
-    if (planId === 'free') {
-      setPlan(planId);
-      paintActive();
-      showToast('Plan cambiado a Aficionado (Gratis).');
-      return;
-    }
-
     const userId = getSupabaseUserId();
     if (!userId) {
-      showToast('Inicia sesión en la página de inicio para suscribirte.');
+      showToast('Inicia sesión en la página de inicio para cambiar de plan.');
       setTimeout(() => {
         window.location.href = '/?login=true';
       }, 2000);
       return;
     }
-
-    const billing = currentBilling();
-    const billingText = billing === 'annual' ? 'anual con 10% de descuento' : 'mensual';
 
     try {
       btn.disabled = true;
@@ -189,45 +178,40 @@ $$('[data-select-plan]').forEach(btn => {
       }
 
       if (!authToken) {
-        showToast('Inicia sesión para suscribirte.');
+        showToast('Inicia sesión para cambiar de plan.');
         btn.disabled = false;
         btn.textContent = btn.dataset.originalLabel;
         setTimeout(() => { window.location.href = '/?login=true'; }, 1500);
         return;
       }
 
-      console.log('Requesting checkout session for plan:', planId, 'billing:', billing);
-      const response = await fetch('/api/payments/create-checkout-session', {
+      console.log('Changing plan to:', planId);
+      const response = await fetch('/api/payments/test-change-plan', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
           'Authorization': `Bearer ${authToken}`
         },
         body: JSON.stringify({
-          planId: planId,
-          billing: billing,
+          plan: planId
         })
       });
 
       const data = await response.json();
       
       if (!response.ok || data.error) {
-        throw new Error(data.error || 'Error al iniciar sesión de pago');
+        throw new Error(data.error || 'Error al cambiar plan en el servidor');
       }
 
-      if (data.url) {
-        showToast(`Redirigiendo a la pasarela de pago para plan ${PLAN_NAMES[planId]}...`);
-        setTimeout(() => {
-          window.location.href = data.url;
-        }, 800);
-      } else {
-        throw new Error('No se recibió la URL de pago.');
-      }
+      setPlan(planId);
+      paintActive();
+      showToast(`¡Plan cambiado a ${PLAN_NAMES[planId]} correctamente!`);
     } catch (err) {
       console.error(err);
       showToast(`Error: ${err.message}`);
+    } finally {
       btn.disabled = false;
-      btn.textContent = btn.dataset.originalLabel;
+      paintActive();
     }
   };
 });
