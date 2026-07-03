@@ -44,18 +44,8 @@ export default function HomePage() {
 
     const { data: { subscription } } = supabase.auth.onAuthStateChange(async (event, session) => {
       if (session && session.user) {
-        // Force refresh the session token so app_metadata.plan is always current
-        // (Stripe webhook updates app_metadata server-side; local JWT may be stale)
-        let freshSession = session;
-        try {
-          const { data: refreshed } = await supabase.auth.refreshSession();
-          if (refreshed?.session) freshSession = refreshed.session;
-        } catch (_) {
-          // If refresh fails, continue with existing session
-        }
-
-        const localPlan = freshSession.user.user_metadata?.plan || freshSession.user.app_metadata?.plan || 'free';
-        setUser(freshSession.user, freshSession.user.user_metadata, localPlan);
+        const localPlan = session.user.user_metadata?.plan || session.user.app_metadata?.plan || 'free';
+        setUser(session.user, session.user.user_metadata, localPlan);
         setAuthOpen(false);
 
         if (event === 'SIGNED_IN' && typeof window !== 'undefined') {
@@ -68,13 +58,13 @@ export default function HomePage() {
         try {
           const res = await fetch('/api/user/dashboard', {
             headers: {
-              'Authorization': `Bearer ${freshSession.access_token}`
+              'Authorization': `Bearer ${session.access_token}`
             }
           });
           if (res.ok) {
             const dashboard = await res.json();
             const plan = dashboard.user?.plan || localPlan;
-            setUser(freshSession.user, freshSession.user.user_metadata, plan);
+            setUser(session.user, session.user.user_metadata, plan);
             setTradesStats(
               dashboard.stats?.tradesCompleted || 0,
               dashboard.stats?.remainingFreeTradesZA !== undefined ? dashboard.stats.remainingFreeTradesZA : 3,
