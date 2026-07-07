@@ -1,7 +1,6 @@
 'use client';
 
 import { useState, useEffect } from 'react';
-import { useAppStore } from '@/store/useAppStore';
 import { SiteNav } from '@/components/layout/SiteNav';
 import { Hero } from '@/components/frontpage/Hero';
 import { DashboardCards } from '@/components/frontpage/DashboardCards';
@@ -12,77 +11,11 @@ import { AuthModal } from '@/components/layout/AuthModal';
 import { WarningModal } from '@/components/frontpage/WarningModal';
 
 export default function HomePage() {
-  const { initSupabase, setUser, clearUser, setTradesStats } = useAppStore();
   const [selectedPokemon, setSelectedPokemon] = useState<any>(null);
   const [activeOrder, setActiveOrder] = useState<any>(null);
   const [authOpen, setAuthOpen] = useState(false);
   const [toastMessage, setToastMessage] = useState('');
   const [warningOrder, setWarningOrder] = useState<{ activeOrderId: string; message?: string } | null>(null);
-
-  // Fetch Supabase configuration and initialize
-  useEffect(() => {
-    async function init() {
-      try {
-        const res = await fetch('/api/auth/config');
-        if (res.ok) {
-          const config = await res.json();
-          if (config.supabaseUrl && config.supabaseAnonKey) {
-            initSupabase(config.supabaseUrl, config.supabaseAnonKey);
-          }
-        }
-      } catch (err) {
-        console.error('Error fetching Supabase client configuration:', err);
-      }
-    }
-    init();
-  }, [initSupabase]);
-
-  // Listen to Supabase auth changes
-  const { supabase } = useAppStore();
-  useEffect(() => {
-    if (!supabase) return;
-
-    const { data: { subscription } } = supabase.auth.onAuthStateChange(async (event, session) => {
-      if (session && session.user) {
-        const localPlan = session.user.user_metadata?.plan || session.user.app_metadata?.plan || 'free';
-        setUser(session.user, session.user.user_metadata, localPlan);
-        setAuthOpen(false);
-
-        if (event === 'SIGNED_IN' && typeof window !== 'undefined') {
-          if (window.location.hash.includes('access_token')) {
-            window.location.hash = 'creator';
-          }
-        }
-
-        // Fetch official dashboard stats & plan from backend
-        try {
-          const res = await fetch('/api/user/dashboard', {
-            headers: {
-              'Authorization': `Bearer ${session.access_token}`
-            }
-          });
-          if (res.ok) {
-            const dashboard = await res.json();
-            const plan = dashboard.user?.plan || localPlan;
-            setUser(session.user, session.user.user_metadata, plan);
-            setTradesStats(
-              dashboard.stats?.tradesCompleted || 0,
-              dashboard.stats?.remainingFreeTradesZA !== undefined ? dashboard.stats.remainingFreeTradesZA : 3,
-              dashboard.stats?.remainingFreeTradesSV !== undefined ? dashboard.stats.remainingFreeTradesSV : 3
-            );
-          }
-        } catch (err) {
-          console.warn('Could not fetch server profile dashboard:', err);
-        }
-      } else {
-        clearUser();
-      }
-    });
-
-    return () => {
-      subscription.unsubscribe();
-    };
-  }, [supabase, setUser, clearUser]);
 
   // Check for cloned Pokémon from dashboard
   useEffect(() => {
