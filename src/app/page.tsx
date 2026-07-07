@@ -84,6 +84,23 @@ export default function HomePage() {
     };
   }, [supabase, setUser, clearUser]);
 
+  // Check for cloned Pokémon from dashboard
+  useEffect(() => {
+    if (typeof window !== 'undefined') {
+      const clone = localStorage.getItem('pkdex.clone_pokemon');
+      if (clone) {
+        try {
+          const parsed = JSON.parse(clone);
+          setSelectedPokemon(parsed);
+        } catch (e) {
+          console.error('Error parsing cloned pokemon:', e);
+        } finally {
+          localStorage.removeItem('pkdex.clone_pokemon');
+        }
+      }
+    }
+  }, []);
+
   const triggerToast = (msg: string) => {
     setToastMessage(msg);
     setTimeout(() => setToastMessage(''), 2600);

@@ -124,6 +124,27 @@ export function PokemonModal({
         // Auto select first type as default tera type
         const firstType = pokeStats.types[0];
         setTeraType(typeMap[firstType] || 'Normal');
+
+        // Check if loading a cloned Pokémon
+        if (pokemon.isClone && pokemon.clonedData) {
+          const c = pokemon.clonedData;
+          const matchEnc = pokeEncounters.find((e: any) => e.id === c.encounterId);
+          if (matchEnc) {
+            setSelectedEncounter(matchEnc);
+          } else if (pokeEncounters.length > 0) {
+            setSelectedEncounter(pokeEncounters[0]);
+          }
+
+          if (c.gameVersion) setGameVersion(c.gameVersion);
+          if (c.ball) setBall(c.ball);
+          if (c.heldItem) setHeldItem(c.heldItem);
+          if (c.gender) setGender(c.gender);
+          if (c.level) setLevel(c.level);
+          if (c.nature) setNature(c.nature);
+          if (c.evMode) setEvMode(c.evMode);
+          if (c.shiny !== undefined) setShiny(c.shiny);
+          if (c.teraType) setTeraType(c.teraType);
+        }
         
         setLoading(false);
       }
