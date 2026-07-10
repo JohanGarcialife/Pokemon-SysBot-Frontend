@@ -51,11 +51,22 @@ const STATUS_BADGES: Record<string, { label: string; class: string }> = {
 };
 
 export default function DashboardPage() {
-  const { user, plan, supabase, setGame } = useAppStore();
+  const { user, plan, supabase, setGame, setUser } = useAppStore();
   const [orders, setOrders] = useState<OrderItem[]>([]);
   const [loading, setLoading] = useState(true);
   const [errorMsg, setErrorMsg] = useState('');
   const [authOpen, setAuthOpen] = useState(false);
+
+  // Profile Edit states
+  const [isEditing, setIsEditing] = useState(false);
+  const [newName, setNewName] = useState('');
+  const [newAvatarUrl, setNewAvatarUrl] = useState('');
+  const [savingProfile, setSavingProfile] = useState(false);
+  const [profileError, setProfileError] = useState('');
+
+  // Stripe Portal states
+  const [portalLoading, setPortalLoading] = useState(false);
+  const [portalError, setPortalError] = useState('');
 
   useEffect(() => {
     if (!user) {
@@ -96,6 +107,70 @@ export default function DashboardPage() {
 
     fetchHistory();
   }, [user, supabase]);
+
+  const handleSaveProfile = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!supabase || !user) return;
+    try {
+      setSavingProfile(true);
+      setProfileError('');
+      
+      const { data, error } = await supabase.auth.updateUser({
+        data: {
+          name: newName.trim(),
+          picture: newAvatarUrl.trim() || null
+        }
+      });
+
+      if (error) throw error;
+      
+      // Update app store locally with new user metadata
+      setUser(data.user, data.user.user_metadata, plan);
+      setIsEditing(false);
+    } catch (err: any) {
+      console.error(err);
+      setProfileError(err.message || 'Error al actualizar el perfil.');
+    } finally {
+      setSavingProfile(false);
+    }
+  };
+
+  const handleOpenPortal = async () => {
+    if (!supabase || !user) return;
+    try {
+      setPortalLoading(true);
+      setPortalError('');
+      
+      const { data: { session } } = await supabase.auth.getSession();
+      if (!session) {
+        setPortalError('Debes volver a iniciar sesión.');
+        return;
+      }
+
+      const res = await fetch('/api/payments/customer-portal', {
+        method: 'POST',
+        headers: {
+          'Authorization': `Bearer ${session.access_token}`
+        }
+      });
+
+      const data = await res.json();
+      if (!res.ok || data.error) {
+        throw new Error(data.error || 'Error al generar enlace del portal.');
+      }
+
+      if (data.url) {
+        window.location.href = data.url;
+      } else {
+        throw new Error('No se recibió la dirección del portal.');
+      }
+    } catch (err: any) {
+      console.error(err);
+      setPortalError(err.message || 'Error al abrir el portal de facturación.');
+    } finally {
+      setPortalLoading(false);
+    }
+  };
 
   const handleClone = (pokemon: PokemonPayload, order: OrderItem) => {
     // Determine target game: Legends ZA -> 'za', Scarlet/Violet -> 'sv'
@@ -275,14 +350,92 @@ export default function DashboardPage() {
           {/* Tarjeta de Perfil y Suscripción */}
           <section className="dashboard-sidebar-section" style={{ position: 'sticky', top: '94px', height: 'fit-content' }}>
             <div className="creator-card" style={{ padding: '24px', borderTop: '5px solid var(--blue)' }}>
+              
+              {/* Profile Display / Edit */}
               <div style={{ textAlign: 'center', marginBottom: '22px' }}>
-                <div style={{ width: '72px', height: '72px', borderRadius: '50%', background: 'linear-gradient(135deg, var(--blue), var(--purple))', color: 'white', display: 'grid', placeItems: 'center', fontSize: '32px', margin: '0 auto 12px', fontWeight: 1000 }}>
-                  {user.email?.charAt(0).toUpperCase() || '👤'}
+                <div style={{ width: '72px', height: '72px', borderRadius: '50%', background: 'linear-gradient(135deg, var(--blue), var(--purple))', color: 'white', display: 'grid', placeItems: 'center', fontSize: '32px', margin: '0 auto 12px', fontWeight: 1000, overflow: 'hidden' }}>
+                  {user.user_metadata?.picture || user.user_metadata?.avatar_url ? (
+                    <img 
+                      src={user.user_metadata?.picture || user.user_metadata?.avatar_url} 
+                      alt="Avatar" 
+                      style={{ width: '100%', height: '100%', objectFit: 'cover' }} 
+                    />
+                  ) : (
+                    (user.user_metadata?.name || user.user_metadata?.full_name || user.email)?.charAt(0).toUpperCase() || '👤'
+                  )}
                 </div>
-                <h3 style={{ fontSize: '18px', fontWeight: 1000, margin: 0 }}>Entrenador PKDEX</h3>
-                <span style={{ color: 'var(--muted)', fontSize: '13px', fontWeight: 650, display: 'block', wordBreak: 'break-all' }}>{user.email}</span>
+                
+                {isEditing ? (
+                  <form onSubmit={handleSaveProfile} style={{ textAlign: 'left', marginTop: '12px' }}>
+                    <div style={{ marginBottom: '10px' }}>
+                      <label style={{ display: 'block', fontSize: '11px', fontWeight: 'bold', color: 'var(--muted)', marginBottom: '4px' }}>NOMBRE</label>
+                      <input 
+                        type="text" 
+                        value={newName} 
+                        onChange={(e) => setNewName(e.target.value)} 
+                        className="input" 
+                        style={{ width: '100%', height: '38px', borderRadius: '8px', fontSize: '14px', background: '#09101f', border: '1px solid var(--line)', padding: '0 10px', color: 'white' }} 
+                        placeholder="Tu nombre o apodo"
+                        required
+                      />
+                    </div>
+                    <div style={{ marginBottom: '14px' }}>
+                      <label style={{ display: 'block', fontSize: '11px', fontWeight: 'bold', color: 'var(--muted)', marginBottom: '4px' }}>FOTO DE PERFIL (URL)</label>
+                      <input 
+                        type="url" 
+                        value={newAvatarUrl} 
+                        onChange={(e) => setNewAvatarUrl(e.target.value)} 
+                        className="input" 
+                        style={{ width: '100%', height: '38px', borderRadius: '8px', fontSize: '14px', background: '#09101f', border: '1px solid var(--line)', padding: '0 10px', color: 'white' }} 
+                        placeholder="https://ejemplo.com/foto.jpg"
+                      />
+                    </div>
+                    {profileError && <p style={{ color: 'var(--danger)', fontSize: '12px', margin: '0 0 10px', fontWeight: 'bold' }}>{profileError}</p>}
+                    <div style={{ display: 'flex', gap: '8px' }}>
+                      <button 
+                        type="submit" 
+                        className="toggle active" 
+                        style={{ padding: '8px 12px', fontSize: '12px', borderRadius: '8px', border: 0 }}
+                        disabled={savingProfile}
+                      >
+                        {savingProfile ? 'Guardando...' : 'Guardar'}
+                      </button>
+                      <button 
+                        type="button" 
+                        className="toggle" 
+                        style={{ padding: '8px 12px', fontSize: '12px', borderRadius: '8px', border: '1px solid var(--line)' }}
+                        onClick={() => { setIsEditing(false); setProfileError(''); }}
+                        disabled={savingProfile}
+                      >
+                        Cancelar
+                      </button>
+                    </div>
+                  </form>
+                ) : (
+                  <>
+                    <h3 style={{ fontSize: '18px', fontWeight: 1000, margin: 0 }}>
+                      {user.user_metadata?.name || user.user_metadata?.full_name || user.email?.split('@')[0] || 'Entrenador PKDEX'}
+                    </h3>
+                    <span style={{ color: 'var(--muted)', fontSize: '13px', fontWeight: 650, display: 'block', wordBreak: 'break-all', marginTop: '2px' }}>
+                      {user.email}
+                    </span>
+                    <button 
+                      type="button" 
+                      onClick={() => {
+                        setNewName(user.user_metadata?.name || user.user_metadata?.full_name || '');
+                        setNewAvatarUrl(user.user_metadata?.picture || user.user_metadata?.avatar_url || '');
+                        setIsEditing(true);
+                      }}
+                      className="toggle" 
+                      style={{ display: 'inline-block', width: 'auto', padding: '6px 14px', fontSize: '11px', marginTop: '12px', borderRadius: '8px', border: '1px solid var(--line)' }}
+                    >
+                      ✏️ Editar perfil
+                    </button>
+                  </>
+                )}
               </div>
 
+              {/* Suscripción */}
               <div style={{ borderTop: '1px solid var(--line)', paddingTop: '18px' }}>
                 <span className="dash-label">Plan de Suscripción</span>
                 <strong style={{ display: 'block', fontSize: '24px', margin: '6px 0 10px', color: plan !== 'free' ? 'var(--yellow)' : 'var(--green)', fontWeight: 1000 }}>
@@ -296,7 +449,23 @@ export default function DashboardPage() {
                 <a href="/memberships.html" className="secondary-action" style={{ display: 'block', textAlign: 'center', textDecoration: 'none', fontSize: '13px' }}>
                   {plan !== 'free' ? 'Ver detalles de plan' : 'Mejorar membresía 👑'}
                 </a>
+
+                {/* Enlace discreto para gestionar / cancelar Stripe */}
+                {plan !== 'free' && (
+                  <div style={{ marginTop: '14px', textAlign: 'center' }}>
+                    <button 
+                      onClick={handleOpenPortal}
+                      style={{ background: 'none', border: 'none', color: 'var(--muted)', fontSize: '12px', textDecoration: 'underline', cursor: 'pointer', fontWeight: 650, display: 'inline-block' }}
+                      type="button"
+                      disabled={portalLoading}
+                    >
+                      {portalLoading ? 'Abriendo portal...' : 'Gestionar suscripción'}
+                    </button>
+                    {portalError && <p style={{ color: 'var(--danger)', fontSize: '11px', marginTop: '4px', fontWeight: 'bold' }}>{portalError}</p>}
+                  </div>
+                )}
               </div>
+
             </div>
           </section>
 
