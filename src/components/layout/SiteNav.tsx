@@ -2,6 +2,7 @@
 
 import { useState, useEffect, useRef } from 'react';
 import { useAppStore } from '@/store/useAppStore';
+import { usePathname } from 'next/navigation';
 
 interface SiteNavProps {
   onOpenAuth: () => void;
@@ -19,9 +20,10 @@ export function SiteNav({ onOpenAuth }: SiteNavProps) {
   const { user, profile, plan, clearUser, supabase } = useAppStore();
   const [dropdownOpen, setDropdownOpen] = useState(false);
   const dropdownRef = useRef<HTMLDivElement>(null);
+  const pathname = usePathname();
 
-  const name = profile?.full_name || profile?.name || user?.email || 'Iniciar Sesión';
-  const avatarUrl = profile?.avatar_url || profile?.picture;
+  const name = profile?.name || profile?.full_name || user?.email || 'Iniciar Sesión';
+  const avatarUrl = profile?.picture || profile?.avatar_url;
 
   useEffect(() => {
     function handleClickOutside(event: MouseEvent) {
@@ -65,8 +67,8 @@ export function SiteNav({ onOpenAuth }: SiteNavProps) {
       </a>
 
       <nav className="nav-links" aria-label="Navegación principal">
-        <a href="/dashboard" className="nav-link">▦ Dashboard</a>
-        <a href="/#creator" className="nav-link active">🎮 Crea tu Pokémon</a>
+        <a href="/dashboard" className={`nav-link ${pathname === '/dashboard' ? 'active' : ''}`}>▦ Dashboard</a>
+        <a href="/#creator" className={`nav-link ${pathname === '/' ? 'active' : ''}`}>🎮 Crea tu Pokémon</a>
         <a href="/memberships.html" className="nav-link">👑 Membresías</a>
       </nav>
 

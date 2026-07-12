@@ -361,6 +361,16 @@ function render(order){
     </article>`).join('');
   $('#warningBox').classList.toggle('hidden', order.status !== 'partial_failed' && order.status !== 'failed');
 
+  const FINAL_STATUSES = ['completed', 'failed', 'partial_failed', 'expired', 'cancelled'];
+  const cancelBtn = $('#cancelBtn');
+  if (cancelBtn) {
+    if (FINAL_STATUSES.includes(order.status.toLowerCase())) {
+      cancelBtn.style.display = 'none';
+    } else {
+      cancelBtn.style.display = 'inline-block';
+    }
+  }
+
   if (shouldPlaySound(previousStatus, order.status)) playStatusSound(order.status);
 }
 
@@ -383,6 +393,55 @@ $('#beginBtn').onclick = async () => {
 };
 $('#refreshBtn').onclick = () => loadStatus().catch(err => alert(err.message));
 $('#soundBtn').onclick = enableSound;
+
+function getSupabaseToken() {
+  for (let i = 0; i < localStorage.length; i++) {
+    const key = localStorage.key(i);
+    if (key && key.startsWith('sb-') && key.endsWith('-auth-token')) {
+      try {
+        const data = JSON.parse(localStorage.getItem(key));
+        return data?.access_token;
+      } catch (e) {
+        console.error('Error parsing token:', e);
+      }
+    }
+  }
+  return null;
+}
+
+const cancelBtn = $('#cancelBtn');
+if (cancelBtn) {
+  cancelBtn.onclick = async () => {
+    if (!confirm('¿Seguro que deseas cancelar este pedido? Se liberará el bot para otros usuarios.')) return;
+    try {
+      cancelBtn.disabled = true;
+      cancelBtn.textContent = 'Cancelando...';
+      
+      const token = getSupabaseToken();
+      const headers = { 'content-type': 'application/json' };
+      if (token) {
+        headers['Authorization'] = `Bearer ${token}`;
+      }
+
+      const res = await fetch(`/api/orders/${encodeURIComponent(orderId)}/cancel`, {
+        method: 'POST',
+        headers
+      });
+
+      if (res.ok) {
+        alert('Pedido cancelado correctamente.');
+        location.href = '/';
+      } else {
+        const err = await res.json().catch(() => ({}));
+        throw new Error(err.error || 'Error al cancelar el pedido.');
+      }
+    } catch (err) {
+      alert(err.message);
+      cancelBtn.disabled = false;
+      cancelBtn.textContent = 'Cancelar pedido';
+    }
+  };
+}
 
 (async () => {
   try {

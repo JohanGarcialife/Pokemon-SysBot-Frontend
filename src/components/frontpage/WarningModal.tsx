@@ -1,5 +1,8 @@
 'use client';
 
+import { useState } from 'react';
+import { useAppStore } from '@/store/useAppStore';
+
 interface WarningModalProps {
   activeOrderId: string;
   message?: string;
@@ -7,8 +10,46 @@ interface WarningModalProps {
 }
 
 export function WarningModal({ activeOrderId, message, onClose }: WarningModalProps) {
+  const { supabase } = useAppStore();
+  const [cancelling, setCancelling] = useState(false);
+  const [cancelError, setCancelError] = useState('');
+
   const handleGoToRoom = () => {
     window.location.assign(`/trade-room.html?order=${activeOrderId}`);
+  };
+
+  const handleCancelOrder = async () => {
+    if (!supabase) return;
+    if (!confirm('¿Seguro que deseas cancelar tu pedido activo para liberar la sala?')) return;
+    
+    try {
+      setCancelling(true);
+      setCancelError('');
+      const { data: { session } } = await supabase.auth.getSession();
+      if (!session) {
+        setCancelError('Inicia sesión para realizar esta acción.');
+        return;
+      }
+
+      const res = await fetch(`/api/orders/${activeOrderId}/cancel`, {
+        method: 'POST',
+        headers: {
+          'Authorization': `Bearer ${session.access_token}`
+        }
+      });
+
+      if (res.ok) {
+        onClose();
+        window.location.reload(); // Hard refresh to reset user state and order queue lock
+      } else {
+        const err = await res.json().catch(() => ({}));
+        setCancelError(err.error || 'Error al cancelar el pedido.');
+      }
+    } catch (err: any) {
+      setCancelError(err.message || 'Error de conexión.');
+    } finally {
+      setCancelling(false);
+    }
   };
 
   const defaultMsg = 'Ya tienes un pedido activo en curso. Por favor finalízalo o cancélalo antes de pedir de nuevo.';
@@ -41,6 +82,31 @@ export function WarningModal({ activeOrderId, message, onClose }: WarningModalPr
             style={{ width: '100%', fontSize: '16px', padding: '16px' }}
           >
             🚪 IR A MI SALA DE INTERCAMBIO
+          </button>
+
+          {cancelError && (
+            <p style={{ color: 'var(--danger)', fontSize: '12px', margin: '10px 0 0', textAlign: 'center', fontWeight: 'bold' }}>
+              {cancelError}
+            </p>
+          )}
+
+          <button 
+            onClick={handleCancelOrder} 
+            type="button"
+            disabled={cancelling}
+            style={{
+              width: '100%',
+              marginTop: '12px',
+              border: '1px solid rgba(255, 91, 110, 0.4)',
+              background: 'rgba(255, 91, 110, 0.1)',
+              color: '#ffb9c1',
+              padding: '12px',
+              borderRadius: '14px',
+              fontWeight: 800,
+              cursor: 'pointer'
+            }}
+          >
+            {cancelling ? 'CANCELANDO...' : '❌ CANCELAR PEDIDO ANTERIOR'}
           </button>
           
           <button 
