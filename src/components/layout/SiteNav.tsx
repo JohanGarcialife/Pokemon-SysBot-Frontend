@@ -67,8 +67,8 @@ export function SiteNav({ onOpenAuth }: SiteNavProps) {
       </a>
 
       <nav className="nav-links" aria-label="Navegación principal">
-        <a href="/dashboard" className={`nav-link ${pathname === '/dashboard' ? 'active' : ''}`}>▦ Dashboard</a>
-        <a href="/#creator" className={`nav-link ${pathname === '/' ? 'active' : ''}`}>🎮 Crea tu Pokémon</a>
+        <a href="/dashboard" className={`nav-link ${pathname.startsWith('/dashboard') ? 'active' : ''}`}>▦ Dashboard</a>
+        <a href="/#creator" className={`nav-link ${pathname === '/' && !pathname.startsWith('/dashboard') ? 'active' : ''}`}>🎮 Crea tu Pokémon</a>
         <a href="/memberships.html" className="nav-link">👑 Membresías</a>
       </nav>
 

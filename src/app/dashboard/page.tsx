@@ -68,6 +68,8 @@ export default function DashboardPage() {
   const [portalLoading, setPortalLoading] = useState(false);
   const [portalError, setPortalError] = useState('');
 
+  const FINAL_STATUSES = ['completed', 'failed', 'expired', 'cancelled', 'partial_failed'];
+
   useEffect(() => {
     if (!user) {
       setLoading(false);
@@ -106,7 +108,19 @@ export default function DashboardPage() {
     }
 
     fetchHistory();
+
+    // Auto-refresh every 5s while there are active (non-final) orders
+    const interval = setInterval(async () => {
+      const hasActive = orders.some(o => !FINAL_STATUSES.includes(o.status));
+      if (hasActive) {
+        await fetchHistory();
+      }
+    }, 5000);
+
+    return () => clearInterval(interval);
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [user, supabase]);
+
 
   const handleSaveProfile = async (e: React.FormEvent) => {
     e.preventDefault();
