@@ -63,5 +63,19 @@ export function AppInitializer() {
     };
   }, [supabase, setUser, clearUser, setTradesStats]);
 
+  // Lightweight page view analytics
+  useEffect(() => {
+    try {
+      fetch('/api/analytics/pageview', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          path: window.location.pathname,
+          referrer: document.referrer || null
+        })
+      }).catch(() => {}); // silently fail
+    } catch {}
+  }, []);
+
   return null;
 }

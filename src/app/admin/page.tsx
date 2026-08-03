@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from 'react';
 import { useAppStore } from '@/store/useAppStore';
-import { Users, CreditCard, Activity, TrendingUp } from 'lucide-react';
+import { Users, Eye, Activity, TrendingUp } from 'lucide-react';
 
 const PLAN_DISPLAY_NAMES: Record<string, string> = {
   free: 'Gratis',
@@ -101,12 +101,13 @@ export default function AdminDashboard() {
 
         <div className="bg-gray-800/50 border border-gray-700/50 rounded-2xl p-6 backdrop-blur-sm">
           <div className="flex items-center justify-between mb-4">
-            <h3 className="text-gray-400 font-bold uppercase tracking-wider text-xs">Ingresos Estimados</h3>
+            <h3 className="text-gray-400 font-bold uppercase tracking-wider text-xs">Visitas (Hoy)</h3>
             <div className="p-2 bg-amber-500/10 rounded-lg">
-              <CreditCard className="w-5 h-5 text-amber-400" />
+              <Eye className="w-5 h-5 text-amber-400" />
             </div>
           </div>
-          <div className="text-4xl font-black text-white">--</div>
+          <div className="text-4xl font-black text-white">{stats.pageViewsToday || 0}</div>
+          <div className="text-xs text-gray-500 mt-2">Semana: {stats.pageViewsWeek || 0} · Total: {stats.pageViewsTotal || 0}</div>
         </div>
       </div>
 

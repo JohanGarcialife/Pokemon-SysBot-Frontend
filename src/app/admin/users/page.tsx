@@ -135,6 +135,7 @@ export default function UsersManagement() {
               <tr className="bg-gray-900/50 border-b border-gray-700/50">
                 <th className="p-4 text-xs font-bold text-gray-400 uppercase tracking-wider">Email</th>
                 <th className="p-4 text-xs font-bold text-gray-400 uppercase tracking-wider">Plan</th>
+                <th className="p-4 text-xs font-bold text-gray-400 uppercase tracking-wider">Renovación</th>
                 <th className="p-4 text-xs font-bold text-gray-400 uppercase tracking-wider">Registro</th>
                 <th className="p-4 text-xs font-bold text-gray-400 uppercase tracking-wider">Acciones</th>
               </tr>
@@ -142,13 +143,13 @@ export default function UsersManagement() {
             <tbody className="divide-y divide-gray-800">
               {loading ? (
                 <tr>
-                  <td colSpan={4} className="p-8 text-center">
+                  <td colSpan={5} className="p-8 text-center">
                     <div className="inline-block animate-spin rounded-full h-8 w-8 border-b-2 border-indigo-500"></div>
                   </td>
                 </tr>
               ) : users.length === 0 ? (
                 <tr>
-                  <td colSpan={4} className="p-8 text-center text-gray-400">No se encontraron usuarios.</td>
+                  <td colSpan={5} className="p-8 text-center text-gray-400">No se encontraron usuarios.</td>
                 </tr>
               ) : (
                 users.map(u => (
@@ -164,6 +165,15 @@ export default function UsersManagement() {
                       }`}>
                         {PLAN_DISPLAY_NAMES[u.plan] || u.plan}
                       </span>
+                    </td>
+                    <td className="p-4 text-sm">
+                      {u.subscription_period_end ? (
+                        <span className={`font-medium ${new Date(u.subscription_period_end) < new Date() ? 'text-red-400' : 'text-emerald-400'}`}>
+                          {new Date(u.subscription_period_end).toLocaleDateString('es-ES')}
+                        </span>
+                      ) : (
+                        <span className="text-gray-600">—</span>
+                      )}
                     </td>
                     <td className="p-4 text-sm text-gray-400">
                       {new Date(u.created_at || u.createdAt).toLocaleDateString('es-ES')}
