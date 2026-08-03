@@ -9,7 +9,7 @@ const PLAN_DISPLAY_NAMES: Record<string, string> = {
   gym: 'Líder de Gimnasio',
   elite: 'Alto Mando',
   champion: 'Campeón de Liga',
-  premium: 'Premium'
+  banned: 'Baneado (Bloqueado)'
 };
 
 const PLAN_COLORS: Record<string, string> = {
@@ -17,7 +17,7 @@ const PLAN_COLORS: Record<string, string> = {
   gym: 'from-blue-500 to-blue-600',
   elite: 'from-purple-500 to-purple-600',
   champion: 'from-amber-400 to-amber-600',
-  premium: 'from-rose-500 to-rose-600'
+  banned: 'from-red-600 to-rose-700'
 };
 
 export default function AdminDashboard() {

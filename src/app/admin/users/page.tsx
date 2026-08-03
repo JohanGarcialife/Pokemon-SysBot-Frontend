@@ -9,10 +9,11 @@ const PLAN_DISPLAY_NAMES: Record<string, string> = {
   gym: 'Líder de Gimnasio',
   elite: 'Alto Mando',
   champion: 'Campeón de Liga',
-  premium: 'Premium'
+  banned: 'Baneado (Bloqueado)',
+  premium: 'Alto Mando' // Fallback map for legacy tokens
 };
 
-const TIERS = ['free', 'gym', 'elite', 'champion', 'premium'];
+const TIERS = ['free', 'gym', 'elite', 'champion', 'banned'];
 
 export default function UsersManagement() {
   const { supabase } = useAppStore();
@@ -157,11 +158,12 @@ export default function UsersManagement() {
                     <td className="p-4 font-medium text-white">{u.email}</td>
                     <td className="p-4">
                       <span className={`inline-flex items-center px-2.5 py-1 rounded-full text-xs font-black uppercase tracking-wider border ${
+                        u.plan === 'banned' ? 'bg-red-500/20 text-red-400 border-red-500/30' :
                         u.plan === 'free' ? 'bg-gray-500/10 text-gray-400 border-gray-500/20' :
                         u.plan === 'gym' ? 'bg-blue-500/10 text-blue-400 border-blue-500/20' :
                         u.plan === 'elite' ? 'bg-purple-500/10 text-purple-400 border-purple-500/20' :
                         u.plan === 'champion' ? 'bg-amber-500/10 text-amber-400 border-amber-500/20' :
-                        'bg-rose-500/10 text-rose-400 border-rose-500/20'
+                        'bg-indigo-500/10 text-indigo-400 border-indigo-500/20'
                       }`}>
                         {PLAN_DISPLAY_NAMES[u.plan] || u.plan}
                       </span>

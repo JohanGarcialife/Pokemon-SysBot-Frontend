@@ -9,7 +9,8 @@ const PLAN_DISPLAY_NAMES: Record<string, string> = {
   gym: 'Líder de Gimnasio',
   elite: 'Alto Mando',
   champion: 'Campeón de Liga',
-  premium: 'Premium'
+  banned: 'Baneado (Bloqueado)',
+  premium: 'Alto Mando'
 };
 
 export default function ActivityLog() {
