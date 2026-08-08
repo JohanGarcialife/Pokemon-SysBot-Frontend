@@ -184,7 +184,9 @@ export default function LegalPage() {
           <Link href="/legal/contacto" className="site-footer-link">Contacto</Link>
           <Link href="/legal/uso-aceptable" className="site-footer-link">Uso Aceptable</Link>
         </div>
-        <p className="site-footer-copy">© {new Date().getFullYear()} PKDEX Trade. Todos los derechos reservados.</p>
+        <p className="site-footer-copy">
+          © {new Date().getFullYear()} PKDEX Trade. Todos los derechos reservados. Pokémon es una marca registrada de Nintendo, Creatures Inc. y GAME FREAK inc. PKDEX es una herramienta independiente no afiliada ni respaldada por Nintendo.
+        </p>
       </footer>
     </main>
   );
