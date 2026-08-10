@@ -185,27 +185,46 @@ $$('[data-select-plan]').forEach(btn => {
         return;
       }
 
-      console.log('Changing plan to:', planId);
-      const response = await fetch('/api/payments/test-change-plan', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          'Authorization': `Bearer ${authToken}`
-        },
-        body: JSON.stringify({
-          plan: planId
-        })
-      });
+      if (planId === 'free') {
+        const response = await fetch('/api/payments/test-change-plan', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${authToken}`
+          },
+          body: JSON.stringify({ plan: 'free' })
+        });
+        const data = await response.json();
+        if (!response.ok || data.error) throw new Error(data.error || 'Error al cambiar al plan gratis.');
+        setPlan('free');
+        paintActive();
+        showToast('Plan cambiado a Gratis.');
+      } else {
+        // Paid plan → Create Stripe Checkout Session
+        const response = await fetch('/api/payments/create-checkout-session', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${authToken}`
+          },
+          body: JSON.stringify({
+            planId,
+            billing: currentBilling()
+          })
+        });
 
-      const data = await response.json();
-      
-      if (!response.ok || data.error) {
-        throw new Error(data.error || 'Error al cambiar plan en el servidor');
+        const data = await response.json();
+        if (!response.ok || data.error) {
+          throw new Error(data.error || 'Error al conectar con la pasarela de Stripe.');
+        }
+
+        if (data.url) {
+          window.location.href = data.url;
+          return;
+        } else {
+          throw new Error('No se recibió la dirección de pago de Stripe.');
+        }
       }
-
-      setPlan(planId);
-      paintActive();
-      showToast(`¡Plan cambiado a ${PLAN_NAMES[planId]} correctamente!`);
     } catch (err) {
       console.error(err);
       showToast(`Error: ${err.message}`);
