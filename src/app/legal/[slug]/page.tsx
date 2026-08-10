@@ -22,7 +22,7 @@ const LEGAL_DOCS: Record<string, LegalDoc> = {
         <p>PKDEX Trade no se hace responsable de las interrupciones del servicio, caídas del servidor o fallos técnicos ajenos a su plataforma. Los servicios de intercambio dependen de sistemas externos (servicios online de Nintendo, servidores de Discord y software de terceros).</p>
         
         <h3>3. Contacto</h3>
-        <p>Para cualquier consulta legal, puedes ponerte en contacto con nosotros a través de nuestro servidor de soporte o escribiendo a: <a href="mailto:soporte@pkdex.trade">soporte@pkdex.trade</a>.</p>
+        <p>Para cualquier consulta legal, puedes ponerte en contacto con nosotros a través de nuestro servidor de soporte o escribiendo a: <a href="mailto:pkdexbot2@gmail.com">pkdexbot2@gmail.com</a>.</p>
       </div>
     )
   },
@@ -105,11 +105,11 @@ const LEGAL_DOCS: Record<string, LegalDoc> = {
         <p>¿Tienes dudas, problemas con tus pedidos o sugerencias? Estamos aquí para ayudarte.</p>
         
         <h3>1. Servidor de Soporte (Discord)</h3>
-        <p>La forma más rápida de obtener asistencia en vivo con tus intercambios es unirte a nuestro servidor de Discord oficial, donde contamos con canales dedicados y moderadores listos para atenderte.</p>
+        <p>La forma más rápida de obtener asistencia en vivo con tus intercambios es unirte a nuestro servidor de Discord oficial: <a href="https://discord.gg/7rBEpRnhv" target="_blank" rel="noopener noreferrer" style={{ color: '#818cf8', fontWeight: 'bold', textDecoration: 'underline' }}>Unirse al Discord de Soporte</a>.</p>
         
         <h3>2. Correo Electrónico</h3>
         <p>Para consultas administrativas, incidencias con pagos o problemas de acceso a tu cuenta, puedes enviarnos un correo electrónico a:</p>
-        <p className="email-highlight"><a href="mailto:soporte@pkdex.trade">soporte@pkdex.trade</a></p>
+        <p className="email-highlight"><a href="mailto:pkdexbot2@gmail.com">pkdexbot2@gmail.com</a></p>
         
         <h3>3. Tiempos de Respuesta</h3>
         <p>Hacemos todo lo posible por responder a todos los correos en un plazo máximo de 24 a 48 horas hábiles.</p>
