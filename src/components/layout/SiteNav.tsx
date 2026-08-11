@@ -70,6 +70,7 @@ export function SiteNav({ onOpenAuth }: SiteNavProps) {
         <a href="/dashboard" className={`nav-link ${pathname.startsWith('/dashboard') ? 'active' : ''}`}>▦ Dashboard</a>
         <a href="/#creator" className={`nav-link ${pathname === '/' && !pathname.startsWith('/dashboard') ? 'active' : ''}`}>🎮 Crea tu Pokémon</a>
         <a href="/memberships.html" className="nav-link">👑 Membresías</a>
+        <a href="https://discord.gg/RMmq4DNdX" target="_blank" rel="noopener noreferrer" className="nav-link" style={{ color: '#818cf8', fontWeight: 'bold' }}>💬 Discord Soporte</a>
       </nav>
 
       <div style={{ display: 'flex', alignItems: 'center' }}>

@@ -105,7 +105,7 @@ const LEGAL_DOCS: Record<string, LegalDoc> = {
         <p>¿Tienes dudas, problemas con tus pedidos o sugerencias? Estamos aquí para ayudarte.</p>
         
         <h3>1. Servidor de Soporte (Discord)</h3>
-        <p>La forma más rápida de obtener asistencia en vivo con tus intercambios es unirte a nuestro servidor de Discord oficial: <a href="https://discord.gg/7rBEpRnhv" target="_blank" rel="noopener noreferrer" style={{ color: '#818cf8', fontWeight: 'bold', textDecoration: 'underline' }}>Unirse al Discord de Soporte</a>.</p>
+        <p>La forma más rápida de obtener asistencia en vivo con tus intercambios es unirte a nuestro servidor de Discord oficial: <a href="https://discord.gg/RMmq4DNdX" target="_blank" rel="noopener noreferrer" style={{ color: '#818cf8', fontWeight: 'bold', textDecoration: 'underline' }}>Unirse al Discord de Soporte</a>.</p>
         
         <h3>2. Correo Electrónico</h3>
         <p>Para consultas administrativas, incidencias con pagos o problemas de acceso a tu cuenta, puedes enviarnos un correo electrónico a:</p>

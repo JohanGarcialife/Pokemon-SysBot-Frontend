@@ -480,6 +480,50 @@ export default function DashboardPage() {
                 )}
               </div>
 
+              {/* Discord Support Card */}
+              <div 
+                style={{ 
+                  marginTop: '16px', 
+                  padding: '18px 20px', 
+                  borderRadius: '16px', 
+                  background: 'linear-gradient(135deg, rgba(88, 101, 242, 0.15), rgba(114, 137, 218, 0.05))', 
+                  border: '1px solid rgba(88, 101, 242, 0.3)',
+                  textAlign: 'center' 
+                }}
+              >
+                <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '8px', marginBottom: '8px' }}>
+                  <svg width="20" height="20" viewBox="0 0 127.14 96.36" fill="#5865F2">
+                    <path d="M107.7,8.07A105.15,105.15,0,0,0,81.47,0a72.06,72.06,0,0,0-3.36,6.83A97.68,97.68,0,0,0,49,6.83,72.37,72.37,0,0,0,45.64,0,105.89,105.89,0,0,0,19.39,8.09C2.79,32.65-1.71,56.6.54,80.21h0A105.73,105.73,0,0,0,32.71,96.36,77.7,77.7,0,0,0,39.6,85.25a68.42,68.42,0,0,1-10.85-5.18c.91-.66,1.8-1.34,2.66-2a74.77,74.77,0,0,0,64.3,0c.87.69,1.76,1.37,2.66,2a68.68,68.68,0,0,1-10.87,5.19,77,77,0,0,0,6.89,11.1,105.25,105.25,0,0,0,32.19-16.14c2.64-27.38-4.51-51.11-18.91-72.15ZM42.45,65.69C36.18,65.69,31,60,31,53s5-12.74,11.43-12.74S54,45.88,53.89,53,48.84,65.69,42.45,65.69Zm42.24,0C78.41,65.69,73.25,60,73.25,53s5-12.74,11.44-12.74S96.23,45.88,96.12,53,91.08,65.69,84.69,65.69Z"/>
+                  </svg>
+                  <strong style={{ fontSize: '15px', color: 'white', fontWeight: 1000 }}>Soporte en Discord</strong>
+                </div>
+                <p style={{ fontSize: '12px', color: 'var(--muted)', margin: '0 0 14px', lineHeight: 1.3, fontWeight: 650 }}>
+                  ¿Necesitas ayuda con tus intercambios o tienes dudas? Únete a nuestra comunidad oficial.
+                </p>
+                <a 
+                  href="https://discord.gg/RMmq4DNdX" 
+                  target="_blank" 
+                  rel="noopener noreferrer" 
+                  style={{ 
+                    display: 'inline-flex', 
+                    alignItems: 'center', 
+                    justifyContent: 'center', 
+                    gap: '8px', 
+                    width: '100%', 
+                    padding: '10px 16px', 
+                    background: '#5865F2', 
+                    color: 'white', 
+                    fontWeight: 900, 
+                    fontSize: '13px', 
+                    borderRadius: '10px', 
+                    textDecoration: 'none',
+                    boxShadow: '0 4px 14px rgba(88, 101, 242, 0.35)'
+                  }}
+                >
+                  Unirse al Discord Oficial →
+                </a>
+              </div>
+
             </div>
           </section>
 
