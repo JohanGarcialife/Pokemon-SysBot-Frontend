@@ -29,7 +29,7 @@ export async function POST(req: NextRequest) {
     }
 
     const customerId = customers.data[0].id;
-    const origin = req.headers.get('origin') || 'https://pkdex.vercel.app';
+    const origin = req.headers.get('origin') || 'https://www.pkdextrade.com';
 
     // Create a Stripe billing portal session
     const session = await stripe.billingPortal.sessions.create({

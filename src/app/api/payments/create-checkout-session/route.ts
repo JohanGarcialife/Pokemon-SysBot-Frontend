@@ -24,7 +24,7 @@ export async function POST(req: NextRequest) {
       );
     }
 
-    const origin = req.headers.get('origin') || 'https://pkdex.vercel.app';
+    const origin = req.headers.get('origin') || 'https://www.pkdextrade.com';
 
     // Create Stripe Checkout Session
     const session = await stripe.checkout.sessions.create({
