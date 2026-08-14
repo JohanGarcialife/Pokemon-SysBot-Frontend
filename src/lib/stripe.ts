@@ -33,16 +33,16 @@ export const stripe = new Proxy({} as Stripe, {
 // Map planId + billing → Stripe Price ID
 export const PRICE_MAP: Record<string, Record<string, string | undefined>> = {
   gym: {
-    monthly: trimEnv(process.env.STRIPE_PRICE_GYM_MONTHLY) || undefined,
-    annual:  trimEnv(process.env.STRIPE_PRICE_GYM_ANNUAL) || undefined,
+    monthly: trimEnv(process.env.STRIPE_PRICE_GYM_MONTHLY) || 'price_1U3ijzJgg2ncXX1ghbV2W95k',
+    annual:  trimEnv(process.env.STRIPE_PRICE_GYM_ANNUAL) || 'price_1U3imgJgg2ncXX1gcJvtanbh',
   },
   elite: {
-    monthly: trimEnv(process.env.STRIPE_PRICE_ELITE_MONTHLY) || undefined,
-    annual:  trimEnv(process.env.STRIPE_PRICE_ELITE_ANNUAL) || undefined,
+    monthly: trimEnv(process.env.STRIPE_PRICE_ELITE_MONTHLY) || 'price_1U3jmuJgg2ncXX1gSAlDKUWs',
+    annual:  trimEnv(process.env.STRIPE_PRICE_ELITE_ANNUAL) || 'price_1U3jnJJgg2ncXX1g8g9fDidS',
   },
   champion: {
-    monthly: trimEnv(process.env.STRIPE_PRICE_CHAMPION_MONTHLY) || undefined,
-    annual:  trimEnv(process.env.STRIPE_PRICE_CHAMPION_ANNUAL) || undefined,
+    monthly: trimEnv(process.env.STRIPE_PRICE_CHAMPION_MONTHLY) || 'price_1U3joLJgg2ncXX1gR9bvczjL',
+    annual:  trimEnv(process.env.STRIPE_PRICE_CHAMPION_ANNUAL) || 'price_1U3jodJgg2ncXX1ghU9shG38',
   },
 };
 
